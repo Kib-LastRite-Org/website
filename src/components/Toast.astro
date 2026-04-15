@@ -1,0 +1,34 @@
+---
+// Toast component - shows a coming-soon notification for unverified links
+// Intercepts clicks on elements with data-coming-soon attribute
+---
+
+<div
+  id="lr-toast"
+  role="alert"
+  aria-live="polite"
+  class="fixed bottom-6 right-6 z-50 hidden max-w-xs rounded-card border-l-4 border-mint bg-dark-card px-5 py-4 shadow-lg transition-all duration-300 opacity-0"
+>
+  <p class="text-sm font-semibold text-white">Coming Soon</p>
+  <p class="text-xs text-gray-400 mt-1">We're still setting this up. Check back soon!</p>
+</div>
+
+<script>
+  const toast = document.getElementById("lr-toast");
+  let toastTimer: ReturnType<typeof setTimeout>;
+
+  document.addEventListener("click", (e) => {
+    const link = (e.target as Element).closest("[data-coming-soon]");
+    if (!link) return;
+    e.preventDefault();
+
+    clearTimeout(toastTimer);
+    toast?.classList.remove("hidden");
+    requestAnimationFrame(() => toast?.classList.remove("opacity-0"));
+
+    toastTimer = setTimeout(() => {
+      toast?.classList.add("opacity-0");
+      setTimeout(() => toast?.classList.add("hidden"), 300);
+    }, 3000);
+  });
+</script>

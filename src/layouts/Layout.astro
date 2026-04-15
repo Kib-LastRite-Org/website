@@ -1,0 +1,35 @@
+---
+import "../styles/global.css";
+import Toast from "../components/Toast.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "LastRite - Where Life Stories Go On" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-dark text-white font-sans">
+    <slot />
+    <Toast />
+  </body>
+</html>
