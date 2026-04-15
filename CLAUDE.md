@@ -1,13 +1,8 @@
 # LastRite Official Website
 
-**Project:** Marketing/landing page for LastRite digital obituary app  
-**Tech Stack:** Astro 6.x + Tailwind CSS 4.x + Vercel  
-**Status:** Active development  
-**Created:** 2026-04-15
+Marketing/landing page for LastRite digital obituary app. Tech: Astro 6.x + Tailwind CSS 4.x + Vercel. Status: Active development.
 
----
-
-## Quick Start
+Quick Start
 
 ```bash
 cd ~/Projects/js/last_rite_web
@@ -53,83 +48,39 @@ public/
 astro.config.mjs              # Astro + @tailwindcss/vite config (no tailwind.config.mjs)
 ```
 
----
-
 ## Design System
 
-**Brand Colors:**
-- Primary: Mint Green `#3EB489` — buttons, text highlights
-- Secondary: Orange `#FF6F00` — secondary CTA, accents
-- Dark Background: `#07190D` — main background
-- Dark Card: `#2A5F47` — card backgrounds
-- Light Mint: `#7DD3C0` — hover states
-
-**Typography:**
-- Font: Roboto (via Google Fonts)
-- Sizes: TBD per component
-
-**Spacing & Radius:**
-- Card radius: `12px`
-- Button radius: `8px`
-
----
-
-## Key Sections
-
-| Section       | Purpose                                  | CTA          |
-| ------------- | ---------------------------------------- | ------------ |
-| **Hero**      | Main tagline + value prop + dual CTAs    | Get Started  |
-| **Features**  | 4 key capabilities with icons            | —            |
-| **HowItWorks**| 3-step process visualization             | —            |
-| **Download** | App access (web + Android)               | Links        |
-| **Footer**    | Links, privacy, contact, copyright       | —            |
-
----
+Colors: Primary Mint Green `#3EB489` (buttons/highlights), Secondary Orange `#FF6F00` (CTAs), Dark Background `#07190D`, Dark Card `#2A5F47`, Light Mint `#7DD3C0` (hover).  
+Typography: Roboto via Google Fonts. Sizes TBD per component.  
+Radius: Cards `12px`, Buttons `8px`.
 
 ## Development Notes
 
-- **Framework:** Astro ships zero JavaScript by default → excellent performance
-- **Styling:** Tailwind CSS v4 — CSS-first config via `src/styles/global.css` using `@theme {}` (no `tailwind.config.mjs`). Integration: `@tailwindcss/vite` Vite plugin (replaces deprecated `@astrojs/tailwind`)
-- **Components:** All `.astro` files; no framework JS runtime overhead
-- **Accessibility:** Use semantic HTML; test with keyboard navigation and screen readers
-- **Responsiveness:** Mobile-first design; breakpoints: sm (640px), md (768px), lg (1024px)
-
----
+- Framework: Astro (zero JS by default, excellent performance). All components are `.astro` files.
+- Styling: Tailwind CSS v4 via `@tailwindcss/vite` plugin. CSS-first config in `src/styles/global.css` with `@theme {}` (no `tailwind.config.mjs`).
+- Accessibility: Semantic HTML, keyboard navigation, screen reader testing.
+- Responsiveness: Mobile-first; breakpoints: sm (640px), md (768px), lg (1024px).
 
 ## Deployment
 
-**Vercel (Recommended):**
-```bash
-# First time
-vercel login
-vercel --prod
+Vercel: `vercel login` then `vercel --prod` (first time). Subsequent: push to GitHub for auto-deploy via integration.  
+Free tier: 100GB bandwidth, 6000 build mins/month, custom domain support, auto-HTTPS, global CDN.
 
-# Subsequent: push to GitHub → auto-deploys via GitHub integration
-```
+## Related
 
-**Environment:**
-- Free Hobby tier: 100GB bandwidth, 6000 build mins/month
-- Custom domain support on free tier
-- Auto-HTTPS, CDN globally distributed
+Flutter app repo: `/Users/kibverse/Projects/flutter/last_rite` (for branding consistency and design tokens).
 
----
+## Unverified Links
 
-## Link Back to Main App
+Links marked `data-coming-soon` show a toast instead of navigating — remove the attribute once the destination is live, note: links for web-app, android-app and email-inbox will be provided when available.
 
-For branding consistency and design token references:  
-→ Flutter app repo: `/Users/kibverse/Projects/flutter/last_rite`
+## Documentation & Git
 
----
+Keep up-to-date: README.md (overview/quick start), LICENSE (proprietary), CHANGELOG.md (all changes), CONTRIBUTING.md (workflow), DEVELOPMENT.md (setup), DEPLOYMENT.md (procedures), .env.example (template).
 
-## Unverified Links (intercept with coming-soon toast)
+After tasks: Update relevant docs (especially CHANGELOG.md), provide sample commit message for user to use manually.
 
-Links marked `data-coming-soon` show a toast instead of navigating — remove the attribute once the destination is live:
-
-- `https://app.lastrite.com` — web app (Download.astro)
-- Play Store URL (`com.lastrite.app`) — Android app (Download.astro)
-- `mailto:hello@lastrite.com` — email inbox (Footer, privacy, terms)
-
----
+Commit format: `<type>(<scope>): <subject>`. Examples: `feat(hero): add animated background`, `fix(toast): correct coming-soon interception`, `docs(changelog): add initial docs`, `refactor(footer): improve spacing`.
 
 ## To-Do / Future Enhancements
 
