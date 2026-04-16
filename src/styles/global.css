@@ -1,14 +1,91 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --font-sans: 'Roboto', sans-serif;
-  --color-mint: #3EB489;
-  --color-mint-light: #7DD3C0;
-  --color-orange: #FF6F00;
-  --color-dark: #07190D;
-  --color-dark-card: #2A5F47;
-  --border-radius-card: 12px;
-  --border-radius-btn: 8px;
+  /* Typography */
+  --font-display: 'Manrope', sans-serif;
+  --font-sans:    'Inter', sans-serif;
+
+  /* Dark mode (default) surface hierarchy */
+  --color-background:                 #05170b;
+  --color-surface:                    #0d1f14;
+  --color-surface-container-lowest:   #021207;
+  --color-surface-container-low:      #0f1f16;
+  --color-surface-container:          #131f18;
+  --color-surface-container-high:     #1a2d21;
+  --color-surface-container-highest:  #26392b;
+
+  /* Primary: Mint */
+  --color-primary:                    #69dbad;
+  --color-on-primary:                 #003828;
+  --color-primary-container:          #00513c;
+
+  /* Secondary: Orange/Warm */
+  --color-secondary:                  #ffb691;
+  --color-on-secondary:               #4e1c00;
+  --color-secondary-container:        #6e2b00;
+
+  /* Text roles */
+  --color-on-surface:                 #e2ede6;
+  --color-on-surface-variant:         #9ab5a2;
+  --color-outline:                    #4a6554;
+  --color-outline-variant:            #253d2d;
+
+  /* Legacy aliases (for backward compat during transition) */
+  --color-mint:       #69dbad;
+  --color-mint-light: #9de8c5;
+  --color-orange:     #ffb691;
+  --color-dark:       #05170b;
+  --color-dark-card:  #1a2d21;
+
+  /* Radii */
+  --border-radius-card: 16px;
+  --border-radius-btn:  10px;
+}
+
+/* Glass panel utility */
+.glass-panel {
+  background: rgba(38, 57, 43, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Light theme overrides — warm sanctuary aesthetic */
+html:not(.dark) {
+  --color-background:                 #faf8f5;
+  --color-surface:                    #f4f1ec;
+  --color-surface-container-lowest:   #ffffff;
+  --color-surface-container-low:      #f0ede8;
+  --color-surface-container:          #ebe8e2;
+  --color-surface-container-high:     #e2dfd8;
+  --color-surface-container-highest:  #d8d4cc;
+  --color-on-surface:                 #0f1f16;
+  --color-on-surface-variant:         #3d5446;
+  --color-outline:                    #5a7a67;
+  --color-outline-variant:            #b8cec0;
+  --color-primary:                    #007a58;   /* deepened for WCAG AA on light */
+  --color-on-primary:                 #ffffff;
+  --color-primary-container:          #c2f0dc;
+  --color-secondary:                  #a94500;   /* deepened warm orange */
+  --color-on-secondary:               #ffffff;
+  --color-secondary-container:        #ffd8bc;
+  --color-mint:       #007a58;
+  --color-orange:     #a94500;
+  --color-dark:       #0f1f16;
+  --color-dark-card:  #e2dfd8;
+}
+
+html:not(.dark) .glass-panel {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* Base styles */
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * {
@@ -21,11 +98,6 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-  line-height: 1.6;
-  color: #fff;
-}
-
 a {
   text-decoration: none;
   color: inherit;
@@ -33,16 +105,17 @@ a {
 }
 
 a:hover {
-  color: #3EB489;
+  color: var(--color-primary);
 }
 
+/* Icon helpers */
+.icon-sm  { font-size: 20px; }
+.icon-md  { font-size: 24px; }
+.icon-lg  { font-size: 32px; }
+.icon-xl  { font-size: 48px; }
+.icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

@@ -1,0 +1,15 @@
+<button id="theme-toggle" aria-label="Toggle theme"
+  class="w-10 h-10 flex items-center justify-center rounded-full
+         text-[color:var(--color-on-surface-variant)]
+         hover:bg-[color:var(--color-surface-container-high)]
+         transition-colors duration-200">
+  <span class="material-symbols-outlined icon-sm hidden dark:block">light_mode</span>
+  <span class="material-symbols-outlined icon-sm block dark:hidden">dark_mode</span>
+</button>
+
+<script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  });
+</script>
