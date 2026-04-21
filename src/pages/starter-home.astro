@@ -1,0 +1,32 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import BackToTopButton from '../components/BackToTopButton.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>LastRite</h1>
+			<p>
+				Create meaningful obituaries, share cherished memories, and organize memorial fundraising—all in one place.
+			</p>
+			<h2>Coming Soon</h2>
+			<p>
+				LastRite is currently in development. Join us to transform how families honor and remember their loved ones.
+			</p>
+			<p>
+				Built with care using <a href="https://astro.build/">Astro</a>, a modern static site generator.
+			</p>
+		</main>
+		<Footer />
+		<BackToTopButton />
+	</body>
+</html>

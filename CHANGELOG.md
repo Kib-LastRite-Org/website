@@ -23,11 +23,14 @@ All notable changes to this project will be documented in this file.
   - localStorage persistence for user preferences ('dark', 'light', 'system')
   - Inline theme initialization script prevents flash of unstyled content
   - Supports three modes:
+
     1. **dark** (default): Always dark theme
     2. **light**: Always light theme
     3. **system**: Respects OS preference (prefers-color-scheme)
 
 ### Changed
+- **Made marketing landing page the root homepage**: Renamed `src/pages/home.astro` → `src/pages/index.astro` to serve the new landing page as the primary entry point. Original starter template preserved at `src/pages/starter-home.astro` (accessible at `/starter-home`) for reference.
+
 - Updated `src/styles/global.css`:
   - Replaced simple accent/gray color variables with comprehensive theme system
   - Organized variables by function (surface hierarchy, colors, text roles, utilities)

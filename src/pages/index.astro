@@ -1,32 +1,47 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
 import BackToTopButton from '../components/BackToTopButton.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import LandingHeader from '../components/LandingHeader.astro';
+import LandingFooter from '../components/LandingFooter.astro';
+import HeroSection from '../components/landing/HeroSection.astro';
+import FeaturesSection from '../components/landing/FeaturesSection.astro';
+import HowItWorksSection from '../components/landing/HowItWorksSection.astro';
+import MobileAppSection from '../components/landing/MobileAppSection.astro';
+import TestimonialsSection from '../components/landing/TestimonialsSection.astro';
+import CtaSection from '../components/landing/CtaSection.astro';
+
+const title = 'LastRite — Celebrate a Life Well Lived';
+const description =
+  'Create meaningful obituaries, share cherished memories, and organize memorial fundraising—all in one place. Join millions honoring their loved ones.';
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>LastRite</h1>
-			<p>
-				Create meaningful obituaries, share cherished memories, and organize memorial fundraising—all in one place.
-			</p>
-			<h2>Coming Soon</h2>
-			<p>
-				LastRite is currently in development. Join us to transform how families honor and remember their loved ones.
-			</p>
-			<p>
-				Built with care using <a href="https://astro.build/">Astro</a>, a modern static site generator.
-			</p>
-		</main>
-		<Footer />
-		<BackToTopButton />
-	</body>
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <LandingHeader />
+    <main class="landing" id="main-content">
+      <HeroSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <MobileAppSection />
+      <TestimonialsSection />
+      <CtaSection />
+    </main>
+    <LandingFooter />
+    <BackToTopButton />
+
+    <script>
+      import { initAll } from '../scripts/animations.js';
+
+      // Call animations on DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAll);
+      } else {
+        initAll();
+      }
+    </script>
+  </body>
 </html>

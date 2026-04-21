@@ -10,7 +10,7 @@ TypeScript config extends astro/tsconfigs/strict with strictNullChecks enabled. 
 
 Astro config: site placeholder at <https://example.com> (needs real domain), MDX and sitemap integrations active. Local font: Atkinson (woff format, 400/700 weights) loaded via CSS variable --font-atkinson with fallback to sans-serif.
 
-Project structure: src/pages/ (routes: index/home, blog/memorial stories, about), src/components/ (reusables), src/content/blog/ (memorial posts & stories), src/assets/ (fonts, images), public/ (static assets).
+Project structure: src/pages/ (routes: index/marketing landing, starter-home/original template, blog/memorial stories, about), src/components/ (reusables), src/content/blog/ (memorial posts & stories), src/assets/ (fonts, images), public/ (static assets).
 
 Features: LastRite branding, dark/light theme toggle, Lighthouse 100/100 target, canonical URLs, Open Graph meta, RSS feed generation (memorial posts), Markdown + MDX content support.
 
