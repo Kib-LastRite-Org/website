@@ -86,12 +86,12 @@
   }
 
   /* Icon colors — dark mode (knob on left = sun side active) */
-  :global(body:not(.light)) .sun-icon { color: #fff; }
-  :global(body:not(.light)) .moon-icon { color: var(--accent, #7c3aed); }
+  :global(body:not(.light)) .sun-icon { color: var(--color-on-surface); }
+  :global(body:not(.light)) .moon-icon { color: var(--color-primary); }
 
   /* Icon colors — light mode (knob on right = moon side active) */
-  :global(.light) .sun-icon  { color: var(--accent, #7c3aed); }
-  :global(.light) .moon-icon { color: #fff; }
+  :global(.light) .sun-icon  { color: var(--color-primary); }
+  :global(.light) .moon-icon { color: var(--color-on-surface); }
 </style>
 
 <script>
