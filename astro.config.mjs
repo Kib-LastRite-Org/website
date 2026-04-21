@@ -6,42 +6,86 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
-	integrations: [mdx(), sitemap()],
-	fonts: [
-		{
-			provider: fontProviders.local(),
-			name: 'Atkinson',
-			cssVariable: '--font-atkinson',
-			fallbacks: ['sans-serif'],
-			options: {
-				variants: [
-					{
-						src: ['./src/assets/fonts/atkinson-regular.woff'],
-						weight: 400,
-						style: 'normal',
-						display: 'swap',
-					},
-					{
-						src: ['./src/assets/fonts/atkinson-bold.woff'],
-						weight: 700,
-						style: 'normal',
-						display: 'swap',
-					},
-				],
-			},
-		},
-		{
-			provider: fontProviders.fontsource(),
-			name: 'Manrope',
-			cssVariable: '--font-display',
-			fallbacks: ['sans-serif'],
-		},
-		{
-			provider: fontProviders.fontsource(),
-			name: 'Inter',
-			cssVariable: '--font-sans',
-			fallbacks: ['sans-serif'],
-		},
-	],
+  site: "https://example.com",
+  integrations: [mdx(), sitemap()],
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: "Inter",
+      cssVariable: "--font-sans",
+      fallbacks: ["sans-serif"],
+      options: {
+        variants: [
+          {
+            src: ["./src/assets/fonts/inter-latin-400-normal.woff2"],
+            weight: 400,
+            style: "normal",
+            display: "swap",
+          },
+          {
+            src: ["./src/assets/fonts/inter-latin-600-normal.woff2"],
+            weight: 600,
+            style: "normal",
+            display: "swap",
+          },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: "Manrope",
+      cssVariable: "--font-display",
+      fallbacks: ["sans-serif"],
+      options: {
+        variants: [
+          {
+            src: ["./src/assets/fonts/manrope-latin-200-normal.woff2"],
+            weight: 200,
+            style: "normal",
+            display: "swap",
+          },
+          {
+            src: ["./src/assets/fonts/manrope-latin-300-normal.woff2"],
+            weight: 300,
+            style: "normal",
+            display: "swap",
+          },
+          {
+            src: ["./src/assets/fonts/manrope-latin-400-normal.woff2"],
+            weight: 400,
+            style: "normal",
+            display: "swap",
+          },
+          {
+            src: ["./src/assets/fonts/manrope-latin-700-normal.woff2"],
+            weight: 700,
+            style: "normal",
+            display: "swap",
+          },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: "Atkinson",
+      cssVariable: "--font-atkinson",
+      fallbacks: ["sans-serif"],
+      options: {
+        variants: [
+          {
+            src: ["./src/assets/fonts/atkinson-regular.woff"],
+            weight: 400,
+            style: "normal",
+            display: "swap",
+          },
+          {
+            src: ["./src/assets/fonts/atkinson-bold.woff"],
+            weight: 700,
+            style: "normal",
+            display: "swap",
+          },
+        ],
+      },
+    },
+  ],
 });
