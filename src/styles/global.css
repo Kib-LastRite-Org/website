@@ -1,12 +1,54 @@
 /*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
+  Dark/Light theme with new color palette.
+  Based on Bear Blog's default CSS with extended theming support.
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
+	/* Typography */
+	--font-display: var(--font-manrope, 'Manrope', sans-serif);
+	--font-sans: var(--font-inter, 'Inter', sans-serif);
+
+	/* Dark mode (default) surface hierarchy */
+	--color-background: #05170b;
+	--color-surface: #0d1f14;
+	--color-surface-container-lowest: #021207;
+	--color-surface-container-low: #0f1f16;
+	--color-surface-container: #131f18;
+	--color-surface-container-high: #1a2d21;
+	--color-surface-container-highest: #26392b;
+
+	/* Primary: Mint */
+	--color-primary: #69dbad;
+	--color-on-primary: #003828;
+	--color-primary-container: #00513c;
+
+	/* Secondary: Orange/Warm */
+	--color-secondary: #ffb691;
+	--color-on-secondary: #4e1c00;
+	--color-secondary-container: #6e2b00;
+
+	/* Text roles */
+	--color-on-surface: #e2ede6;
+	--color-on-surface-variant: #9ab5a2;
+	--color-outline: #4a6554;
+	--color-outline-variant: #253d2d;
+
+	/* Legacy aliases for backward compatibility */
+	--color-mint: #69dbad;
+	--color-mint-light: #9de8c5;
+	--color-orange: #ffb691;
+	--color-dark: #05170b;
+	--color-dark-card: #1a2d21;
+	--accent: #69dbad;
+	--accent-dark: #003828;
+
+	/* Spacing and Radii */
+	--border-radius-card: 16px;
+	--border-radius-btn: 10px;
+
+	/* Legacy gray scales (for backward compat with Bear Blog baseline) */
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
 	--gray-light: 229, 233, 240;
@@ -16,25 +58,112 @@
 		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
 }
+
+/* Light theme overrides (only applied when explicitly requested via .light class) */
+/* Removed @media (prefers-color-scheme: light) to make dark the absolute default */
+
+/* Explicit light/dark class toggles (for future JS theme switching) */
+html.light {
+	--color-background: #faf8f5;
+	--color-surface: #f4f1ec;
+	--color-surface-container-lowest: #ffffff;
+	--color-surface-container-low: #f0ede8;
+	--color-surface-container: #ebe8e2;
+	--color-surface-container-high: #e2dfd8;
+	--color-surface-container-highest: #d8d4cc;
+	--color-on-surface: #0f1f16;
+	--color-on-surface-variant: #3d5446;
+	--color-outline: #5a7a67;
+	--color-outline-variant: #b8cec0;
+	--color-primary: #007a58;
+	--color-on-primary: #ffffff;
+	--color-primary-container: #c2f0dc;
+	--color-secondary: #a94500;
+	--color-on-secondary: #ffffff;
+	--color-secondary-container: #ffd8bc;
+	--color-mint: #007a58;
+	--color-orange: #a94500;
+	--color-dark: #0f1f16;
+	--color-dark-card: #e2dfd8;
+	--accent: #007a58;
+	--accent-dark: #003828;
+	--gray-dark: 15, 31, 22;
+	--gray: 61, 84, 70;
+}
+
+html.dark {
+	--color-background: #05170b;
+	--color-surface: #0d1f14;
+	--color-surface-container-lowest: #021207;
+	--color-surface-container-low: #0f1f16;
+	--color-surface-container: #131f18;
+	--color-surface-container-high: #1a2d21;
+	--color-surface-container-highest: #26392b;
+	--color-primary: #69dbad;
+	--color-on-primary: #003828;
+	--color-primary-container: #00513c;
+	--color-secondary: #ffb691;
+	--color-on-secondary: #4e1c00;
+	--color-secondary-container: #6e2b00;
+	--color-on-surface: #e2ede6;
+	--color-on-surface-variant: #9ab5a2;
+	--color-outline: #4a6554;
+	--color-outline-variant: #253d2d;
+	--color-mint: #69dbad;
+	--color-mint-light: #9de8c5;
+	--color-orange: #ffb691;
+	--color-dark: #05170b;
+	--color-dark-card: #1a2d21;
+	--accent: #69dbad;
+	--accent-dark: #003828;
+	--gray-dark: 34, 41, 57;
+	--gray: 96, 115, 159;
+}
+
+/* Glass panel utility */
+.glass-panel {
+	background: rgba(38, 57, 43, 0.4);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+}
+
+html.light .glass-panel {
+	background: rgba(255, 255, 255, 0.55);
+}
+
+/* Base styles */
 body {
 	font-family: var(--font-atkinson);
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
+	background-color: var(--color-background);
 	background-size: 100% 600px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
+	color: var(--color-on-surface);
 	font-size: 20px;
 	line-height: 1.7;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
 main {
 	width: 720px;
 	max-width: calc(100% - 2em);
 	margin: auto;
 	padding: 3em 1em;
 }
+
 h1,
 h2,
 h3,
@@ -42,77 +171,137 @@ h4,
 h5,
 h6 {
 	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
+	color: var(--color-on-surface);
 	line-height: 1.2;
 }
+
 h1 {
 	font-size: 3.052em;
 }
+
 h2 {
 	font-size: 2.441em;
 }
+
 h3 {
 	font-size: 1.953em;
 }
+
 h4 {
 	font-size: 1.563em;
 }
+
 h5 {
 	font-size: 1.25em;
 }
+
 strong,
 b {
 	font-weight: 700;
 }
+
 a {
-	color: var(--accent);
+	color: var(--color-primary);
+	text-decoration: none;
+	transition: color 0.3s ease;
 }
+
 a:hover {
-	color: var(--accent);
+	color: var(--color-primary);
+	opacity: 0.8;
 }
+
 p {
 	margin-bottom: 1em;
 }
+
 .prose p {
 	margin-bottom: 2em;
 }
+
 textarea {
 	width: 100%;
 	font-size: 16px;
 }
+
 input {
 	font-size: 16px;
 }
+
 table {
 	width: 100%;
 }
+
 img {
 	max-width: 100%;
 	height: auto;
 	border-radius: 8px;
 }
+
 code {
 	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
+	background-color: var(--color-surface-container);
+	color: var(--color-on-surface);
 	border-radius: 2px;
 }
+
 pre {
 	padding: 1.5em;
 	border-radius: 8px;
+	background-color: var(--color-surface-container);
+	overflow-x: auto;
 }
+
 pre > code {
 	all: unset;
+	color: var(--color-on-surface);
 }
+
 blockquote {
-	border-left: 4px solid var(--accent);
+	border-left: 4px solid var(--color-primary);
 	padding: 0 0 0 20px;
 	margin: 0;
 	font-size: 1.333em;
+	color: var(--color-on-surface-variant);
 }
+
 hr {
 	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+	border-top: 1px solid var(--color-surface-container-high);
 }
+
+/* Icon helpers */
+.icon-sm {
+	font-size: 20px;
+}
+
+.icon-md {
+	font-size: 24px;
+}
+
+.icon-lg {
+	font-size: 32px;
+}
+
+.icon-xl {
+	font-size: 48px;
+}
+
+.icon-filled {
+	font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+@keyframes fadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 @media (max-width: 720px) {
 	body {
 		font-size: 18px;
@@ -130,12 +319,8 @@ hr {
 	height: 1px;
 	width: 1px;
 	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
 	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
 	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
 	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }

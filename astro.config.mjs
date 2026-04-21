@@ -31,5 +31,17 @@ export default defineConfig({
 				],
 			},
 		},
+		{
+			provider: fontProviders.fontsource(),
+			name: 'Manrope',
+			cssVariable: '--font-display',
+			fallbacks: ['sans-serif'],
+		},
+		{
+			provider: fontProviders.fontsource(),
+			name: 'Inter',
+			cssVariable: '--font-sans',
+			fallbacks: ['sans-serif'],
+		},
 	],
 });
