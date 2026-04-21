@@ -1,4 +1,6 @@
-# Project: lastrite_website v0.0.1 — Astro 6.1.8 blog starter template using pnpm
+# Project: LastRite Marketing Website — Astro 6.1.8 (transitioning from blog starter template)
+
+**Note:** This project was initialized from Astro's official blog starter kit but is now being adapted as the official marketing website for LastRite, a digital platform for creating and sharing obituaries.
 
 Node engine: >=22.12.0, ES modules enabled, zero devDependencies declared.
 
@@ -8,9 +10,9 @@ TypeScript config extends astro/tsconfigs/strict with strictNullChecks enabled. 
 
 Astro config: site placeholder at <https://example.com> (needs real domain), MDX and sitemap integrations active. Local font: Atkinson (woff format, 400/700 weights) loaded via CSS variable --font-atkinson with fallback to sans-serif.
 
-Project structure: src/pages/ (routes), src/components/ (reusables), src/content/blog/ (content collections for posts), src/assets/ (fonts, images), public/ (static assets).
+Project structure: src/pages/ (routes: index/home, blog/memorial stories, about), src/components/ (reusables), src/content/blog/ (memorial posts & stories), src/assets/ (fonts, images), public/ (static assets).
 
-Features: minimal styling baseline, Lighthouse 100/100 target, canonical URLs, Open Graph meta, RSS feed generation, Markdown + MDX blog content support.
+Features: LastRite branding, dark/light theme toggle, Lighthouse 100/100 target, canonical URLs, Open Graph meta, RSS feed generation (memorial posts), Markdown + MDX content support.
 
 Scripts: dev (localhost:4321), build (→ dist/), preview (local build preview), astro (CLI passthrough).
 

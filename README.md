@@ -1,63 +1,83 @@
-# Astro Starter Kit: Blog
+# LastRite — Marketing Website
 
-```sh
-pnpm create astro@latest -- --template blog
-```
+The official marketing website and landing page for **LastRite**, a digital platform for creating, sharing, and honoring obituaries.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## About LastRite
 
-Features:
+LastRite makes it easy to create meaningful obituaries, share memories with loved ones, and organize memorial fundraising in all one place. This repository contains the public-facing marketing site built with Astro, while the core application is in continuous development in a separate repository.
 
-- ✅ Minimal styling (make it your own!)
+## Features
+
+- ✅ Fast, modern Astro 6 build
 - ✅ 100/100 Lighthouse performance
 - ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+- ✅ Dark/Light theme toggle
+- ✅ RSS feed for memorial posts
+- ✅ Markdown & MDX blog support
+- ✅ Responsive design
 
-## 🚀 Project Structure
+## Getting Started
 
-Inside of your Astro project, you'll see the following folders and files:
+### Prerequisites
 
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+- Node.js ≥ 22.12.0
+- pnpm (ES modules enabled)
+
+### Installation
+
+```sh
+cd website
+pnpm install
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+### Development
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+pnpm dev
+```
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+Starts the dev server at `localhost:4321`.
 
-Any static assets, like images, can be placed in the `public/` directory.
+### Production Build
 
-## 🧞 Commands
+```sh
+pnpm build
+```
 
-All commands are run from the root of the project, from a terminal:
+Outputs optimized site to `./dist/`.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+### Preview Build Locally
 
-## 👀 Want to learn more?
+```sh
+pnpm preview
+```
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Project Structure
 
-## Credit
+```text
+├── public/              Static assets
+├── src/
+│   ├── assets/         Fonts and images
+│   ├── components/     Reusable Astro components
+│   ├── content/blog/   Memorial posts & stories
+│   ├── layouts/        Page templates
+│   └── pages/          Routes
+├── astro.config.mjs
+├── tsconfig.json
+└── package.json
+```
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+## Technologies
+
+- **Astro 6.1.8** — Static site generator
+- **@astrojs/mdx** — MDX support for interactive content
+- **Sharp** — Image optimization
+- **TypeScript** — Type-safe development
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on reporting issues, suggesting features, and submitting pull requests.
+
+## License
+
+All rights reserved. LastRite is proprietary software.
