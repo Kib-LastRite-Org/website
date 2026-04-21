@@ -1,0 +1,197 @@
+---
+import { Image } from 'astro:assets';
+import heroImage from '../../assets/blog-placeholder-1.jpg';
+---
+
+<section class="hero" id="hero" aria-label="Hero section">
+  <div class="hero-inner">
+    <!-- Left column: Text content -->
+    <div class="hero-text">
+      <p class="hero-eyebrow reveal" data-delay="1">
+        Trusted by millions
+      </p>
+      <h1 class="hero-headline reveal" data-delay="2">
+        Celebrate a <br />
+        <em class="accent">Life</em> Well Lived
+      </h1>
+      <p class="hero-sub reveal" data-delay="3">
+        Create meaningful obituaries, gather condolences, and fundraise for
+        legacy causes—all in one place.
+      </p>
+      <div class="hero-ctas reveal" data-delay="4">
+        <a href="#cta" class="btn btn-primary">Create a Tribute →</a>
+        <a href="#how-it-works" class="btn btn-outline">Learn More</a>
+      </div>
+    </div>
+
+    <!-- Right column: Visual card with badge -->
+    <div class="hero-visual reveal" data-delay="2">
+      <div class="hero-card glass-panel">
+        <Image
+          src={heroImage}
+          alt="A cherished family memory"
+          loading="eager"
+          decoding="async"
+        />
+        <div class="hero-badge" aria-label="Global community statistics">
+          <span class="badge-label">GLOBAL COMMUNITY</span>
+          <span class="badge-stat">
+            <span data-counter="4.8" data-counter-suffix="M">4.8M</span>
+            Tributes
+          </span>
+          <span class="badge-detail">Shared across 120 countries daily</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    background-color: var(--color-background);
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 0;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 80% 60% at 60% 40%,
+      rgba(105, 219, 173, 0.07) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-headline {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+    font-family: var(--font-display);
+    margin-bottom: 1.5rem;
+  }
+
+  .accent {
+    font-style: italic;
+    color: var(--color-primary);
+  }
+
+  .hero-eyebrow {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--color-on-surface-variant);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-card {
+    border-radius: var(--border-radius-card);
+    overflow: hidden;
+    border: 1px solid var(--color-outline-variant);
+    position: relative;
+  }
+
+  .hero-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    background: var(--color-surface-container-highest);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .badge-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-on-surface-variant);
+    font-weight: 600;
+  }
+
+  .badge-stat {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    font-family: var(--font-display);
+  }
+
+  .badge-detail {
+    font-size: 0.75rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.3;
+  }
+
+  @media (max-width: 720px) {
+    .hero {
+      min-height: auto;
+      padding: 3rem 0;
+    }
+
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 1.25rem;
+    }
+
+    .hero-visual {
+      order: -1;
+    }
+
+    .hero-headline {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+    }
+
+    .hero-card {
+      max-width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-badge {
+      animation: none;
+    }
+  }
+</style>

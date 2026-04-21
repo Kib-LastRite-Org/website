@@ -1,0 +1,232 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header id="landing-header" class="landing-header">
+  <nav class="nav-bar" aria-label="Main navigation">
+    <a href="/" class="logo" title="LastRite home">LastRite</a>
+
+    <div class="nav-links" id="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#tributes">Tributes</a>
+    </div>
+
+    <div class="nav-actions">
+      <ThemeToggle />
+      <a href="#how-it-works" class="btn btn-outline btn-sm">Learn More</a>
+      <a href="#cta" class="btn btn-primary btn-sm">Create Tribute</a>
+    </div>
+
+    <button
+      class="hamburger"
+      id="hamburger"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#testimonials">Testimonials</a>
+    <a href="#tributes">Tributes</a>
+  </div>
+</header>
+
+<style>
+  .landing-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-surface);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-outline-variant);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .landing-header.scrolled {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 64px;
+    max-width: 100%;
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+  }
+
+  .logo:hover {
+    opacity: 0.8;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--color-on-surface);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--color-primary);
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .btn-sm {
+    padding: 0.5em 1.1em;
+    font-size: 0.875rem;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .hamburger span {
+    width: 24px;
+    height: 2px;
+    background: var(--color-on-surface);
+    transition: all 0.3s ease;
+    border-radius: 2px;
+  }
+
+  .hamburger[aria-expanded='true'] span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+  }
+
+  .hamburger[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger[aria-expanded='true'] span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+  }
+
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: var(--color-surface-container);
+    border-bottom: 1px solid var(--color-outline-variant);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .mobile-menu[aria-hidden='false'] {
+    max-height: 300px;
+  }
+
+  .mobile-menu a {
+    color: var(--color-on-surface);
+    font-weight: 500;
+  }
+
+  @media (max-width: 720px) {
+    .nav-bar {
+      padding: 0 1rem;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .hamburger {
+      display: flex;
+    }
+
+    .nav-actions {
+      gap: 0.5rem;
+    }
+
+    .btn-outline,
+    .btn-primary {
+      padding: 0.4em 0.8em;
+      font-size: 0.8rem;
+    }
+
+    .mobile-menu {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const header = document.getElementById('landing-header');
+  let isMenuOpen = false;
+
+  // Hamburger toggle
+  if (hamburger) {
+    hamburger.addEventListener('click', () => {
+      isMenuOpen = !isMenuOpen;
+      hamburger.setAttribute('aria-expanded', String(isMenuOpen));
+      if (isMenuOpen) {
+        mobileMenu.removeAttribute('hidden');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+      } else {
+        mobileMenu.setAttribute('hidden', '');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
+  // Close menu on link click
+  const mobileLinks = mobileMenu?.querySelectorAll('a');
+  if (mobileLinks) {
+    mobileLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        isMenuOpen = false;
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('hidden', '');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      });
+    });
+  }
+
+  // Scroll effect for header shadow
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 0) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+</script>

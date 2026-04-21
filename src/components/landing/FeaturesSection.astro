@@ -1,0 +1,172 @@
+---
+---
+
+<section class="features" id="features" aria-labelledby="features-heading">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <h2 id="features-heading">Preserving Every Moment</h2>
+      <p class="section-sub">Everything you need to honor a life fully lived.</p>
+    </div>
+
+    <div class="features-grid">
+      <article class="feature-card glass-panel reveal" data-delay="1">
+        <div class="feature-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width="32"
+            height="32"
+          >
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"
+            />
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+        </div>
+        <h3>Obituary Creation</h3>
+        <p>
+          Write, format, and publish a beautiful memorial page with photos and
+          stories.
+        </p>
+      </article>
+
+      <article class="feature-card glass-panel reveal" data-delay="2">
+        <div class="feature-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width="32"
+            height="32"
+          >
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+            ></path>
+          </svg>
+        </div>
+        <h3>Condolences & Stories</h3>
+        <p>
+          Let family and friends share cherished memories, photos, videos, and
+          heartfelt resources.
+        </p>
+      </article>
+
+      <article class="feature-card glass-panel reveal" data-delay="3">
+        <div class="feature-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width="32"
+            height="32"
+          >
+            <path d="M17 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2z"></path>
+            <polyline points="16 3 16 7 8 7 8 3"></polyline>
+            <line x1="9" y1="11" x2="15" y2="11"></line>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
+          </svg>
+        </div>
+        <h3>Legacy Fundraising</h3>
+        <p>
+          Support charitable causes or charities in the name of your loved ones.
+        </p>
+      </article>
+
+      <article class="feature-card glass-panel reveal" data-delay="4">
+        <div class="feature-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width="32"
+            height="32"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <h3>Multi-Device</h3>
+        <p>
+          Access memories and tributes from any device, anytime, anywhere in
+          the world.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .features {
+    padding: 6rem 2rem;
+    background: var(--color-surface);
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-header h2 {
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    color: var(--color-on-surface-variant);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    padding: 2rem;
+    border-radius: var(--border-radius-card);
+    border: 1px solid var(--color-outline-variant);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .feature-card:hover {
+    transform: scale(1.02);
+  }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--color-primary-container);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    color: var(--color-primary);
+  }
+
+  .feature-card h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+  }
+
+  .feature-card p {
+    color: var(--color-on-surface-variant);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 720px) {
+    .features {
+      padding: 4rem 1.25rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

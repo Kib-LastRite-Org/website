@@ -1,0 +1,157 @@
+---
+---
+
+<section
+  class="testimonials"
+  id="testimonials"
+  aria-labelledby="test-heading"
+>
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <h2 id="test-heading">Family Stories</h2>
+      <p class="section-sub">
+        Hear from those who've honored their loved ones with LastRite.
+      </p>
+    </div>
+
+    <div class="testimonials-grid">
+      <blockquote class="testimonial-card glass-panel reveal" data-delay="1">
+        <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <p>
+          "LastRite helped our family come together during the most difficult
+          time. The memorial page was beautiful and easy to create."
+        </p>
+        <footer>
+          <cite>
+            <strong>Sarah Jackson</strong>
+            <span>Daughter, Ontario</span>
+          </cite>
+        </footer>
+      </blockquote>
+
+      <blockquote class="testimonial-card glass-panel reveal" data-delay="2">
+        <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <p>
+          "The interface is so respectful and inviting. It didn't feel like a
+          chore; it felt like a library of a person's life."
+        </p>
+        <footer>
+          <cite>
+            <strong>Michael Rossi</strong>
+            <span>Son, California</span>
+          </cite>
+        </footer>
+      </blockquote>
+
+      <blockquote class="testimonial-card glass-panel reveal" data-delay="3">
+        <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <p>
+          "Setting up the memorial fund was easy and our relatives from across
+          the country could instantly donate. We raised $25,000 in just 48
+          hours."
+        </p>
+        <footer>
+          <cite>
+            <strong>Elena Kozlov</strong>
+            <span>Granddaughter, New York</span>
+          </cite>
+        </footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    padding: 6rem 2rem;
+    background: var(--color-background);
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-header h2 {
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    color: var(--color-on-surface-variant);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .testimonial-card {
+    padding: 2rem;
+    border-radius: var(--border-radius-card);
+    border: 1px solid var(--color-outline-variant);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .testimonial-card:hover {
+    transform: scale(1.02);
+  }
+
+  .stars {
+    color: var(--color-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .testimonial-card p {
+    color: var(--color-on-surface);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: auto;
+    font-style: italic;
+  }
+
+  .testimonial-card footer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-outline-variant);
+  }
+
+  cite {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-style: normal;
+  }
+
+  cite strong {
+    color: var(--color-on-surface);
+    font-size: 0.95rem;
+  }
+
+  cite span {
+    font-size: 0.8rem;
+    color: var(--color-on-surface-variant);
+  }
+
+  @media (max-width: 720px) {
+    .testimonials {
+      padding: 4rem 1.25rem;
+    }
+
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
