@@ -1,4 +1,5 @@
 ---
+const isDev = import.meta.env.DEV;
 ---
 
 <footer class="landing-footer">
@@ -91,6 +92,29 @@
           </svg>
         </a>
       </div>
+      {isDev && (
+        <div class="debug-row">
+          <a
+            href="/starter-home"
+            class="debug-link"
+            aria-label="Debug: Starter Home"
+            title="Debug: Starter Home"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="20"
+              height="20"
+            >
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <span>Debug</span>
+          </a>
+        </div>
+      )}
     </div>
   </div>
 </footer>
@@ -212,5 +236,26 @@
     .footer-logo {
       font-size: 1.25rem;
     }
+  }
+
+  .debug-row {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .debug-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-outline-variant);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+  }
+
+  .debug-link:hover {
+    color: var(--color-on-surface-variant);
   }
 </style>
