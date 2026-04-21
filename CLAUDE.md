@@ -18,6 +18,8 @@ Scripts: dev (localhost:4321), build (→ dist/), preview (local build preview),
 
 Font files location: ./src/assets/fonts/atkinson-regular.woff, ./src/assets/fonts/atkinson-bold.woff with display:swap for non-blocking load.
 
+Typography: Body uses Inter (UI Sans), headings use Manrope (Display), long-form content uses Atkinson (Reading) via `.prose` class in BlogPost layout. Code blocks use monospace. This three-tier hierarchy preserves brand voice (Manrope), usability (Inter), and accessibility (Atkinson) without flattening design.
+
 Starter template from Bear Blog theme. No custom integrations or complex config. Ready for blog content in src/content/blog/ using getCollection() API with optional frontmatter schema validation.
 
 MDX Support: Provided via `@astrojs/mdx`. Enables `.mdx` files to embed JSX components and JS expressions within Markdown — useful for interactive content (charts, buttons, alerts).
