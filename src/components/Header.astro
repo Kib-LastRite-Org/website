@@ -44,12 +44,45 @@ import ThemeToggle from './ThemeToggle.astro';
 		</div>
 	</nav>
 </header>
+
+<script>
+	const header = document.querySelector('header');
+
+	function updateHeaderScroll() {
+		if (window.scrollY > 0) {
+			header?.classList.add('scrolled');
+		} else {
+			header?.classList.remove('scrolled');
+		}
+	}
+
+	window.addEventListener('scroll', updateHeaderScroll, { passive: true });
+	updateHeaderScroll();
+</script>
+
 <style>
 	header {
+		position: sticky;
+		top: 0;
 		margin: 0;
 		padding: 0 1em;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		background-color: var(--color-surface);
+		z-index: 100;
+		backdrop-filter: blur(8px);
+		background-image: linear-gradient(
+			to right,
+			var(--color-surface),
+			var(--color-surface) 99%,
+			var(--color-surface-container) 100%
+		);
+		transition: box-shadow 0.3s ease;
 	}
+
+	header.scrolled {
+		box-shadow: 0 4px 16px rgba(var(--black), 12%);
+	}
+
 	h2 {
 		margin: 0;
 		font-size: 1em;
@@ -66,9 +99,10 @@ import ThemeToggle from './ThemeToggle.astro';
 	}
 	nav a {
 		padding: 1em 0.5em;
-		color: var(--black);
+		color: var(--color-on-surface);
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
+		transition: border-bottom-color 0.3s ease;
 	}
 	nav a.active {
 		text-decoration: none;

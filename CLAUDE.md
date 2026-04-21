@@ -14,7 +14,7 @@ Project structure: src/pages/ (routes: index/home, blog/memorial stories, about)
 
 Features: LastRite branding, dark/light theme toggle, Lighthouse 100/100 target, canonical URLs, Open Graph meta, RSS feed generation (memorial posts), Markdown + MDX content support.
 
-Scripts: dev (localhost:4321), build (→ dist/), preview (local build preview), astro (CLI passthrough).
+Scripts: dev (localhost:4321), build (→ dist/), preview (local build preview), astro (CLI passthrough). **Port cleanup:** If port 4321 is stuck in use, run `lsof -ti:4321 | xargs kill -9` to free it before starting dev server.
 
 Font files location: ./src/assets/fonts/atkinson-regular.woff, ./src/assets/fonts/atkinson-bold.woff with display:swap for non-blocking load.
 
