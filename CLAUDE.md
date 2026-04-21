@@ -1,4 +1,5 @@
-Project: kibtestastro1 v0.0.1 — Astro 6.1.8 blog starter template using pnpm.
+# Project: lastrite_website v0.0.1 — Astro 6.1.8 blog starter template using pnpm
+
 Node engine: >=22.12.0, ES modules enabled, zero devDependencies declared.
 
 Core dependencies: astro@^6.1.8, @astrojs/mdx@^5.0.3, @astrojs/sitemap@^3.7.2, @astrojs/rss@^4.0.18, sharp@^0.34.3. While using astro ensure to follow standards of astro6[<https://astro.build/blog/astro-6/>](Astro 6 introduces a broad set of new capabilities, including a built-in Fonts API, Content Security Policy API, and support for Live Content Collections that work with your externally-hosted content through the unified Astro content layer.).
