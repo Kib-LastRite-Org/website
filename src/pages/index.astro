@@ -36,16 +36,19 @@ const description =
     <script>
       import { initAll } from '../scripts/animations.js';
       import { initComingSoonInterceptor } from '../scripts/comingSoonInterceptor';
+      import { initLastRiteToastInterceptor } from '../scripts/lastRiteToastInterceptor';
 
       // Call animations and coming-soon interceptor on DOM ready
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
           initAll();
           initComingSoonInterceptor();
+          initLastRiteToastInterceptor();
         });
       } else {
         initAll();
         initComingSoonInterceptor();
+        initLastRiteToastInterceptor();
       }
     </script>
   </body>
