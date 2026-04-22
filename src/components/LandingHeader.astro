@@ -190,6 +190,7 @@ import ThemeToggle from './ThemeToggle.astro';
 
   .mobile-drawer-backdrop[hidden],
   .mobile-drawer-backdrop[aria-hidden='true'] {
+    display: none !important;
     opacity: 0;
     pointer-events: none;
   }
@@ -206,6 +207,10 @@ import ThemeToggle from './ThemeToggle.astro';
     transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
+  }
+
+  .mobile-drawer[hidden] {
+    display: none !important;
   }
 
   .mobile-drawer[aria-hidden='false'] {
