@@ -1,0 +1,220 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import LandingHeader from '../components/LandingHeader.astro';
+import LandingFooter from '../components/LandingFooter.astro';
+import BackToTopButton from '../components/BackToTopButton.astro';
+import WaitlistForm from '../components/waitlist/WaitlistForm.astro';
+
+const title = 'Join the Waitlist — LastRite';
+const description =
+  'Be among the first to create a dignified tribute. Join thousands honoring their loved ones with LastRite.';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <LandingHeader />
+    <main class="waitlist-page" id="main-content">
+      <section class="waitlist-hero">
+        <div class="waitlist-container">
+          <div class="waitlist-content">
+            <h1 class="waitlist-headline">
+              A dignified space <br />
+              to <em class="accent">remember</em>
+            </h1>
+            <p class="waitlist-subheading">
+              Honor, celebrate, and organize everything that matters about those we love—all in one thoughtful place.
+            </p>
+            <p class="waitlist-description">
+              LastRite is being built for anyone who wants to create a meaningful tribute, preserve precious memories, and support their community through loss. Join the waitlist to be among the first to experience it.
+            </p>
+          </div>
+
+          <div class="waitlist-form-container">
+            <WaitlistForm />
+          </div>
+        </div>
+      </section>
+
+      <section class="waitlist-benefits">
+        <div class="waitlist-container">
+          <h2>What you'll be able to do</h2>
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-icon">📝</div>
+              <h3>Create Meaningful Tributes</h3>
+              <p>Craft personalized obituaries and memorial pages that celebrate a life well lived.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon">💭</div>
+              <h3>Share Cherished Memories</h3>
+              <p>Gather stories, photos, and condolences in one beautiful, shared space.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon">🤝</div>
+              <h3>Support & Community</h3>
+              <p>Connect with others, organize memorial fundraising, and find comfort together.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon">💾</div>
+              <h3>Preserve Legacy</h3>
+              <p>Keep memories safe and accessible for generations to come.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <LandingFooter />
+    <BackToTopButton />
+  </body>
+</html>
+
+<style>
+  .waitlist-page {
+    background-color: var(--color-background);
+  }
+
+  .waitlist-hero {
+    min-height: 80svh;
+    display: flex;
+    align-items: center;
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .waitlist-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 80% 60% at 60% 40%,
+      rgba(105, 219, 173, 0.07) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .waitlist-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .waitlist-content {
+    margin-bottom: 3rem;
+  }
+
+  .waitlist-headline {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.2;
+    font-family: var(--font-display);
+    margin-bottom: 1.5rem;
+    color: var(--color-on-background);
+  }
+
+  .accent {
+    font-style: italic;
+    color: var(--color-primary);
+  }
+
+  .waitlist-subheading {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+  }
+
+  .waitlist-description {
+    font-size: 1rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .waitlist-form-container {
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--border-radius-card);
+    padding: 2rem;
+  }
+
+  .waitlist-benefits {
+    padding: 4rem 0;
+    background: var(--color-surface-dim);
+  }
+
+  .waitlist-benefits h2 {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-family: var(--font-display);
+    margin-bottom: 2.5rem;
+    text-align: center;
+    color: var(--color-on-background);
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .benefit-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-outline-variant);
+    border-radius: var(--border-radius-card);
+    padding: 1.75rem;
+    text-align: center;
+  }
+
+  .benefit-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .benefit-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-on-surface);
+  }
+
+  .benefit-card p {
+    font-size: 0.95rem;
+    color: var(--color-on-surface-variant);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 720px) {
+    .waitlist-hero {
+      min-height: auto;
+      padding: 2.5rem 0;
+    }
+
+    .waitlist-form-container {
+      padding: 1.5rem;
+    }
+
+    .waitlist-headline {
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+    }
+
+    .waitlist-subheading {
+      font-size: 1rem;
+    }
+
+    .waitlist-description {
+      font-size: 0.95rem;
+    }
+
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

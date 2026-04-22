@@ -1,0 +1,275 @@
+---
+import Toast from '../Toast.astro';
+---
+
+<form class="waitlist-form" id="waitlistForm" data-form="waitlist">
+  <div class="form-group">
+    <label for="email" class="form-label">Email Address</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      class="form-input"
+      placeholder="your@email.com"
+      required
+      aria-required="true"
+    />
+  </div>
+
+  <div class="form-group checkbox-group">
+    <label class="checkbox-label" for="notify">
+      <input
+        type="checkbox"
+        id="notify"
+        name="notify"
+        class="checkbox-input"
+        checked
+      />
+      <span class="checkbox-custom"></span>
+      Notify me when LastRite is available
+    </label>
+  </div>
+
+  <button type="submit" class="btn btn-primary form-submit">
+    Join the Waitlist
+  </button>
+
+  <p class="form-footer">
+    We respect your privacy. Unsubscribe anytime.
+  </p>
+</form>
+
+<div id="toastContainer" class="toast-container"></div>
+
+<script>
+  const form = document.getElementById('waitlistForm');
+  const toastContainer = document.getElementById('toastContainer');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const email = formData.get('email');
+      const notify = formData.get('notify') === 'on';
+
+      try {
+        // Simulate API call (mock submission)
+        await simulateSubmission(email, notify);
+
+        // Show success toast
+        showSuccessToast(email);
+
+        // Reset form
+        form.reset();
+      } catch (error) {
+        showErrorToast();
+      }
+    });
+  }
+
+  function simulateSubmission(email, notify) {
+    return new Promise((resolve) => {
+      // Simulate network delay (800-1200ms)
+      const delay = Math.random() * 400 + 800;
+      setTimeout(() => {
+        console.log('Waitlist submission:', { email, notify, timestamp: new Date().toISOString() });
+        resolve();
+      }, delay);
+    });
+  }
+
+  function showSuccessToast(email) {
+    const toastHtml = `
+      <div class="toast toast--success" role="status" aria-live="polite" aria-atomic="true">
+        <div class="toast-content">
+          <div class="toast-message">
+            <p class="toast-title">Confirmed! You're on the list.</p>
+            <p class="toast-description">We'll send updates to ${email} when LastRite becomes available.</p>
+          </div>
+          <button class="toast-dismiss" aria-label="Dismiss notification" onclick="this.closest('.toast').remove()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+
+    const toast = document.createElement('div');
+    toast.innerHTML = toastHtml;
+    toastContainer.appendChild(toast.firstElementChild);
+
+    // Auto-dismiss after 5 seconds
+    const toastEl = toastContainer.querySelector('.toast');
+    setTimeout(() => {
+      toastEl?.classList.add('toast--exiting');
+      setTimeout(() => {
+        toastEl?.remove();
+      }, 300);
+    }, 5000);
+  }
+
+  function showErrorToast() {
+    const toastHtml = `
+      <div class="toast toast--error" role="status" aria-live="polite" aria-atomic="true">
+        <div class="toast-content">
+          <div class="toast-message">
+            <p class="toast-title">Oops, something went wrong</p>
+            <p class="toast-description">Please try again or contact us for support.</p>
+          </div>
+          <button class="toast-dismiss" aria-label="Dismiss notification" onclick="this.closest('.toast').remove()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+
+    const toast = document.createElement('div');
+    toast.innerHTML = toastHtml;
+    toastContainer.appendChild(toast.firstElementChild);
+  }
+</script>
+
+<style>
+  .waitlist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-on-surface);
+    font-family: var(--font-body);
+  }
+
+  .form-input {
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--color-outline);
+    border-radius: 8px;
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(105, 219, 173, 0.1);
+  }
+
+  .form-input::placeholder {
+    color: var(--color-on-surface-variant);
+  }
+
+  .checkbox-group {
+    gap: 0.75rem;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--color-on-surface);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .checkbox-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--color-outline);
+    border-radius: 4px;
+    background-color: var(--color-surface);
+    transition: all 0.2s ease;
+  }
+
+  .checkbox-input:checked + .checkbox-custom {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .checkbox-input:checked + .checkbox-custom::after {
+    content: '✓';
+    color: var(--color-surface);
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+
+  .checkbox-input:focus + .checkbox-custom {
+    box-shadow: 0 0 0 3px rgba(105, 219, 173, 0.1);
+  }
+
+  .form-submit {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+  }
+
+  .form-submit:hover {
+    transform: translateY(-2px);
+  }
+
+  .form-submit:active {
+    transform: translateY(0);
+  }
+
+  .form-footer {
+    font-size: 0.85rem;
+    color: var(--color-on-surface-variant);
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  .toast-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    .toast-container {
+      left: 1rem;
+      right: 1rem;
+    }
+
+    .form-submit {
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+    }
+  }
+</style>

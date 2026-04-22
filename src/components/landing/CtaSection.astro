@@ -5,7 +5,10 @@
   <div class="cta-inner reveal">
     <h2 id="cta-heading">Start Your Tribute Today</h2>
     <p>Give your loved ones the memorial they deserve. Free to start.</p>
-    <a href="/" data-coming-soon="true" data-feature="Create Memorial" class="btn btn-dark btn-lg">Create Memorial Now</a>
+    <div class="cta-buttons">
+      <a href="/waitlist" class="btn btn-dark btn-lg">Join the Waitlist</a>
+      <a href="/" data-coming-soon="true" data-feature="Create Memorial" class="btn btn-outline btn-lg">Create Memorial Now</a>
+    </div>
   </div>
 </section>
 
@@ -38,6 +41,13 @@
     font-size: 1.05rem;
     line-height: 1.6;
     margin-bottom: 2rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   @media (max-width: 720px) {
