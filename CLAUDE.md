@@ -17,6 +17,14 @@ Project structure: src/pages/ (routes: index/marketing landing, starter-home/ori
 
 Features: LastRite branding, dark/light theme toggle, Lighthouse 100/100 target, canonical URLs, Open Graph meta, RSS feed generation (memorial posts), Markdown + MDX content support.
 
+**Responsive Design & Mobile Testing:**
+
+- Primary breakpoint at 720px (hides nav-links, shows hamburger menu; buttons moved to mobile menu to prevent overflow)
+- Secondary breakpoint at 480px (optimizes toast, spacing, fonts for small phones like Android at 375px width)
+- When positioning elements with left/right on mobile, use `width: auto` (not `width: 100%`) to respect margin constraints
+- Always test at actual device widths (375px for Android, 390px for iPhone) — not just breakpoints — to catch edge cases
+- Test theme toggle and all interactive components at smallest widths before committing
+
 Scripts: dev (localhost:4321), build (→ dist/), preview (local build preview), astro (CLI passthrough). **Port cleanup:** If port 4321 is stuck in use, run `lsof -ti:4321 | xargs kill -9` to free it before starting dev server.
 
 Font files location: ./src/assets/fonts/atkinson-regular.woff, ./src/assets/fonts/atkinson-bold.woff with display:swap for non-blocking load.

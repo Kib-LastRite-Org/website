@@ -121,6 +121,7 @@
   .toast {
     left: 1rem;
     right: 1rem;
+    width: auto;
     transform: none;
     max-width: none;
   }
