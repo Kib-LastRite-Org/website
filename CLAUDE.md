@@ -33,3 +33,4 @@ Key points: [MDX = Markdown + JSX/JS — React-like syntax; tags + `{}` expressi
 Documentation & Git: Keep up-to-date: README.md (overview/quick start), LICENSE (proprietary), CHANGELOG.md (all changes), CONTRIBUTING.md (workflow), DEVELOPMENT.md (setup), DEPLOYMENT.md (procedures), .env.example (template).
 After tasks: Update relevant docs (especially CHANGELOG.md), provide sample commit message for user to use manually.
 Commit format: `<type>(<scope>): <subject>`. Examples: `feat(hero): add animated background`, `fix(toast): correct coming-soon interception`, `docs(changelog): add initial docs`, `refactor(footer): improve spacing`.
+logs/documentations etc are kept in folder `./docs_etc/`.
