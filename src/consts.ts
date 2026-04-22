@@ -3,3 +3,4 @@
 
 export const SITE_TITLE = 'LastRite';
 export const SITE_DESCRIPTION = 'Create, share, and honor obituaries in one meaningful place.';
+export const COMING_SOON_SUBTITLE = "This feature is on the way. Stay tuned 😁";

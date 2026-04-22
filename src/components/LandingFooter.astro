@@ -19,7 +19,13 @@ const isDev = import.meta.env.DEV;
         <li><a href="#features">Features</a></li>
         <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#testimonials">Testimonials</a></li>
-        <li><a href="/blog">Blog</a></li>
+        <li>
+          <a href="/blog"
+            data-coming-soon="true"
+            data-feature="Blog">
+            Blog
+          </a>
+        </li>
       </ul>
     </nav>
 
@@ -27,23 +33,57 @@ const isDev = import.meta.env.DEV;
     <nav aria-label="Legal links">
       <h4>Legal</h4>
       <ul>
-        <li><a href="/privacy">Privacy Policy</a></li>
-        <li><a href="/terms">Terms of Service</a></li>
-        <li><a href="/cookies">Cookie Policy</a></li>
+        <li>
+          <a 
+          href="/privacy"
+          data-coming-soon="true"
+          data-feature="Privacy Policy"
+          data-feature-subtitle="This will be availed soon 😁">
+            Privacy Policy
+          </a>
+        </li>
+        <li>
+          <a href="/terms"
+            title="Terms of Service"
+            data-coming-soon="true"
+            data-feature="Terms of Service"
+            data-feature-subtitle="This will be availed soon 😁">
+            Terms of Service
+          </a>
+        </li>
+        <li>
+          <a href="/cookies"
+            title="Cookie Policy"
+            data-coming-soon="true"
+            data-feature="Cookie Policy"
+            data-feature-subtitle="This will be availed soon 😁">
+            Cookie Policy
+          </a>
+        </li>
       </ul>
     </nav>
 
     <!-- Col 4: Contact -->
     <div class="footer-contact">
       <h4>Contact</h4>
-      <a href="mailto:hello@lastrite.app" class="footer-email">
+      <a
+        href="mailto:hello@lastrite.app"
+        class="footer-email"
+        data-coming-soon="true"
+        data-feature="Email Contact"
+        data-feature-subtitle="You shall be able to reach us soon 😁"
+        title="Contact Us"
+        aria-label="Curious about LastRite? Send us an email"
+      >
         hello@lastrite.app
       </a>
       <div class="social-row">
         <a
-          href="#"
-          aria-label="Visit us on Twitter"
-          title="Twitter"
+          href="/"
+          aria-label="Visit us on X"
+          title="X(formely Twitter)"
+          data-coming-soon="true"
+          data-feature="X/Twitter"
         >
           <svg
             viewBox="0 0 24 24"
@@ -57,9 +97,11 @@ const isDev = import.meta.env.DEV;
           </svg>
         </a>
         <a
-          href="#"
+          href="/"
           aria-label="Visit us on Instagram"
           title="Instagram"
+          data-coming-soon="true"
+          data-feature="Instagram"
         >
           <svg
             viewBox="0 0 24 24"
@@ -75,9 +117,11 @@ const isDev = import.meta.env.DEV;
           </svg>
         </a>
         <a
-          href="#"
+          href="/"
           aria-label="Visit us on LinkedIn"
           title="LinkedIn"
+          data-coming-soon="true"
+          data-feature="LinkedIn"
         >
           <svg
             viewBox="0 0 24 24"
@@ -259,3 +303,4 @@ const isDev = import.meta.env.DEV;
     color: var(--color-on-surface-variant);
   }
 </style>
+

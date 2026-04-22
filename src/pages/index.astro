@@ -35,12 +35,17 @@ const description =
 
     <script>
       import { initAll } from '../scripts/animations.js';
+      import { initComingSoonInterceptor } from '../scripts/comingSoonInterceptor';
 
-      // Call animations on DOM ready
+      // Call animations and coming-soon interceptor on DOM ready
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initAll);
+        document.addEventListener('DOMContentLoaded', () => {
+          initAll();
+          initComingSoonInterceptor();
+        });
       } else {
         initAll();
+        initComingSoonInterceptor();
       }
     </script>
   </body>

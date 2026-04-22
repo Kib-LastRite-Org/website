@@ -1,0 +1,68 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  type?: 'info' | 'success' | 'warning' | 'error';
+  duration?: number;
+  dismissible?: boolean;
+}
+
+const {
+  title,
+  description,
+  type = 'info',
+  duration = 5000,
+  dismissible = true,
+} = Astro.props;
+
+const toastId = `toast-${Math.random().toString(36).slice(2, 11)}`;
+---
+
+<div
+  id={toastId}
+  class={`toast toast--${type}`}
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+>
+  <div class="toast-content">
+    <div class="toast-message">
+      <p class="toast-title">{title}</p>
+      {description && <p class="toast-description">{description}</p>}
+    </div>
+    {dismissible && (
+      <button
+        class="toast-dismiss"
+        aria-label="Dismiss notification"
+        onclick={`document.getElementById('${toastId}').remove()`}
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="18"
+          height="18"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    )}
+  </div>
+</div>
+
+<script define:vars={{ toastId, duration }} is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toast = document.getElementById(toastId);
+    if (toast && duration > 0) {
+      setTimeout(() => {
+        toast.classList.add('toast--exiting');
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      }, duration);
+    }
+  });
+</script>
+

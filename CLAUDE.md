@@ -1,10 +1,13 @@
 # Project: LastRite Marketing Website — Astro 6.1.8 (transitioning from blog starter template)
 
-**Note:** This project was initialized from Astro's official blog starter kit but is now being adapted as the official marketing website for LastRite, a digital platform for creating and sharing obituaries.
+Note: This project was initialized from Astro's official blog starter kit but is now being adapted as the official marketing website for LastRite, a digital platform for creating and sharing obituaries.[docs_etc/from-lastrite-app-project--PROJECT_REPORT.md]
 
 Node engine: >=22.12.0, ES modules enabled, zero devDependencies declared.
 
-Core dependencies: astro@^6.1.8, @astrojs/mdx@^5.0.3, @astrojs/sitemap@^3.7.2, @astrojs/rss@^4.0.18, sharp@^0.34.3. While using astro ensure to follow standards of astro6[<https://astro.build/blog/astro-6/>](Astro 6 introduces a broad set of new capabilities, including a built-in Fonts API, Content Security Policy API, and support for Live Content Collections that work with your externally-hosted content through the unified Astro content layer.).
+Core dependencies: astro@^6.1.8, @astrojs/mdx@^5.0.3, @astrojs/sitemap@^3.7.2, @astrojs/rss@^4.0.18, sharp@^0.34.3. While using astro ensure to follow standards of astro6[<https://astro.build/blog/astro-6/>](Astro 6 introduces a broad set of new capabilities, including a built-in Fonts API, Content Security Policy API, and support for Live Content Collections that work with your externally-hosted content through the unified Astro content layer.)(Always ensure to use Astro-6-&-onwards features).
+
+- logs/documentations etc are kept in folder `./docs_etc/`.
+- include current & validated data via web-search. sequential-thinking for proper assessment and planning.
 
 TypeScript config extends astro/tsconfigs/strict with strictNullChecks enabled. Target output: dist/ directory.
 
@@ -33,4 +36,3 @@ Key points: [MDX = Markdown + JSX/JS — React-like syntax; tags + `{}` expressi
 Documentation & Git: Keep up-to-date: README.md (overview/quick start), LICENSE (proprietary), CHANGELOG.md (all changes), CONTRIBUTING.md (workflow), DEVELOPMENT.md (setup), DEPLOYMENT.md (procedures), .env.example (template).
 After tasks: Update relevant docs (especially CHANGELOG.md), provide sample commit message for user to use manually.
 Commit format: `<type>(<scope>): <subject>`. Examples: `feat(hero): add animated background`, `fix(toast): correct coming-soon interception`, `docs(changelog): add initial docs`, `refactor(footer): improve spacing`.
-logs/documentations etc are kept in folder `./docs_etc/`.
