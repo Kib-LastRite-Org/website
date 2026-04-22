@@ -1,0 +1,35 @@
+{
+  "name": "LastRite — Celebrate a Life Well Lived",
+  "short_name": "LastRite",
+  "description": "Create meaningful obituaries, share cherished memories, and organize memorial fundraising—all in one place. Join millions honoring their loved ones.",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#69dbad",
+  "background_color": "#05170b",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "start_url": "/",
+  "categories": ["lifestyle", "productivity"],
+  "screenshots": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "form_factor": "wide"
+    }
+  ],
+  "prefer_related_applications": false
+}
