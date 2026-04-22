@@ -1,8 +1,5 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import BackToTopButton from '../components/BackToTopButton.astro';
-import LandingHeader from '../components/LandingHeader.astro';
-import LandingFooter from '../components/LandingFooter.astro';
+import MarketingLayout from '../layouts/MarketingLayout.astro';
 import HeroSection from '../components/landing/HeroSection.astro';
 import FeaturesSection from '../components/landing/FeaturesSection.astro';
 import HowItWorksSection from '../components/landing/HowItWorksSection.astro';
@@ -15,13 +12,7 @@ const description =
   'Create meaningful obituaries, share cherished memories, and organize memorial fundraising—all in one place. Join millions honoring their loved ones.';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-  </head>
-  <body>
-    <LandingHeader />
+<MarketingLayout title={title} description={description}>
     <main class="landing" id="main-content">
       <HeroSection />
       <FeaturesSection />
@@ -30,8 +21,6 @@ const description =
       <TestimonialsSection />
       <CtaSection />
     </main>
-    <LandingFooter />
-    <BackToTopButton />
 
     <script>
       import { initAll } from '../scripts/animations.js';
@@ -51,5 +40,4 @@ const description =
         initLastRiteToastInterceptor();
       }
     </script>
-  </body>
-</html>
+</MarketingLayout>

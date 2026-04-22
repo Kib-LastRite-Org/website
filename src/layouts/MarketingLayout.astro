@@ -1,0 +1,24 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import LandingHeader from '../components/LandingHeader.astro';
+import LandingFooter from '../components/LandingFooter.astro';
+import BackToTopButton from '../components/BackToTopButton.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <LandingHeader />
+    <slot />
+    <LandingFooter />
+    <BackToTopButton />
+  </body>
+</html>
