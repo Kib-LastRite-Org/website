@@ -3,13 +3,19 @@
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
+import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
   site: process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : "https://example.com",
+
   integrations: [mdx(), sitemap()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
+
   fonts: [
     {
       provider: fontProviders.local(),
