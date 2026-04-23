@@ -182,11 +182,15 @@ const description =
   @media (max-width: 720px) {
     .waitlist-hero {
       min-height: auto;
-      padding: 2.5rem 0;
+      padding: 2rem 0;
+    }
+
+    .waitlist-container {
+      padding: 1.25rem;
     }
 
     .waitlist-form-container {
-      padding: 1.5rem;
+      padding: 1.25rem;
     }
 
     .waitlist-headline {
@@ -203,6 +207,28 @@ const description =
 
     .benefits-grid {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .waitlist-container {
+      padding: 1rem;
+    }
+
+    .waitlist-form-container {
+      padding: 1rem;
+    }
+
+    .waitlist-hero {
+      padding: 1.5rem 0;
+    }
+
+    .waitlist-headline {
+      margin-bottom: 1rem;
+    }
+
+    .waitlist-benefits {
+      padding: 2rem 0;
     }
   }
 </style>
