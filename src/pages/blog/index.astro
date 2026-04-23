@@ -1,0 +1,262 @@
+---
+import MarketingLayout from '../../layouts/MarketingLayout.astro';
+
+const title = 'LastRite Chronicle - Blog & Stories';
+const description = 'Insights into our journey, product updates, and the stories behind digital memorials.';
+
+const posts = [
+  {
+    id: 1,
+    category: 'Engineering',
+    categoryColor: 'text-secondary',
+    title: 'Scaling Memorial Services for Global Reach',
+    excerpt: 'How we optimized our database for high-traffic memorial anniversaries and distributed global edge delivery.',
+    author: 'Alex Chen',
+    date: 'Apr 28',
+    readTime: '8 min',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3Huz8BFCQuBrMBVizF696hUgjeZ9yUAFRYD0v5ABltuei3Sp9g3aKDUfbjIrSrEsrZhQMAFiHI5SLpm943PQPW9n3nni8dyCIjJMcENNuRohDdJrbh8yC4JlMhAeEDQ2lqPVfuFLP7371IMtn_xcI5MtmFlOk04i9MArfJDWfhB5GpV6BBHSQFS3waRMoq26AIChnrM8o07WP-35qe6dHzm5WMcra2_kh9D3B6pApWrg5w9Zvcgfi3fTgyswmCadYgC3LpO662Zoj',
+    imageAlt: 'close-up of complex circuit board with glowing emerald light pathways illuminating futuristic server architecture',
+    delay: '0.1s',
+  },
+  {
+    id: 2,
+    category: 'Stories',
+    categoryColor: 'text-tertiary-fixed-dim',
+    title: 'Finding Solace in Digital Heirlooms',
+    excerpt: 'Personal accounts of how shared digital legacies helped a community heal after unexpected loss.',
+    author: 'Elena Rossi',
+    date: 'May 05',
+    readTime: '5 min',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCu_hZCbr7BAU2xZGdPjsWvHn0sZQB1XXnRTG34z0vs7kOzi-XSKq5xafi4JpeMpKbSwyUq_D8mHuoWp4vB0lNKoMjbs_ORGoQE_7-2Ibg1OUGXjhlZdFhgfkVBST4y2qawEnNdS7yom211NJ9AMiRc9kPlSsY5PoD14CHmMn-ATtQN0a987XzMP-EkDd_uKrDGGQoHEtOAQsMf70AE6kfNrzrxtGGm24iso_-8EdSUpVX_PbwI-N0K2hBtultCwi8E_TehJRY5QUrc',
+    imageAlt: 'soft focus of a family sitting together in a sun-drenched library sharing a tablet with warm emotional lighting',
+    delay: '0.2s',
+  },
+  {
+    id: 3,
+    category: 'Product Updates',
+    categoryColor: 'text-primary',
+    title: 'The New LastRite Mobile Experience',
+    excerpt: 'A complete overhaul of our mobile application to focus on accessibility and mindful interaction.',
+    author: 'David Park',
+    date: 'May 10',
+    readTime: '4 min',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCU_DV15iPvc7JqQhyeePGNdqLuHltpLJqfa2j-RfUfjIj4rHgvbAB-szYGe9P4gCNTLoxJ5EskxOmZsxm5U8rpOLsvFhNBwFlAEGPqJTPhPjnm3G2UeUWJFkh6lXWRHNmTWb4W0HtbpawxVwLjFI7y1VZgygcuUw88AwSRsXysKlLcOYJKo67DHOmmbfalw3nt8I5sfZKmW_uk4-ZlJ_CP-L_xRwSued63jj9fyxRTTnd7oxqUDQ2wFnNNcn5rTfHQE15mR4ysxT1d',
+    imageAlt: 'minimalist white desk with a glowing smartphone displaying a clean user interface with floral motifs',
+    delay: '0.3s',
+  },
+  {
+    id: 4,
+    category: 'Engineering',
+    categoryColor: 'text-secondary',
+    title: 'Encryption Standards for Eternal Privacy',
+    excerpt: 'Deep dive into our zero-knowledge architecture ensuring your memories stay private for generations.',
+    author: 'Marcus Thorne',
+    date: 'Apr 15',
+    readTime: '12 min',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAR4wFsbcuM2aZ_-zJw6DJZW0L0PL_9vLFnWZJFWmG0GT91EU3dFcTWoHWd1gmQfLFSrZFjpKJmZgmjYRu1h4aRxXlMn84U8EFCNntuH-YDE8hWqltwxi0OnMgSAOERxE-dBU3d3WNpHpYsovDJ4BYYNggbAWq2TCPVwh5oEBuUKQ-Hnqi9RzVluOCOMHLbcICVczeBInqruDJyyESm6jK2Lps3qa2MS7jndJvkkJPllEj3FwnVXQ_aQE2EoqD8AlPP91KZZmedBplL',
+    imageAlt: 'macro photography of a single glowing tree leaf with golden veins against a deep dark background',
+    delay: '0.4s',
+  },
+  {
+    id: 5,
+    category: 'Milestones',
+    categoryColor: 'text-tertiary-fixed-dim',
+    title: 'Reaching 1 Million Legacies Protected',
+    excerpt: 'Celebrating the global community that trusts LastRite to preserve their most precious stories.',
+    author: 'Sarah Miller',
+    date: 'Apr 02',
+    readTime: '3 min',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZoYkywkGv6s9D_wpca-tNDNkzDzOhZO7HGAYSWfu_macFZQOsYAcI2ijlqiz44i_goBvgvT-ziATPJxfgm0Fqv1l4A_WPgYs3YAzJ8JX7SmHwiDNqfONX0_9jzsHzkmPbGItGJHw0Z5BnB5zFjq2ZaulYgpa2FXxY2qC974i4V_W-dcU2WN6U9Jj_QZOcpAyxWfLZKEDA5W6ba0zZK6MmmG_NxiqLQ6ShoVwcX4Zi5wAFRjHU4dZHrI7B_3hKmMDOROtU5wzLz9xt',
+    imageAlt: 'abstract composition of floating geometric crystals glowing with soft mint and orange light in a dark void',
+    delay: '0.5s',
+  },
+  {
+    id: 6,
+    category: 'Stories',
+    categoryColor: 'text-primary',
+    title: 'The Philosophy of Digital Immortality',
+    excerpt: 'A thoughtful exploration of what it means to live on through the pixels and memories we leave behind.',
+    author: 'Julian Vane',
+    date: 'Mar 25',
+    readTime: '15 min',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBcAtfPudYl51fiNHjvCLc0M8tcG9UrmUIJd2OchrkydFvUvL-5iYLtTYkFwekmrEvVzDukY2CfFZ0WRUIwilQd01sg0jHez5yDoyBJF1YHtT0S9aNOdkuKtSf3QN6f11Ql3Dp6_Eevu5KmoCyeL5uZCVzTOgqxQGEGk_guYVjE0REHchscG5nShxoIUyI6WQnKLPISP-AxHP2TB22U1kynPkI0TFKsDz5hvT4-bk-c40dIpIDMAl6cVZZS9YpD_M3Oa86p5MF8oNcN',
+    imageAlt: 'low angle shot of ancient oak trees in a misty forest with ethereal light beams filtering through the canopy',
+    delay: '0.6s',
+  },
+];
+
+const featuredPost = {
+  title: 'Introducing Memorial Spaces: A New Way to Gather and Grieve',
+  category: 'Feature',
+  author: 'Sarah Miller',
+  date: 'May 12, 2024',
+  readTime: '6 min read',
+  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuALJBsT8UghXJYO7Qs7XdOh0F9KoriWH4prgOvEGhlQjYyLD1g2tssmWAs8tJkRMSES-wbzk6hHs5bFy3ewC-fxzqe_mU54cxyzhgvkhfxAeF1p5SAkNDZhMmK14ViuSbglQcaC_0-MJL7Hxn-mXGrdrWRPHnH3op_5XOzvmFPdttkwL0mm76EVK9nbk-DtuT6z1Uq3zR2LabxZkio3kdLBJtW_0dBSCdJJcQ8wM1gK5QUS2CUG_l9UkEdKsbh9a6zfQSrZ4ZtqURIy',
+  imageAlt: 'dramatic wide shot of a serene mountain lake at twilight with glowing digital particles rising like stars into the night sky',
+};
+
+const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stories'];
+---
+
+<MarketingLayout title={title} description={description}>
+  <main class="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+    <!-- Hero Section -->
+    <header class="mb-16 reveal">
+      <h1 class="font-display-lg text-display-lg text-on-background max-w-3xl mb-6">
+        The LastRite Chronicle: Honoring Legacies, Building the Future.
+      </h1>
+      <p class="font-body-reading text-body-reading text-on-surface-variant max-w-2xl">
+        Insights into our journey, product updates, and the stories behind digital memorials.
+      </p>
+    </header>
+
+    <!-- Search & Filter Bar -->
+    <section class="mb-12 reveal flex flex-col md:flex-row gap-6 items-center justify-between">
+      <div class="relative w-full md:w-96">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+        <input
+          class="w-full bg-surface-container border border-glass-border rounded-xl py-3 pl-12 pr-4 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
+          placeholder="Search posts..."
+          type="text"
+        />
+      </div>
+      <div class="flex gap-3 overflow-x-auto pb-2 w-full md:w-auto">
+        {categories.map((cat) => (
+          <button
+            class={`px-5 py-2 rounded-full text-label-caps whitespace-nowrap transition-colors ${
+              cat === 'All'
+                ? 'bg-primary-container text-on-primary-container'
+                : 'glass-panel text-on-surface-variant hover:text-primary'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </section>
+
+    <!-- Featured Post -->
+    <section class="mb-20 reveal">
+      <div class="group relative rounded-16px overflow-hidden h-[500px] flex items-end p-8 md:p-16">
+        <img
+          alt={featuredPost.imageAlt}
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          src={featuredPost.image}
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+        <div class="relative z-10 max-w-2xl">
+          <span class="bg-primary/20 text-primary px-3 py-1 rounded-full text-label-caps mb-4 inline-block backdrop-blur-md"
+            >{featuredPost.category}</span
+          >
+          <h2 class="font-display-md text-display-md text-on-background mb-4">{featuredPost.title}</h2>
+          <div class="flex items-center gap-4 text-on-surface-variant font-ui-main text-sm">
+            <span class="font-semibold text-on-surface">{featuredPost.author}</span>
+            <span>•</span>
+            <span>{featuredPost.date}</span>
+            <span>•</span>
+            <span>{featuredPost.readTime}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+      {posts.map((post) => (
+        <article
+          class="reveal glass-panel rounded-16px overflow-hidden group hover:scale-[1.02] transition-all duration-300 mint-glow-hover flex flex-col"
+          style={`animation-delay: ${post.delay};`}
+        >
+          <div class="h-48 overflow-hidden">
+            <img
+              alt={post.imageAlt}
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              src={post.image}
+            />
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <span class={`${post.categoryColor} font-label-caps text-label-caps mb-3`}>{post.category}</span>
+            <h3 class="font-headline-sm text-headline-sm mb-3 group-hover:text-primary transition-colors">
+              {post.title}
+            </h3>
+            <p class="text-on-surface-variant text-sm line-clamp-3 mb-6">{post.excerpt}</p>
+            <div class="mt-auto flex items-center justify-between text-xs text-outline">
+              <span>{post.author}</span>
+              <span>{post.date} • {post.readTime}</span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <!-- Pagination -->
+    <nav class="reveal flex justify-center items-center gap-4 mb-24">
+      <button class="w-10 h-10 flex items-center justify-center rounded-xl glass-panel text-on-surface hover:bg-primary/20 transition-colors"
+        >1</button
+      >
+      <button class="w-10 h-10 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-primary transition-colors"
+        >2</button
+      >
+      <button class="w-10 h-10 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-primary transition-colors"
+        >3</button
+      >
+      <span class="text-outline">...</span>
+      <button class="px-5 py-2 flex items-center justify-center rounded-xl glass-panel text-on-surface hover:text-primary transition-colors font-semibold"
+        >Next <span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span></button
+      >
+    </nav>
+
+    <!-- CTA Section -->
+    <section class="reveal glass-panel rounded-16px p-12 md:p-20 text-center relative overflow-hidden">
+      <div class="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 blur-[100px] rounded-full"></div>
+      <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-secondary/10 blur-[100px] rounded-full"></div>
+      <div class="relative z-10">
+        <h2 class="font-display-md text-display-md mb-6">Stay updated on the future of remembrance.</h2>
+        <p class="text-on-surface-variant mb-10 max-w-lg mx-auto">
+          Join 10,000+ others receiving our monthly digest on technology, grief, and legacy.
+        </p>
+        <form class="flex flex-col md:flex-row gap-4 max-w-md mx-auto">
+          <input
+            class="flex-grow bg-surface border border-glass-border rounded-xl px-6 py-4 outline-none focus:ring-1 focus:ring-primary"
+            placeholder="Enter your email"
+            type="email"
+          />
+          <button
+            class="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(105,219,173,0.4)] transition-all"
+            >Subscribe</button
+          >
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: revealFade 0.8s forwards ease-out;
+    }
+
+    @keyframes revealFade {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .glass-panel {
+      background: rgba(13, 31, 20, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(226, 237, 230, 0.1);
+    }
+
+    .mint-glow-hover:hover {
+      box-shadow: 0 0 25px rgba(105, 219, 173, 0.15);
+      border-color: rgba(105, 219, 173, 0.3);
+    }
+
+    .rounded-16px {
+      border-radius: 16px;
+    }
+  </style>
+</MarketingLayout>
