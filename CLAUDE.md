@@ -41,6 +41,16 @@ Key points: [MDX = Markdown + JSX/JS — React-like syntax; tags + `{}` expressi
   <HeaderLink href="/about">About</HeaderLink>
 ```], [Opt out: remove `@astrojs/mdx` from `astro.config.mjs` to use plain `.md` only].
 
+**Tailwind v4 Hybrid Migration:**
+
+Installed tailwindcss@4.2.4 + @tailwindcss/vite@4.2.4. Uses CSS-first hybrid approach: keep existing design system (tokens, theme, components, animations) while adding Tailwind utilities for layout/spacing/flex/grid.
+
+Implementation: `@theme` block in `src/styles/global.css` maps CSS variables to Tailwind utilities (`--color-primary: var(--color-primary)` → `bg-primary`). Self-referential CSS variables resolve at runtime for live theme switching. **No tailwind.config.js** — that's Tailwind v3 only.
+
+Keep in CSS: complex effects (gradients, ::before/::after), animations, typography hierarchy, all tokens, component classes (`.btn`, `.glass-panel`). Convert to Tailwind: simple layout patterns (flex, gap, padding, grid), spacing utilities, responsive wrappers.
+
+Process: (1) Start with components that have layout-only CSS, (2) add Tailwind classes to markup, remove equivalent CSS rules, (3) test at actual widths (375px/390px), (4) build to verify, (5) commit. DO: Replace simple flex/gap patterns. DON'T: Use `@apply` heavily, create config.js, use Tailwind dark mode, mix Tailwind utils with animated/complex-styled components.
+
 Documentation & Git: Keep up-to-date: README.md (overview/quick start), LICENSE (proprietary), CHANGELOG.md (all changes), CONTRIBUTING.md (workflow), DEVELOPMENT.md (setup), DEPLOYMENT.md (procedures), .env.example (template).
 After tasks: Update relevant docs (especially CHANGELOG.md), provide sample commit message for user to use manually.
 Commit format: `<type>(<scope>): <subject>`. Examples: `feat(hero): add animated background`, `fix(toast): correct coming-soon interception`, `docs(changelog): add initial docs`, `refactor(footer): improve spacing`.
