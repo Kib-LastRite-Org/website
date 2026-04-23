@@ -17,7 +17,7 @@ import heroImage from '../../assets/blog-placeholder-1.jpg';
       <p class="hero-sub reveal" data-delay="3">
         When words are hard, give memories a place to live. Bring family together around a life that deserves to be remembered.
       </p>
-      <div class="hero-ctas reveal" data-delay="4">
+      <div class="hero-ctas reveal flex gap-4 flex-wrap" data-delay="4">
         <a href="#cta" class="btn btn-primary">Join the Waitlist →</a>
         <a href="#how-it-works" class="btn btn-outline">See how it works</a>
       </div>
@@ -32,7 +32,7 @@ import heroImage from '../../assets/blog-placeholder-1.jpg';
           loading="eager"
           decoding="async"
         />
-        <div class="hero-badge" aria-label="Global community statistics">
+        <div class="hero-badge flex flex-col gap-1" aria-label="Global community statistics">
           <span class="badge-label">FAMILIES WORLDWIDE</span>
           <span class="badge-stat">
             <span data-counter="4.8" data-counter-suffix="M">4.8M</span>
@@ -109,12 +109,6 @@ import heroImage from '../../assets/blog-placeholder-1.jpg';
     line-height: 1.6;
   }
 
-  .hero-ctas {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
   .hero-card {
     border-radius: var(--border-radius-card);
     overflow: hidden;
@@ -136,9 +130,6 @@ import heroImage from '../../assets/blog-placeholder-1.jpg';
     border: 1px solid var(--color-outline-variant);
     border-radius: 12px;
     padding: 0.75rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
     animation: float 4s ease-in-out infinite;
   }
 
