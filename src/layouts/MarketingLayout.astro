@@ -20,5 +20,22 @@ const { title, description } = Astro.props;
     <slot />
     <LandingFooter />
     <BackToTopButton />
+
+    <script>
+      import { initComingSoonInterceptor } from '../scripts/comingSoonInterceptor';
+      import { initLastRiteToastInterceptor } from '../scripts/lastRiteToastInterceptor';
+
+      // Call animations and coming-soon interceptor on DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          initComingSoonInterceptor();
+          initLastRiteToastInterceptor();
+        });
+      } else {
+        initComingSoonInterceptor();
+        initLastRiteToastInterceptor();
+      }
+    </script>
+
   </body>
 </html>
