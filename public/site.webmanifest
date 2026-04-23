@@ -43,9 +43,15 @@
   "categories": ["lifestyle", "productivity"],
   "screenshots": [
     {
-      "src": "/favicon.svg",
-      "type": "image/svg+xml",
-      "sizes": "512x512",
+      "src": "/pwa-screenshot-narrow.png",
+      "type": "image/png",
+      "sizes": "540x720",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/pwa-screenshot-wide.png",
+      "type": "image/png",
+      "sizes": "1280x720",
       "form_factor": "wide"
     }
   ],
