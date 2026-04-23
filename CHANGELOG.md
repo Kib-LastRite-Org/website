@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.1] - 2026-04-23
+
+### Added
+- **Version display in footers**: Added semantic versioning (SemVer) support across all layouts
+  - Created `src/utils/version.ts` utility to import and export version from package.json
+  - Version displayed in footer of both MarketingLayout and BlogPost layouts
+  - Format: `vX.Y.Z` (e.g., `v0.0.1`) following [Semantic Versioning 2.0.0](https://semver.org/)
+  - Styled with monospace font for technical clarity, subtle gray color to avoid distraction
+  - Follows 2026 best practices: Conventional Commits automate version bumps, CHANGELOG tracks releases
+
 ## [0.1.0] - 2026-04-21
 
 ### Added

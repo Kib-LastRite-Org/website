@@ -1,10 +1,13 @@
 ---
+import { getVersionDisplay } from '../utils/version';
 const today = new Date();
+const version = getVersionDisplay();
 ---
 
 <footer>
 	&copy; {today.getFullYear()} LastRite. All rights reserved.
 	<p style="font-size: 0.9em; margin-top: 0.5em;">The official marketing site built with Astro.</p>
+	<p class="version-text">{version}</p>
 </footer>
 <style>
 	footer {
@@ -24,5 +27,13 @@ const today = new Date();
 	}
 	.social-links a:hover {
 		color: var(--color-on-surface);
+	}
+
+	.version-text {
+		font-size: 0.75rem;
+		color: var(--color-outline-variant);
+		margin-top: 0.75em;
+		font-family: 'Courier New', monospace;
+		letter-spacing: 0.05em;
 	}
 </style>
