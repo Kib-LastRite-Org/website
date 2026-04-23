@@ -6,7 +6,7 @@
   id="testimonials"
   aria-labelledby="test-heading"
 >
-  <div class="section-inner">
+  <div class="section-inner max-w-5xl mx-auto">
     <div class="section-header reveal">
       <h2 id="test-heading">Families who found their way through</h2>
       <p class="section-sub">
@@ -14,40 +14,40 @@
       </p>
     </div>
 
-    <div class="testimonials-grid">
-      <blockquote class="testimonial-card glass-panel reveal" data-delay="1">
+    <div class="testimonials-grid grid grid-cols-3 gap-6 mt-12">
+      <blockquote class="testimonial-card glass-panel reveal flex flex-col" data-delay="1">
         <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
         <p>
           "It brought our whole family together in a way we didn't expect. We needed somewhere to grieve — together."
         </p>
         <footer>
-          <cite>
+          <cite class="flex flex-col gap-px">
             <strong>Sarah Jackson</strong>
             <span>Daughter, Ontario</span>
           </cite>
         </footer>
       </blockquote>
 
-      <blockquote class="testimonial-card glass-panel reveal" data-delay="2">
+      <blockquote class="testimonial-card glass-panel reveal flex flex-col" data-delay="2">
         <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
         <p>
           "It didn't feel like an app — it felt like a place. Like somewhere to go when we just needed to be near him."
         </p>
         <footer>
-          <cite>
+          <cite class="flex flex-col gap-px">
             <strong>Michael Rossi</strong>
             <span>Son, California</span>
           </cite>
         </footer>
       </blockquote>
 
-      <blockquote class="testimonial-card glass-panel reveal" data-delay="3">
+      <blockquote class="testimonial-card glass-panel reveal flex flex-col" data-delay="3">
         <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
         <p>
           "We didn't have to juggle WhatsApp, calls, and emails anymore. Everything was in one place — and we raised $25,000 in 48 hours."
         </p>
         <footer>
-          <cite>
+          <cite class="flex flex-col gap-px">
             <strong>Elena Kozlov</strong>
             <span>Granddaughter, New York</span>
           </cite>
@@ -64,7 +64,6 @@
   }
 
   .section-inner {
-    max-width: 1200px;
     margin: 0 auto;
   }
 
@@ -83,19 +82,10 @@
     line-height: 1.6;
   }
 
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 3rem;
-  }
-
   .testimonial-card {
     padding: 2rem;
     border-radius: var(--border-radius-card);
     border: 1px solid var(--color-outline-variant);
-    display: flex;
-    flex-direction: column;
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -125,9 +115,6 @@
   }
 
   cite {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
     font-style: normal;
   }
 

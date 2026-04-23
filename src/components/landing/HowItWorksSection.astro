@@ -6,15 +6,15 @@
   id="how-it-works"
   aria-labelledby="hiw-heading"
 >
-  <div class="section-inner">
+  <div class="section-inner max-w-5xl mx-auto">
     <div class="section-header reveal">
       <h2 id="hiw-heading">Simple when nothing else is</h2>
       <p class="section-sub">Three steps to a lasting place for their memory.</p>
     </div>
 
-    <div class="steps-row" role="list">
-      <div class="step reveal" data-delay="1" role="listitem">
-        <div class="step-number" aria-hidden="true">01</div>
+    <div class="steps-row flex items-start gap-0 mt-12" role="list">
+      <div class="step reveal flex-1 text-center px-6" data-delay="1" role="listitem">
+        <div class="step-number flex items-center justify-center" aria-hidden="true">01</div>
         <h3>Create their space</h3>
         <p>
           Build a memorial with photos, biography, and the stories that made them who they were.
@@ -23,8 +23,8 @@
 
       <div class="step-connector" aria-hidden="true"></div>
 
-      <div class="step reveal" data-delay="2" role="listitem">
-        <div class="step-number" aria-hidden="true">02</div>
+      <div class="step reveal flex-1 text-center px-6" data-delay="2" role="listitem">
+        <div class="step-number flex items-center justify-center" aria-hidden="true">02</div>
         <h3>Invite those who loved them</h3>
         <p>
           Family and friends add their own memories, messages, and support — from anywhere in the world.
@@ -33,8 +33,8 @@
 
       <div class="step-connector" aria-hidden="true"></div>
 
-      <div class="step reveal" data-delay="3" role="listitem">
-        <div class="step-number" aria-hidden="true">03</div>
+      <div class="step reveal flex-1 text-center px-6" data-delay="3" role="listitem">
+        <div class="step-number flex items-center justify-center" aria-hidden="true">03</div>
         <h3>Keep their memory alive</h3>
         <p>
           A living tribute that grows with every story shared — there whenever you need to return.
@@ -51,7 +51,6 @@
   }
 
   .section-inner {
-    max-width: 1200px;
     margin: 0 auto;
   }
 
@@ -71,17 +70,11 @@
   }
 
   .steps-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
-    margin-top: 3rem;
     list-style: none;
   }
 
   .step {
-    flex: 1;
-    text-align: center;
-    padding: 0 1.5rem;
+    padding: 0;
   }
 
   .step-number {
@@ -93,9 +86,6 @@
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin: 0 auto 1rem;
     border: 2px solid var(--color-primary);
   }
