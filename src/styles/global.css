@@ -7,6 +7,26 @@
 
 @import "tailwindcss";
 
+@theme {
+  /* Map existing CSS vars into Tailwind utilities via live references */
+  --color-background: var(--color-background);     /* → bg-background */
+  --color-surface: var(--color-surface);           /* → bg-surface */
+  --color-primary: var(--color-primary);           /* → bg-primary, text-primary */
+  --color-on-primary: var(--color-on-primary);     /* → text-on-primary */
+  --color-secondary: var(--color-secondary);       /* → bg-secondary */
+  --color-on-surface: var(--color-on-surface);     /* → text-on-surface */
+  --color-outline: var(--color-outline);           /* → border-outline */
+  --color-on-surface-variant: var(--color-on-surface-variant); /* → text-on-surface-variant */
+  --color-outline-variant: var(--color-outline-variant); /* → border-outline-variant */
+
+  --font-sans: var(--font-sans);                   /* → font-sans */
+  --font-display: var(--font-display);             /* → font-display */
+  --font-prose: var(--font-atkinson);              /* → font-prose (maps --font-atkinson) */
+
+  --radius-btn: var(--border-radius-btn);          /* → rounded-btn */
+  --radius-card: var(--border-radius-card);        /* → rounded-card */
+}
+
 :root {
   /* Typography */
   --font-display: var(--font-manrope, "Manrope", sans-serif);
