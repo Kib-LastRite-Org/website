@@ -89,6 +89,27 @@ astro.config.mjs, tsconfig.json, package.json, pnpm-lock.yaml
 
 **Scroll Animations:** Elements with `data-delay` animate into view via `animations.js` (Intersection Observer).
 
+## Tailwind v4 Hybrid Migration
+
+The project uses **Tailwind v4.2.4** with a hybrid approach: keep the existing CSS design system (tokens, theme, components, animations) while using Tailwind utilities for layout, spacing, flex/grid patterns.
+
+**Setup:** `@theme` block in `src/styles/global.css` maps CSS variables to Tailwind utilities (e.g., `--color-primary: var(--color-primary)` → `bg-primary`, `text-primary`). No `tailwind.config.js` — Tailwind v4 is CSS-first.
+
+**What stays in CSS:** Complex effects (gradients, ::before/::after), animations, typography hierarchy, all color/spacing tokens, component classes (`.btn`, `.btn-primary`, `.glass-panel`, `.reveal`).
+
+**What uses Tailwind:** Simple layout patterns (`flex gap-4 flex-wrap`), spacing utilities (`px-4 py-8`), responsive wrappers (`grid grid-cols-2`).
+
+**When adding new components or modifying layouts:**
+
+- ✅ Use Tailwind for layout structure: `flex items-center gap-6`, `grid grid-cols-2`, `max-w-3xl mx-auto`
+- ✅ Keep color/typography in CSS or component classes
+- ✅ Test at 375px (Android) and 390px (iPhone) widths
+- ❌ Don't use `@apply` — defeats the utility-first purpose
+- ❌ Don't use Tailwind dark mode — CSS variables (via `html.light`/`html.dark`) handle theming
+- ❌ Don't apply Tailwind to animated elements — keep animation CSS separate
+
+See `CLAUDE.md` for detailed migration guidance and `docs_etc/` for validation reference.
+
 ## Configuration & Deployment
 
 **Site URL (astro.config.mjs):** Update `site: "https://example.com"` to your actual domain before production (required for canonical URLs, sitemap, RSS).
