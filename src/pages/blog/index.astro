@@ -79,54 +79,58 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
 
     <!-- Featured Post -->
     <section class="blog-featured reveal">
-      <div class="blog-featured-inner">
-        <img
-          alt={featuredPost.data.imageAlt}
-          class="blog-featured-image"
-          src={featuredPost.data.image}
-          loading="lazy"
-        />
-        <div class="blog-featured-overlay"></div>
-        <div class="blog-featured-content">
-          <span class="blog-featured-category">{featuredPost.data.category}</span>
-          <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
-          <div class="blog-featured-meta">
-            <span class="blog-featured-author">{featuredPost.data.author}</span>
-            <span>•</span>
-            <span>{formatDate(featuredPost.data.date, 'long')}</span>
-            <span>•</span>
-            <span>{featuredPost.data.readTime}</span>
+      <a href={`/blog/${featuredPost.id}/`} class="blog-featured-link">
+        <div class="blog-featured-inner">
+          <img
+            alt={featuredPost.data.imageAlt}
+            class="blog-featured-image"
+            src={featuredPost.data.image}
+            loading="lazy"
+          />
+          <div class="blog-featured-overlay"></div>
+          <div class="blog-featured-content">
+            <span class="blog-featured-category">{featuredPost.data.category}</span>
+            <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
+            <div class="blog-featured-meta">
+              <span class="blog-featured-author">{featuredPost.data.author}</span>
+              <span>•</span>
+              <span>{formatDate(featuredPost.data.date, 'long')}</span>
+              <span>•</span>
+              <span>{featuredPost.data.readTime}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </a>
     </section>
 
     <!-- Blog Grid -->
     <section class="blog-grid">
       {regularPosts.map((post, index) => (
-        <article
-          class="blog-card glass-panel reveal"
-          style={`--reveal-delay: ${postDelays[index] || '0.6s'};`}
-        >
-          <div class="blog-card-image">
-            <img
-              alt={post.data.imageAlt}
-              src={post.data.image}
-              loading="lazy"
-            />
-          </div>
-          <div class="blog-card-content">
-            <span class="blog-card-category" style={`color: ${getCategoryColor(post.data.category)}`}>{post.data.category}</span>
-            <h3 class="blog-card-title">
-              {post.data.title}
-            </h3>
-            <p class="blog-card-excerpt">{post.data.excerpt}</p>
-            <div class="blog-card-footer">
-              <span>{post.data.author}</span>
-              <span>{formatDate(post.data.date)} • {post.data.readTime}</span>
+        <a href={`/blog/${post.id}/`} class="blog-card-link">
+          <article
+            class="blog-card glass-panel reveal"
+            style={`--reveal-delay: ${postDelays[index] || '0.6s'};`}
+          >
+            <div class="blog-card-image">
+              <img
+                alt={post.data.imageAlt}
+                src={post.data.image}
+                loading="lazy"
+              />
             </div>
-          </div>
-        </article>
+            <div class="blog-card-content">
+              <span class="blog-card-category" style={`color: ${getCategoryColor(post.data.category)}`}>{post.data.category}</span>
+              <h3 class="blog-card-title">
+                {post.data.title}
+              </h3>
+              <p class="blog-card-excerpt">{post.data.excerpt}</p>
+              <div class="blog-card-footer">
+                <span>{post.data.author}</span>
+                <span>{formatDate(post.data.date)} • {post.data.readTime}</span>
+              </div>
+            </div>
+          </article>
+        </a>
       ))}
     </section>
 
@@ -356,6 +360,14 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
       margin-bottom: 6rem;
     }
 
+    .blog-featured-link {
+      display: block;
+      text-decoration: none;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
     .blog-featured-inner {
       position: relative;
       border-radius: 16px;
@@ -514,6 +526,12 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
       }
     }
 
+    /* Blog card link */
+    .blog-card-link {
+      text-decoration: none;
+      display: block;
+    }
+
     /* Blog card */
     .blog-card {
       border-radius: 16px;
@@ -525,7 +543,7 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
       cursor: pointer;
     }
 
-    .blog-card:hover {
+    .blog-card-link:hover .blog-card {
       transform: scale(1.02);
       box-shadow: 0 0 25px rgba(105, 219, 173, 0.15);
       border-color: rgba(105, 219, 173, 0.3);

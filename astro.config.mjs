@@ -9,7 +9,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : "https://example.com",
+    : "https://website-azure-two-47.vercel.app",
 
   integrations: [mdx(), sitemap()],
   vite: {

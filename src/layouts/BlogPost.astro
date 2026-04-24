@@ -2,9 +2,9 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
+import LandingFooter from '../components/LandingFooter.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import LandingHeader from '../components/LandingHeader.astro';
 import BackToTopButton from '../components/BackToTopButton.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
@@ -57,7 +57,7 @@ const { title, excerpt, date, image, imageAlt } = Astro.props;
 	</head>
 
 	<body>
-		<Header />
+		<LandingHeader />
 		<main>
 			<article>
 				<div class="hero-image">
@@ -75,7 +75,7 @@ const { title, excerpt, date, image, imageAlt } = Astro.props;
 				</div>
 			</article>
 		</main>
-		<Footer />
+		<LandingFooter />
 		<BackToTopButton />
 	</body>
 </html>

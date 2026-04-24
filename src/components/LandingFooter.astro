@@ -1,6 +1,6 @@
 ---
 import { getVersionDisplay } from '../utils/version';
-const isDev = import.meta.env.DEV;
+// const isDev = import.meta.env.DEV; // Debug links feature removed. To enable debug features/tools, add them conditionally here.
 const version = getVersionDisplay();
 ---
 
@@ -131,29 +131,6 @@ const version = getVersionDisplay();
           </svg>
         </a>
       </div>
-      {isDev && (
-        <div class="debug-row">
-          <a
-            href="/starter-home"
-            class="debug-link"
-            aria-label="Debug: Starter Home"
-            title="Debug: Starter Home"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              width="20"
-              height="20"
-            >
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
-            <span>Debug</span>
-          </a>
-        </div>
-      )}
     </div>
   </div>
 </footer>
