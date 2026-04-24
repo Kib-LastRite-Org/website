@@ -328,6 +328,7 @@ import ThemeToggle from './ThemeToggle.astro';
 
   const closeDrawer = () => {
     isDrawerOpen = false;
+    document.body.style.overflow = '';
     if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
     if (mobileDrawer) {
       mobileDrawer.setAttribute('hidden', '');
@@ -341,6 +342,7 @@ import ThemeToggle from './ThemeToggle.astro';
 
   const openDrawer = () => {
     isDrawerOpen = true;
+    document.body.style.overflow = 'hidden';
     if (hamburger) hamburger.setAttribute('aria-expanded', 'true');
     if (mobileDrawer) {
       mobileDrawer.removeAttribute('hidden');
