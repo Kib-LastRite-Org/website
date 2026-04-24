@@ -53,13 +53,13 @@ const toastId = `toast-${Math.random().toString(36).slice(2, 11)}`;
 </div>
 
 <script define:vars={{ toastId, duration }} is:inline>
+  // @ts-nocheck
   /**
    * Variables injected via define:vars: toastId (string), duration (number)
    * @type {{ toastId: string; duration: number }}
    */
 
   document.addEventListener('DOMContentLoaded', () => {
-    // @ts-expect-error - toastId is injected via define:vars directive
     const toast = document.getElementById(toastId);
     if (toast && duration > 0) {
       setTimeout(() => {

@@ -3,7 +3,7 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
 const postCollection = defineCollection({
-  // Load Markdown and MDX files in the `src/content/blog/` directory.
+  // Load Markdown and MDX files in the `src/content/posts/` directory.
   loader: glob({ base: "./src/content/posts", pattern: "**/*.{md,mdx}" }),
 
   // Unified LastRite schema with date coercion
@@ -20,6 +20,7 @@ const postCollection = defineCollection({
     image: z.union([z.string(), z.any()]), // Allow both URL strings and ImageMetadata objects
     imageAlt: z.string(),
     featured: z.boolean().default(false),
+    tags: z.array(z.string()).optional().default([]),
   }),
 });
 
