@@ -78,30 +78,32 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
     </section>
 
     <!-- Featured Post -->
-    <section class="blog-featured reveal">
-      <a href={`/blog/${featuredPost.id}/`} class="blog-featured-link">
-        <div class="blog-featured-inner">
-          <img
-            alt={featuredPost.data.imageAlt}
-            class="blog-featured-image"
-            src={featuredPost.data.image}
-            loading="lazy"
-          />
-          <div class="blog-featured-overlay"></div>
-          <div class="blog-featured-content">
-            <span class="blog-featured-category">{featuredPost.data.category}</span>
-            <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
-            <div class="blog-featured-meta">
-              <span class="blog-featured-author">{featuredPost.data.author}</span>
-              <span>•</span>
-              <span>{formatDate(featuredPost.data.date, 'long')}</span>
-              <span>•</span>
-              <span>{featuredPost.data.readTime}</span>
+    {featuredPost && (
+      <section class="blog-featured reveal">
+        <a href={`/blog/${featuredPost.id}/`} class="blog-featured-link">
+          <div class="blog-featured-inner">
+            <img
+              alt={featuredPost.data.imageAlt}
+              class="blog-featured-image"
+              src={featuredPost.data.image}
+              loading="lazy"
+            />
+            <div class="blog-featured-overlay"></div>
+            <div class="blog-featured-content">
+              <span class="blog-featured-category">{featuredPost.data.category}</span>
+              <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
+              <div class="blog-featured-meta">
+                <span class="blog-featured-author">{featuredPost.data.author}</span>
+                <span>•</span>
+                <span>{formatDate(featuredPost.data.date, 'long')}</span>
+                <span>•</span>
+                <span>{featuredPost.data.readTime}</span>
+              </div>
             </div>
           </div>
-        </div>
-      </a>
-    </section>
+        </a>
+      </section>
+    )}
 
     <!-- Blog Grid -->
     <section class="blog-grid">

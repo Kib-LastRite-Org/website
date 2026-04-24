@@ -9,7 +9,7 @@ Core dependencies: astro@^6.1.8, @astrojs/mdx@^5.0.3, @astrojs/sitemap@^3.7.2, @
 - logs/documentations etc are kept in folder `./docs_etc/`.
 - include current & validated data via web-search. sequential-thinking for proper assessment and planning.
 
-TypeScript config extends astro/tsconfigs/strict with strictNullChecks enabled. Target output: dist/ directory.
+TypeScript config extends astro/tsconfigs/strictest with strictNullChecks and exactOptionalPropertyTypes enabled. Target output: dist/ directory. When adding optional properties that may be undefined, annotate as `prop?: Type | undefined` instead of `prop?: Type`.
 
 Astro config: site placeholder at <https://example.com> (needs real domain), MDX and sitemap integrations active. Local font: Atkinson (woff format, 400/700 weights) loaded via CSS variable --font-atkinson with fallback to sans-serif.
 

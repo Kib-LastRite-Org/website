@@ -14,7 +14,7 @@ export function initLastRiteToastInterceptor() {
         const dismissible = el.getAttribute('data-toast-dismissible') !== 'false';
 
         showToast(title, {
-          description: description || undefined,
+          ...(description && { description }),
           type,
           duration,
           dismissible,

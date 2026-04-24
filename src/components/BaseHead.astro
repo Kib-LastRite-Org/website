@@ -10,7 +10,7 @@ import { Font } from 'astro:assets';
 interface Props {
 	title: string;
 	description: string;
-	image?: ImageMetadata;
+	image?: ImageMetadata | undefined;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
