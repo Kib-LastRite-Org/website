@@ -31,31 +31,31 @@ import ThemeToggle from './ThemeToggle.astro';
       <span></span>
     </button>
   </nav>
-
-  <div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop" hidden></div>
-  <div class="mobile-drawer" id="mobile-drawer" hidden>
-    <div class="mobile-drawer-header">
-      <ThemeToggle />
-      <button
-        id="mobile-drawer-close"
-        class="mobile-drawer-close"
-        aria-label="Close menu"
-      >
-        ×
-      </button>
-    </div>
-    <nav class="mobile-drawer-content">
-      <a href="/#features">Features</a>
-      <a href="/#how-it-works">How It Works</a>
-      <a href="/#testimonials">Testimonials</a>
-      <a href="/#tributes">Tributes</a>
-      <div class="mobile-drawer-actions">
-        <a href="/#how-it-works" class="btn btn-outline btn-sm">Learn More</a>
-        <a href="/waitlist" class="btn btn-primary btn-sm">Join Waitlist</a>
-      </div>
-    </nav>
-  </div>
 </header>
+
+<div class="mobile-drawer-backdrop" id="mobile-drawer-backdrop" hidden></div>
+<div class="mobile-drawer" id="mobile-drawer" hidden>
+  <div class="mobile-drawer-header">
+    <ThemeToggle />
+    <button
+      id="mobile-drawer-close"
+      class="mobile-drawer-close"
+      aria-label="Close menu"
+    >
+      ×
+    </button>
+  </div>
+  <nav class="mobile-drawer-content">
+    <a href="/#features">Features</a>
+    <a href="/#how-it-works">How It Works</a>
+    <a href="/#testimonials">Testimonials</a>
+    <a href="/#tributes">Tributes</a>
+    <div class="mobile-drawer-actions">
+      <a href="/#how-it-works" class="btn btn-outline btn-sm">Learn More</a>
+      <a href="/waitlist" class="btn btn-primary btn-sm">Join Waitlist</a>
+    </div>
+  </nav>
+</div>
 
 <style>
   .landing-header {
