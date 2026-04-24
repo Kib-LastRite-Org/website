@@ -2,9 +2,9 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
-const blog = defineCollection({
+const postCollection = defineCollection({
   // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
+  loader: glob({ base: "./src/content/posts", pattern: "**/*.{md,mdx}" }),
 
   // Unified LastRite schema with date coercion
   // Note: Uses z.coerce.date() to convert ISO string dates (YYYY-MM-DD) to Date objects
@@ -23,4 +23,6 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+export const collections = { 
+	'posts': postCollection
+ };

@@ -7,7 +7,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import LandingHeader from '../components/LandingHeader.astro';
 import BackToTopButton from '../components/BackToTopButton.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'posts'>['data'];
 
 const { title, excerpt, date, image, imageAlt } = Astro.props;
 ---

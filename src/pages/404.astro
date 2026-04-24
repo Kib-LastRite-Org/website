@@ -7,7 +7,7 @@ import NotFoundIllustration from '../components/NotFoundIllustration.astro';
 Astro.response.status = 404;
 Astro.response.statusText = 'Not Found';
 
-const blogPosts = await getCollection('blog');
+const blogPosts = await getCollection('posts');
 const recentMemorials = blogPosts
   .filter((post: any) => 'date' in post.data && post.data.date)
   .sort((a: any, b: any) => new Date(b.data.date as string).getTime() - new Date(a.data.date as string).getTime())

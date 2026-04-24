@@ -5,7 +5,7 @@ import MarketingLayout from '../../layouts/MarketingLayout.astro';
 const title = 'LastRite Chronicle - Blog & Stories';
 const description = 'Insights into our journey, product updates, and the stories behind digital memorials.';
 
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('posts');
 const posts = allPosts
   .filter((post: any) => 'date' in post.data && post.data.date)
   .sort((a: any, b: any) => new Date(b.data.date as string).getTime() - new Date(a.data.date as string).getTime())
