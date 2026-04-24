@@ -1,5 +1,4 @@
 ---
-import Toast from '../Toast.astro';
 ---
 
 <form class="waitlist-form" id="waitlistForm" data-form="waitlist">
@@ -23,15 +22,19 @@ import Toast from '../Toast.astro';
         id="notify"
         name="notify"
         class="checkbox-input"
-        checked
       />
       <span class="checkbox-custom"></span>
       Notify me when LastRite is available
     </label>
   </div>
 
-  <button type="submit" class="btn btn-primary form-submit">
-    Join the Waitlist
+  <button type="submit" class="btn btn-primary form-submit" id="submitBtn">
+    <span class="submit-text">Join the Waitlist</span>
+    <span class="submit-spinner">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+      </svg>
+    </span>
   </button>
 
   <p class="form-footer">
@@ -42,16 +45,21 @@ import Toast from '../Toast.astro';
 <div id="toastContainer" class="toast-container"></div>
 
 <script>
-  const form = document.getElementById('waitlistForm');
-  const toastContainer = document.getElementById('toastContainer');
+  const form = document.getElementById('waitlistForm') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement | null;
+  const toastContainer = document.getElementById('toastContainer') as HTMLDivElement | null;
 
-  if (form) {
+  if (form && toastContainer && submitBtn) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const formData = new FormData(form);
-      const email = formData.get('email');
+      const email = formData.get('email') as string;
       const notify = formData.get('notify') === 'on';
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading');
 
       try {
         // Simulate API call (mock submission)
@@ -64,12 +72,16 @@ import Toast from '../Toast.astro';
         form.reset();
       } catch (error) {
         showErrorToast();
+      } finally {
+        // Restore button state
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-loading');
       }
     });
   }
 
-  function simulateSubmission(email, notify) {
-    return new Promise((resolve) => {
+  function simulateSubmission(email: string, notify: boolean): Promise<void> {
+    return new Promise<void>((resolve) => {
       // Simulate network delay (800-1200ms)
       const delay = Math.random() * 400 + 800;
       setTimeout(() => {
@@ -79,7 +91,7 @@ import Toast from '../Toast.astro';
     });
   }
 
-  function showSuccessToast(email) {
+  function showSuccessToast(email: string): void {
     const toastHtml = `
       <div class="toast toast--success" role="status" aria-live="polite" aria-atomic="true">
         <div class="toast-content">
@@ -99,19 +111,24 @@ import Toast from '../Toast.astro';
 
     const toast = document.createElement('div');
     toast.innerHTML = toastHtml;
-    toastContainer.appendChild(toast.firstElementChild);
+    const toastElement = toast.firstElementChild as HTMLElement;
+    if (toastContainer) {
+      toastContainer.appendChild(toastElement);
+    }
 
     // Auto-dismiss after 5 seconds
-    const toastEl = toastContainer.querySelector('.toast');
-    setTimeout(() => {
-      toastEl?.classList.add('toast--exiting');
+    const toastEl = toastContainer?.querySelector('.toast');
+    if (toastEl) {
       setTimeout(() => {
-        toastEl?.remove();
-      }, 300);
-    }, 5000);
+        toastEl.classList.add('toast--exiting');
+        setTimeout(() => {
+          toastEl.remove();
+        }, 300);
+      }, 5000);
+    }
   }
 
-  function showErrorToast() {
+  function showErrorToast(): void {
     const toastHtml = `
       <div class="toast toast--error" role="status" aria-live="polite" aria-atomic="true">
         <div class="toast-content">
@@ -131,7 +148,10 @@ import Toast from '../Toast.astro';
 
     const toast = document.createElement('div');
     toast.innerHTML = toastHtml;
-    toastContainer.appendChild(toast.firstElementChild);
+    const toastElement = toast.firstElementChild as HTMLElement;
+    if (toastContainer) {
+      toastContainer.appendChild(toastElement);
+    }
   }
 </script>
 
@@ -234,14 +254,55 @@ import Toast from '../Toast.astro';
     cursor: pointer;
     transition: all 0.2s ease;
     margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    position: relative;
   }
 
-  .form-submit:hover {
+  .form-submit:hover:not(:disabled) {
     transform: translateY(-2px);
   }
 
-  .form-submit:active {
+  .form-submit:active:not(:disabled) {
     transform: translateY(0);
+  }
+
+  .form-submit:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+
+  .submit-text {
+    display: inline;
+  }
+
+  .form-submit.is-loading .submit-text {
+    visibility: hidden;
+    width: 0;
+  }
+
+  .submit-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+  }
+
+  .form-submit.is-loading .submit-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .form-footer {

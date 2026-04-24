@@ -7,9 +7,11 @@ import NotFoundIllustration from '../components/NotFoundIllustration.astro';
 Astro.response.status = 404;
 Astro.response.statusText = 'Not Found';
 
-const recentMemorials = (await getCollection('blog')).sort(
-  (a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-).slice(0, 3);
+const blogPosts = await getCollection('blog');
+const recentMemorials = blogPosts
+  .filter((post: any) => 'date' in post.data && post.data.date)
+  .sort((a: any, b: any) => new Date(b.data.date as string).getTime() - new Date(a.data.date as string).getTime())
+  .slice(0, 3);
 ---
 
 <MarketingLayout title="404 - Page Not Found" description="The page you're looking for has drifted away, but your memories remain.">
@@ -91,10 +93,10 @@ const recentMemorials = (await getCollection('blog')).sort(
       <section class="recent-section-404">
         <h2>Recent Memorials</h2>
         <div class="memorial-grid">
-          {recentMemorials.map((post) => (
-            <a href={`/blog/${post.id}/`} class="memorial-card-compact">
+          {recentMemorials.map((post: any) => (
+            <a href="/blog" class="memorial-card-compact">
               <h3>{post.data.title}</h3>
-              <time class="memorial-date">{post.data.pubDate.toLocaleDateString()}</time>
+              <time class="memorial-date">{new Date(post.data.date as string).toLocaleDateString()}</time>
             </a>
           ))}
         </div>

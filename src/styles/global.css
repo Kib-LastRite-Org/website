@@ -386,9 +386,8 @@ hr {
 .reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition:
-    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: revealFade 0.8s forwards ease-out;
+  animation-delay: var(--reveal-delay, 0s);
 }
 
 .reveal.visible {
@@ -396,20 +395,27 @@ hr {
   transform: translateY(0);
 }
 
+@keyframes revealFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .reveal[data-delay="1"] {
-  transition-delay: 0.1s;
+  animation-delay: 0.1s;
 }
 
 .reveal[data-delay="2"] {
-  transition-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 .reveal[data-delay="3"] {
-  transition-delay: 0.3s;
+  animation-delay: 0.3s;
 }
 
 .reveal[data-delay="4"] {
-  transition-delay: 0.4s;
+  animation-delay: 0.4s;
 }
 
 /* Disable animations for users who prefer reduced motion */

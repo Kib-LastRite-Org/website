@@ -1,101 +1,47 @@
 ---
+import { getCollection } from 'astro:content';
 import MarketingLayout from '../../layouts/MarketingLayout.astro';
 
 const title = 'LastRite Chronicle - Blog & Stories';
 const description = 'Insights into our journey, product updates, and the stories behind digital memorials.';
 
-const posts = [
-  {
-    id: 1,
-    category: 'Engineering',
-    categoryColor: 'var(--color-secondary)',
-    title: 'Scaling Memorial Services for Global Reach',
-    excerpt: 'How we optimized our database for high-traffic memorial anniversaries and distributed global edge delivery.',
-    author: 'Alex Chen',
-    date: 'Apr 28',
-    readTime: '8 min',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3Huz8BFCQuBrMBVizF696hUgjeZ9yUAFRYD0v5ABltuei3Sp9g3aKDUfbjIrSrEsrZhQMAFiHI5SLpm943PQPW9n3nni8dyCIjJMcENNuRohDdJrbh8yC4JlMhAeEDQ2lqPVfuFLP7371IMtn_xcI5MtmFlOk04i9MArfJDWfhB5GpV6BBHSQFS3waRMoq26AIChnrM8o07WP-35qe6dHzm5WMcra2_kh9D3B6pApWrg5w9Zvcgfi3fTgyswmCadYgC3LpO662Zoj',
-    imageAlt: 'close-up of complex circuit board with glowing emerald light pathways illuminating futuristic server architecture',
-    delay: '0.1s',
-  },
-  {
-    id: 2,
-    category: 'Stories',
-    categoryColor: 'var(--color-primary)',
-    title: 'Finding Solace in Digital Heirlooms',
-    excerpt: 'Personal accounts of how shared digital legacies helped a community heal after unexpected loss.',
-    author: 'Elena Rossi',
-    date: 'May 05',
-    readTime: '5 min',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCu_hZCbr7BAU2xZGdPjsWvHn0sZQB1XXnRTG34z0vs7kOzi-XSKq5xafi4JpeMpKbSwyUq_D8mHuoWp4vB0lNKoMjbs_ORGoQE_7-2Ibg1OUGXjhlZdFhgfkVBST4y2qawEnNdS7yom211NJ9AMiRc9kPlSsY5PoD14CHmMn-ATtQN0a987XzMP-EkDd_uKrDGGQoHEtOAQsMf70AE6kfNrzrxtGGm24iso_-8EdSUpVX_PbwI-N0K2hBtultCwi8E_TehJRY5QUrc',
-    imageAlt: 'soft focus of a family sitting together in a sun-drenched library sharing a tablet with warm emotional lighting',
-    delay: '0.2s',
-  },
-  {
-    id: 3,
-    category: 'Product Updates',
-    categoryColor: 'var(--color-primary)',
-    title: 'The New LastRite Mobile Experience',
-    excerpt: 'A complete overhaul of our mobile application to focus on accessibility and mindful interaction.',
-    author: 'David Park',
-    date: 'May 10',
-    readTime: '4 min',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCU_DV15iPvc7JqQhyeePGNdqLuHltpLJqfa2j-RfUfjIj4rHgvbAB-szYGe9P4gCNTLoxJ5EskxOmZsxm5U8rpOLsvFhNBwFlAEGPqJTPhPjnm3G2UeUWJFkh6lXWRHNmTWb4W0HtbpawxVwLjFI7y1VZgygcuUw88AwSRsXysKlLcOYJKo67DHOmmbfalw3nt8I5sfZKmW_uk4-ZlJ_CP-L_xRwSued63jj9fyxRTTnd7oxqUDQ2wFnNNcn5rTfHQE15mR4ysxT1d',
-    imageAlt: 'minimalist white desk with a glowing smartphone displaying a clean user interface with floral motifs',
-    delay: '0.3s',
-  },
-  {
-    id: 4,
-    category: 'Engineering',
-    categoryColor: 'var(--color-secondary)',
-    title: 'Encryption Standards for Eternal Privacy',
-    excerpt: 'Deep dive into our zero-knowledge architecture ensuring your memories stay private for generations.',
-    author: 'Marcus Thorne',
-    date: 'Apr 15',
-    readTime: '12 min',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAR4wFsbcuM2aZ_-zJw6DJZW0L0PL_9vLFnWZJFWmG0GT91EU3dFcTWoHWd1gmQfLFSrZFjpKJmZgmjYRu1h4aRxXlMn84U8EFCNntuH-YDE8hWqltwxi0OnMgSAOERxE-dBU3d3WNpHpYsovDJ4BYYNggbAWq2TCPVwh5oEBuUKQ-Hnqi9RzVluOCOMHLbcICVczeBInqruDJyyESm6jK2Lps3qa2MS7jndJvkkJPllEj3FwnVXQ_aQE2EoqD8AlPP91KZZmedBplL',
-    imageAlt: 'macro photography of a single glowing tree leaf with golden veins against a deep dark background',
-    delay: '0.4s',
-  },
-  {
-    id: 5,
-    category: 'Milestones',
-    categoryColor: 'var(--color-primary)',
-    title: 'Reaching 1 Million Legacies Protected',
-    excerpt: 'Celebrating the global community that trusts LastRite to preserve their most precious stories.',
-    author: 'Sarah Miller',
-    date: 'Apr 02',
-    readTime: '3 min',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZoYkywkGv6s9D_wpca-tNDNkzDzOhZO7HGAYSWfu_macFZQOsYAcI2ijlqiz44i_goBvgvT-ziATPJxfgm0Fqv1l4A_WPgYs3YAzJ8JX7SmHwiDNqfONX0_9jzsHzkmPbGItGJHw0Z5BnB5zFjq2ZaulYgpa2FXxY2qC974i4V_W-dcU2WN6U9Jj_QZOcpAyxWfLZKEDA5W6ba0zZK6MmmG_NxiqLQ6ShoVwcX4Zi5wAFRjHU4dZHrI7B_3hKmMDOROtU5wzLz9xt',
-    imageAlt: 'abstract composition of floating geometric crystals glowing with soft mint and orange light in a dark void',
-    delay: '0.5s',
-  },
-  {
-    id: 6,
-    category: 'Stories',
-    categoryColor: 'var(--color-primary)',
-    title: 'The Philosophy of Digital Immortality',
-    excerpt: 'A thoughtful exploration of what it means to live on through the pixels and memories we leave behind.',
-    author: 'Julian Vane',
-    date: 'Mar 25',
-    readTime: '15 min',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBcAtfPudYl51fiNHjvCLc0M8tcG9UrmUIJd2OchrkydFvUvL-5iYLtTYkFwekmrEvVzDukY2CfFZ0WRUIwilQd01sg0jHez5yDoyBJF1YHtT0S9aNOdkuKtSf3QN6f11Ql3Dp6_Eevu5KmoCyeL5uZCVzTOgqxQGEGk_guYVjE0REHchscG5nShxoIUyI6WQnKLPISP-AxHP2TB22U1kynPkI0TFKsDz5hvT4-bk-c40dIpIDMAl6cVZZS9YpD_M3Oa86p5MF8oNcN',
-    imageAlt: 'low angle shot of ancient oak trees in a misty forest with ethereal light beams filtering through the canopy',
-    delay: '0.6s',
-  },
-];
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter((post: any) => 'date' in post.data && post.data.date)
+  .sort((a: any, b: any) => new Date(b.data.date as string).getTime() - new Date(a.data.date as string).getTime())
+  .slice(0, 6);
 
-const featuredPost = {
-  title: 'Introducing Memorial Spaces: A New Way to Gather and Grieve',
-  category: 'Feature',
-  author: 'Sarah Miller',
-  date: 'May 12, 2024',
-  readTime: '6 min read',
-  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuALJBsT8UghXJYO7Qs7XdOh0F9KoriWH4prgOvEGhlQjYyLD1g2tssmWAs8tJkRMSES-wbzk6hHs5bFy3ewC-fxzqe_mU54cxyzhgvkhfxAeF1p5SAkNDZhMmK14ViuSbglQcaC_0-MJL7Hxn-mXGrdrWRPHnH3op_5XOzvmFPdttkwL0mm76EVK9nbk-DtuT6z1Uq3zR2LabxZkio3kdLBJtW_0dBSCdJJcQ8wM1gK5QUS2CUG_l9UkEdKsbh9a6zfQSrZ4ZtqURIy',
-  imageAlt: 'dramatic wide shot of a serene mountain lake at twilight with glowing digital particles rising like stars into the night sky',
+const featuredPost = allPosts.find(p => p.data.featured) || posts[0];
+const regularPosts = posts.filter(p => !p.data.featured).slice(0, 6);
+
+const getCategoryColor = (category: string): string => {
+  const colors: Record<string, string> = {
+    'Engineering': 'var(--color-secondary)',
+    'Stories': 'var(--color-primary)',
+    'Product Updates': 'var(--color-primary)',
+    'Milestones': 'var(--color-primary)',
+    'Feature': 'var(--color-primary)',
+  };
+  return colors[category] || 'var(--color-primary)';
+};
+
+const formatDate = (dateInput: string | Date, format: 'short' | 'long' = 'short'): string => {
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  if (format === 'short') {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
+  }
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(date);
 };
 
 const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stories'];
+const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
 ---
 
 <MarketingLayout title={title} description={description}>
@@ -135,20 +81,21 @@ const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stor
     <section class="blog-featured reveal">
       <div class="blog-featured-inner">
         <img
-          alt={featuredPost.imageAlt}
+          alt={featuredPost.data.imageAlt}
           class="blog-featured-image"
-          src={featuredPost.image}
+          src={featuredPost.data.image}
+          loading="lazy"
         />
         <div class="blog-featured-overlay"></div>
         <div class="blog-featured-content">
-          <span class="blog-featured-category">{featuredPost.category}</span>
-          <h2 class="blog-featured-title">{featuredPost.title}</h2>
+          <span class="blog-featured-category">{featuredPost.data.category}</span>
+          <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
           <div class="blog-featured-meta">
-            <span class="blog-featured-author">{featuredPost.author}</span>
+            <span class="blog-featured-author">{featuredPost.data.author}</span>
             <span>•</span>
-            <span>{featuredPost.date}</span>
+            <span>{formatDate(featuredPost.data.date, 'long')}</span>
             <span>•</span>
-            <span>{featuredPost.readTime}</span>
+            <span>{featuredPost.data.readTime}</span>
           </div>
         </div>
       </div>
@@ -156,26 +103,27 @@ const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stor
 
     <!-- Blog Grid -->
     <section class="blog-grid">
-      {posts.map((post) => (
+      {regularPosts.map((post, index) => (
         <article
-          class="blog-card reveal"
-          style={`animation-delay: ${post.delay};`}
+          class="blog-card glass-panel reveal"
+          style={`--reveal-delay: ${postDelays[index] || '0.6s'};`}
         >
           <div class="blog-card-image">
             <img
-              alt={post.imageAlt}
-              src={post.image}
+              alt={post.data.imageAlt}
+              src={post.data.image}
+              loading="lazy"
             />
           </div>
           <div class="blog-card-content">
-            <span class="blog-card-category" style={`color: ${post.categoryColor}`}>{post.category}</span>
+            <span class="blog-card-category" style={`color: ${getCategoryColor(post.data.category)}`}>{post.data.category}</span>
             <h3 class="blog-card-title">
-              {post.title}
+              {post.data.title}
             </h3>
-            <p class="blog-card-excerpt">{post.excerpt}</p>
+            <p class="blog-card-excerpt">{post.data.excerpt}</p>
             <div class="blog-card-footer">
-              <span>{post.author}</span>
-              <span>{post.date} • {post.readTime}</span>
+              <span>{post.data.author}</span>
+              <span>{formatDate(post.data.date)} • {post.data.readTime}</span>
             </div>
           </div>
         </article>
@@ -183,8 +131,8 @@ const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stor
     </section>
 
     <!-- Pagination -->
-    <nav class="blog-pagination reveal">
-      <button class="blog-pagination-btn blog-pagination-btn--active">1</button>
+    <nav class="blog-pagination reveal" style="--reveal-delay: 0.7s;">
+      <button class="blog-pagination-btn blog-pagination-btn--active glass-panel">1</button>
       <button class="blog-pagination-btn">2</button>
       <button class="blog-pagination-btn">3</button>
       <span class="blog-pagination-dots">...</span>
@@ -194,7 +142,7 @@ const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stor
     </nav>
 
     <!-- CTA Section -->
-    <section class="blog-cta reveal">
+    <section class="blog-cta glass-panel reveal" style="--reveal-delay: 0.8s;">
       <div class="blog-cta-content">
         <h2 class="blog-cta-title">Stay updated on the future of remembrance.</h2>
         <p class="blog-cta-subtitle">
@@ -570,8 +518,6 @@ const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stor
     .blog-card {
       border-radius: 16px;
       overflow: hidden;
-      background: rgba(13, 31, 20, 0.6);
-      backdrop-filter: blur(20px);
       border: 1px solid rgba(226, 237, 230, 0.1);
       display: flex;
       flex-direction: column;
@@ -716,8 +662,6 @@ const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stor
     }
 
     .blog-pagination-btn--active {
-      background: rgba(13, 31, 20, 0.6);
-      backdrop-filter: blur(20px);
       border: 1px solid rgba(226, 237, 230, 0.1);
       color: var(--color-on-surface);
     }
@@ -770,8 +714,6 @@ const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stor
     /* CTA section */
     .blog-cta {
       border-radius: 16px;
-      background: rgba(13, 31, 20, 0.6);
-      backdrop-filter: blur(20px);
       border: 1px solid rgba(226, 237, 230, 0.1);
       padding: 4rem 3rem;
       text-align: center;
@@ -945,22 +887,5 @@ const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stor
       }
     }
 
-    /* Reveal animation */
-    .reveal {
-      opacity: 0;
-      transform: translateY(1.25rem);
-      animation: revealFade 0.8s forwards ease-out;
-    }
-
-    @keyframes revealFade {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .reveal[style*="animation-delay"] {
-      animation-delay: inherit;
-    }
   </style>
 </MarketingLayout>
