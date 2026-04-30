@@ -33,6 +33,7 @@ yarn-error.log*
 
 .playwright-mcp/
 docs_etc/
+.claude/
 
 # IDE
 .vscode/
