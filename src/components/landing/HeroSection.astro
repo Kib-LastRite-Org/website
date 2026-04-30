@@ -1,6 +1,5 @@
 ---
-import { Image } from 'astro:assets';
-import heroImage from '@/assets/blog-placeholder-1.jpg';
+import heroSvgUrl from '@/assets/illustrations/hero-moments.svg?url';
 ---
 
 <section class="hero" id="hero" aria-label="Hero section">
@@ -26,11 +25,14 @@ import heroImage from '@/assets/blog-placeholder-1.jpg';
     <!-- Right column: Visual card with badge -->
     <div class="hero-visual reveal" data-delay="2">
       <div class="hero-card glass-panel">
-        <Image
-          src={heroImage}
-          alt="A cherished family memory"
+        <img
+          src={heroSvgUrl}
+          alt="Cherished moments shared by families"
           loading="eager"
           decoding="async"
+          width="560"
+          height="571"
+          class="hero-illustration"
         />
         <div class="hero-badge flex flex-col gap-1" aria-label="Global community statistics">
           <span class="badge-label">FAMILIES WORLDWIDE</span>
@@ -116,10 +118,12 @@ import heroImage from '@/assets/blog-placeholder-1.jpg';
     position: relative;
   }
 
-  .hero-card img {
+  .hero-illustration {
     width: 100%;
     height: auto;
+    max-width: 560px;
     display: block;
+    border-radius: var(--border-radius-card);
   }
 
   .hero-badge {
