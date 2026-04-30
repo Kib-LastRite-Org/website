@@ -2,6 +2,52 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2026-04-30
+
+### Added
+
+- **Blog search, filter, and sort**: Implemented client-side blog discovery features on the blog index page
+  - Full-text search across post titles and descriptions
+  - Category filter pills to narrow posts by topic
+  - Sort controls (newest/oldest) for post ordering
+  - Icon bug fixes for filter/sort controls
+
+- **Draft banner support**: Blog posts with `draft: true` frontmatter now render a visible draft banner, clearly flagging unpublished content during development
+
+- **Enriched post content**: Expanded blog post articles with richer body content and improved frontmatter metadata (author, category, readTime, tags)
+
+### Changed
+
+- **Search UX improvements**: Added a clear button to the search input; selecting a category now resets the search query to avoid conflicting filter states
+
+---
+
+## [0.2.1] - 2026-04-30
+
+### Added
+
+- **`@/` path alias**: Added `@/*` alias in `tsconfig.json` pointing to `./src/*`, enabling clean absolute imports across all layouts, pages, and components — no more `../../` chains
+
+### Changed
+
+- **Component directory restructure**: Moved shared UI components (`ThemeToggle`, `BackToTopButton`, `FormattedDate`, `Toast`, `ComingSoonToast`) from flat `src/components/` into `src/components/ui/` subdirectory for better organisation
+
+- **Scripts migrated to TypeScript**: Converted `animations.js` and `theme.js` to TypeScript equivalents for type safety
+
+- **All imports converted to `@/` alias**: Replaced all relative `../` and `../../` import paths across components, pages, layouts, and scripts with the `@/*` alias (preserving `src/utils/version.ts` → `package.json` relative import since `package.json` lives outside `src/`)
+
+- **Blog collection renamed to `posts`**: Migrated content collection from `blog` → `posts` and moved content directory from `src/content/blog/` to `src/content/posts/`; updated `content.config.ts`, layouts, and all blog pages accordingly
+
+- **Blog post layout redesigned**: Enhanced post presentation with related posts sidebar (filtered by category), recent posts list, improved hero section with category pills, and skeleton loading states with shimmer animation
+
+- **TypeScript strictest config**: Upgraded `tsconfig.json` to extend `astro/tsconfigs/strictest` (from `strict`); resolved all `exactOptionalPropertyTypes` errors across `BaseHead.astro`, `blog/index.astro`, and `lastRiteToastInterceptor.ts`
+
+- **Image schema simplified**: Changed `content.config.ts` image field from `z.union([z.string(), z.any()])` to `z.string()` for cleaner type safety
+
+- **`.gitignore` updated**: Added `.claude/` directory to `.gitignore` to exclude Claude Code session files from version control
+
+---
+
 ## [0.2.0] - 2026-04-24
 
 ### Added
