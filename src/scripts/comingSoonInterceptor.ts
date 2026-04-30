@@ -1,5 +1,5 @@
-import { showComingSoonToast } from '../utils/comingSoonToast';
-import { COMING_SOON_SUBTITLE } from '../consts';
+import { showComingSoonToast } from '@/utils/comingSoonToast';
+import { COMING_SOON_SUBTITLE } from '@/consts';
 
 export function initComingSoonInterceptor() {
   document.querySelectorAll('[data-coming-soon="true"]').forEach((el) => {

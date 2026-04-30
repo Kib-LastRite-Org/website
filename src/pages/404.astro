@@ -1,7 +1,7 @@
 ---
-import MarketingLayout from '../layouts/MarketingLayout.astro';
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
 import { getCollection } from 'astro:content';
-import NotFoundIllustration from '../components/NotFoundIllustration.astro';
+import NotFoundIllustration from '@/components/NotFoundIllustration.astro';
 
 // Set proper HTTP status code for SSR
 Astro.response.status = 404;
@@ -612,8 +612,8 @@ const recentMemorials = blogPosts
 </style>
 
 <script>
-  import { initComingSoonInterceptor } from '../scripts/comingSoonInterceptor';
-  import { initLastRiteToastInterceptor } from '../scripts/lastRiteToastInterceptor';
+  import { initComingSoonInterceptor } from '@/scripts/comingSoonInterceptor';
+  import { initLastRiteToastInterceptor } from '@/scripts/lastRiteToastInterceptor';
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {

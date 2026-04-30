@@ -1,4 +1,4 @@
-import { showToast } from '../utils/lastRiteToast';
+import { showToast } from '@/utils/lastRiteToast';
 
 export function initLastRiteToastInterceptor() {
   document.querySelectorAll('[data-toast]').forEach((el) => {
