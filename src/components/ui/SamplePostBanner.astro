@@ -1,0 +1,56 @@
+---
+interface Props {
+  category?: string | undefined;
+}
+const { category } = Astro.props;
+---
+
+<div class="sample-banner reveal" data-delay="5" aria-label="Sample content notice">
+  <span class="sample-banner__icon material-symbols-outlined" aria-hidden="true">edit_note</span>
+  <p class="sample-banner__text">
+    <span class="sample-banner__label">Sample post</span>
+    {category ? `This ${category.toLowerCase()} post is placeholder content used for layout and design purposes.` : 'This post is placeholder content used for layout and design purposes.'}
+    Real content is on the way.
+  </p>
+</div>
+
+<style>
+  .sample-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    margin-bottom: 2.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    background: color-mix(in srgb, var(--color-primary) 6%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .sample-banner__icon {
+    font-size: 1.1rem;
+    color: var(--color-primary);
+    opacity: 0.7;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+  }
+
+  .sample-banner__text {
+    font-family: var(--font-ui);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--color-on-surface-variant);
+    margin: 0;
+  }
+
+  .sample-banner__label {
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-right: 0.375rem;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+  }
+</style>

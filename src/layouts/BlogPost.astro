@@ -7,12 +7,13 @@ import LandingFooter from '@/components/LandingFooter.astro';
 import FormattedDate from '@/components/ui/FormattedDate.astro';
 import LandingHeader from '@/components/LandingHeader.astro';
 import BackToTopButton from '@/components/ui/BackToTopButton.astro';
+import SamplePostBanner from '@/components/ui/SamplePostBanner.astro';
 
 type RelatedPost = CollectionEntry<'posts'>;
 
 interface Props {
   title: string;
-  excerpt: string;
+  postContent: string;
   date: Date;
   image: string | ImageMetadata;
   imageAlt: string;
@@ -20,13 +21,14 @@ interface Props {
   author: string;
   readTime: string;
   tags?: string[];
+  draft?: boolean | undefined;
   relatedPosts?: RelatedPost[];
   recentPosts?: RelatedPost[];
 }
 
 const {
   title,
-  excerpt,
+  postContent,
   date,
   image,
   imageAlt,
@@ -34,6 +36,7 @@ const {
   author,
   readTime,
   tags,
+  draft = false,
   relatedPosts = [],
   recentPosts = [],
 } = Astro.props;
@@ -44,7 +47,7 @@ const hasRelated = relatedPosts.length > 0;
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={excerpt} image={ogImage} />
+		<BaseHead title={title} description={postContent} image={ogImage} />
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 		<style>
 			.page-container {
@@ -499,6 +502,7 @@ const hasRelated = relatedPosts.length > 0;
 			<div class="page-container content-layout">
 				<div class="narrative-container">
 					<div class="prose-content reveal" data-delay="5">
+						{draft && <SamplePostBanner category={category} />}
 						<slot />
 					</div>
 
@@ -581,7 +585,7 @@ const hasRelated = relatedPosts.length > 0;
 									<div class="related-card-content">
 										<div class="related-card-category">{post.data.category}</div>
 										<h3 class="related-card-title">{post.data.title}</h3>
-										<p class="related-card-excerpt">{post.data.excerpt}</p>
+										<p class="related-card-excerpt">{post.data.postContent}</p>
 									</div>
 								</a>
 							))}
