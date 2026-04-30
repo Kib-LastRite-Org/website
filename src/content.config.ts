@@ -17,7 +17,7 @@ const postCollection = defineCollection({
     author: z.string(),
     date: z.coerce.date(), // Converts "2024-04-28" → Date object
     readTime: z.string(),
-    image: z.union([z.string(), z.any()]), // Allow both URL strings and ImageMetadata objects
+    image: z.string(), // image: z.union([z.string(), z.any()]), // Allow both URL strings and ImageMetadata objects
     imageAlt: z.string(),
     featured: z.boolean().default(false),
     tags: z.array(z.string()).optional().default([]),

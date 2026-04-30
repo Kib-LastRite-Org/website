@@ -1,8 +1,8 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import LandingHeader from '../components/LandingHeader.astro';
-import LandingFooter from '../components/LandingFooter.astro';
-import BackToTopButton from '../components/BackToTopButton.astro';
+import BaseHead from '@/components/BaseHead.astro';
+import LandingHeader from '@/components/LandingHeader.astro';
+import LandingFooter from '@/components/LandingFooter.astro';
+import BackToTopButton from '@/components/ui/BackToTopButton.astro';
 
 interface Props {
   title: string;
@@ -22,8 +22,8 @@ const { title, description } = Astro.props;
     <BackToTopButton />
 
     <script>
-      import { initComingSoonInterceptor } from '../scripts/comingSoonInterceptor';
-      import { initLastRiteToastInterceptor } from '../scripts/lastRiteToastInterceptor';
+      import { initComingSoonInterceptor } from '@/scripts/comingSoonInterceptor';
+      import { initLastRiteToastInterceptor } from '@/scripts/lastRiteToastInterceptor';
 
       const initInterceptors = () => {
         initComingSoonInterceptor();

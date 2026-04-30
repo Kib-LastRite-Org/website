@@ -3,7 +3,6 @@ export function initScrollReveal() {
   const elements = document.querySelectorAll('.reveal');
   if (!elements.length) return;
 
-  // Check for prefers-reduced-motion
   const prefersReduced = window.matchMedia(
     '(prefers-reduced-motion: reduce)'
   ).matches;
@@ -44,10 +43,10 @@ export function initCounters() {
         if (!entry.isIntersecting) return;
         observer.unobserve(entry.target);
 
-        const el = entry.target;
-        const target = parseFloat(el.dataset.counter); // e.g. "4.8"
-        const suffix = el.dataset.counterSuffix ?? ''; // e.g. "M"
-        const duration = prefersReduced ? 0 : 1600; // ms
+        const el = entry.target as HTMLElement;
+        const target = parseFloat(el.dataset['counter'] ?? '0');
+        const suffix = el.dataset['counterSuffix'] ?? '';
+        const duration = prefersReduced ? 0 : 1600;
 
         if (prefersReduced) {
           el.textContent = target + suffix;
@@ -56,9 +55,8 @@ export function initCounters() {
 
         const start = performance.now();
 
-        function tick(now) {
+        function tick(now: number) {
           const progress = Math.min((now - start) / duration, 1);
-          // ease-out cubic
           const eased = 1 - Math.pow(1 - progress, 3);
           const current = (target * eased).toFixed(
             Number.isInteger(target) ? 0 : 1
@@ -95,7 +93,6 @@ export function initConnectors() {
           return;
         }
 
-        // Stagger each connector by 200ms * index
         setTimeout(() => {
           entry.target.classList.add('drawn');
         }, i * 200);
