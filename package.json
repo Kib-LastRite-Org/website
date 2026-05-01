@@ -6,11 +6,14 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro check && astro dev",
+    "dev": "astro check && astro dev --host",
     "build": "astro check && astro build",
-    "preview": "astro preview",
+    "dev:build": "astro check && astro build && rm -rf dist && [ ! -d dist ] && echo 'dist folder deleted successfully' || echo 'dist folder still exists'",
+    "preview": "astro preview --host",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "clean": "rm -rf dist .astro",
+    "build:verbose": "astro build --verbose"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.4",
