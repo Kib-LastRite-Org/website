@@ -328,6 +328,37 @@
   const $textarea = (id: string) => document.getElementById(id) as HTMLTextAreaElement;
   const $select = (id: string) => document.getElementById(id) as HTMLSelectElement;
 
+  // ── Dev logging helper ────────────────────────────────────────
+  // Production: import.meta.env.DEV → false; Vite dead-code-eliminates the fn body.
+  const log = import.meta.env.DEV
+    ? (label: string, data?: unknown) => {
+        if (data !== undefined) {
+          console.groupCollapsed(`[PE] ${label}`);
+          console.log(data);
+          console.groupEnd();
+        } else {
+          console.log(`[PE] ${label}`);
+        }
+      }
+    : (_label: string, _data?: unknown) => {};
+
+  // ── UUID helper ───────────────────────────────────────────────
+  // uuid() requires a secure context; polyfill via getRandomValues()
+  // so the editor works on 127.0.0.1 and in Playwright test environments.
+  function uuid(): string {
+    if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+    const b = crypto.getRandomValues(new Uint8Array(16));
+    b[6] = (b[6]! & 0x0f) | 0x40;
+    b[8] = (b[8]! & 0x3f) | 0x80;
+    return [...b]
+      .map((v, i) =>
+        [4, 6, 8, 10].includes(i)
+          ? `-${v!.toString(16).padStart(2, '0')}`
+          : v!.toString(16).padStart(2, '0'),
+      )
+      .join('');
+  }
+
   // ── Step navigation ───────────────────────────────────────────
   function goToStep(n: number) {
     if (n < 1 || n > MAX_STEPS) return;
@@ -342,6 +373,7 @@
       el.classList.toggle('pe-sidebar-nav__item--active', parseInt(el.dataset.step || '0') === n);
     });
     currentStep = n;
+    log('step:change', { step: n });
     if (n === 2) initEditor();
     if (n === 5) {
       refreshExportSummary();
@@ -356,16 +388,19 @@
     const excerpt = $textarea('pe-excerpt').value.trim();
     const author  = $input('pe-author-name').value.trim();
     if (title.length < 5) {
+      log('validate:error', { step: 1, field: 'title', reason: 'min 5 chars' });
       $input('pe-title').classList.add('pe-input--error');
       $input('pe-title').focus();
       return false;
     }
     if (!excerpt) {
+      log('validate:error', { step: 1, field: 'excerpt', reason: 'required' });
       $textarea('pe-excerpt').classList.add('pe-textarea--error');
       $textarea('pe-excerpt').focus();
       return false;
     }
     if (!author) {
+      log('validate:error', { step: 1, field: 'authorName', reason: 'required' });
       $input('pe-author-name').classList.add('pe-input--error');
       $input('pe-author-name').focus();
       return false;
@@ -376,8 +411,16 @@
   function validateStep3(): boolean {
     const src = $input('pe-cover-src').value.trim();
     const alt = $input('pe-cover-alt').value.trim();
-    if (!src) { $input('pe-cover-src').classList.add('pe-input--error'); return false; }
-    if (!alt) { $input('pe-cover-alt').classList.add('pe-input--error'); return false; }
+    if (!src) {
+      log('validate:error', { step: 3, field: 'coverSrc', reason: 'required' });
+      $input('pe-cover-src').classList.add('pe-input--error');
+      return false;
+    }
+    if (!alt) {
+      log('validate:error', { step: 3, field: 'coverAlt', reason: 'required' });
+      $input('pe-cover-alt').classList.add('pe-input--error');
+      return false;
+    }
     return true;
   }
 
@@ -535,11 +578,13 @@
   // ── TinyMDE editor ───────────────────────────────────────────
   function initEditor() {
     if (editor) return;
+    log('editor:init');
     const area    = $('pe-editor-area');
     const toolbar = $('pe-editor-toolbar');
 
     editor = new TinyMDEEditor({ element: area });
     new TinyMDECommandBar({ editor, element: toolbar });
+    log('editor:ready');
 
     editor!.addEventListener('change', () => {
       const body   = editor!.getContent();
@@ -553,6 +598,7 @@
 
   // ── Autosave ──────────────────────────────────────────────────
   function scheduleSave() {
+    log('save:queued');
     if (autosaveTimer) clearTimeout(autosaveTimer);
     setSaveStatus('saving');
     autosaveTimer = setTimeout(doSave, 3000);
@@ -560,29 +606,38 @@
 
   async function doSave() {
     try {
+      log('save:start', { draftId });
       const draft = buildDraftRecord();
       if (!draftId) {
-        draftId = crypto.randomUUID();
+        draftId = uuid();
         draftCreatedAt = Date.now();
+        log('db:audit:write', { event: 'draft_created', draftId, title: draft.title || 'Untitled' });
         await appendAuditEvent({
-          id: crypto.randomUUID(),
+          id: uuid(),
           event: 'draft_created',
           draftId,
           draftTitle: draft.title || 'Untitled',
           timestamp: Date.now(),
         });
+        log('db:audit:ok', { event: 'draft_created' });
       }
+      log('db:draft:write', { draftId, title: draft.title, updatedAt: new Date().toISOString() });
       await saveDraft({ ...draft, id: draftId!, createdAt: draftCreatedAt, updatedAt: Date.now() });
+      log('db:draft:ok', { draftId });
+      log('db:audit:write', { event: 'draft_saved', draftId, title: draft.title || 'Untitled' });
       await appendAuditEvent({
-        id: crypto.randomUUID(),
+        id: uuid(),
         event: 'draft_saved',
         draftId,
         draftTitle: draft.title || 'Untitled',
         timestamp: Date.now(),
       });
+      log('db:audit:ok', { event: 'draft_saved' });
       setSaveStatus('saved');
+      log('save:success', { draftId, version });
       document.dispatchEvent(new CustomEvent('pe:draft-saved'));
-    } catch {
+    } catch (err) {
+      log('save:error', { error: String(err) });
       setSaveStatus('error');
     }
   }
@@ -637,6 +692,7 @@
 
   // ── Load draft into form ──────────────────────────────────────
   function loadDraftIntoForm(draft: DraftRecord) {
+    log('draft:load', { id: draft.id, title: draft.title });
     draftId  = draft.id;
     version  = draft.version;
 
@@ -693,7 +749,9 @@
 
   // ── Audit log ─────────────────────────────────────────────────
   async function refreshAuditLog() {
+    log('db:audit:read', { limit: 20 });
     const events = await listAuditEvents(20);
+    log('db:audit:loaded', { count: events.length });
     const list   = $('pe-audit-list');
     list.innerHTML = '';
 
@@ -729,18 +787,22 @@
     const slug  = finalSlugEl.value.trim() || draft.slug || generateSlug(draft.title);
     const date  = ($('pe-date') as HTMLInputElement).value || new Date().toISOString().slice(0, 10);
     version++;
+    log('export:start', { slug, version });
 
     exportToMarkdown({ ...draft, slug, date, version });
 
     await doSave();
+    log('export:success', { slug, version });
     if (draftId) {
+      log('db:audit:write', { event: 'draft_exported', draftId, title: draft.title || 'Untitled' });
       await appendAuditEvent({
-        id: crypto.randomUUID(),
+        id: uuid(),
         event: 'draft_exported',
         draftId,
         draftTitle: draft.title || 'Untitled',
         timestamp: Date.now(),
       });
+      log('db:audit:ok', { event: 'draft_exported' });
     }
 
     $('pe-sum-version').textContent = version.toString();
@@ -838,6 +900,7 @@
 
   // ── Bootstrap on auth ─────────────────────────────────────────
   function boot() {
+    log('boot', { step: currentStep });
     wireCounter('pe-excerpt',    'pe-excerpt-count',    500);
     wireCounter('pe-author-bio', 'pe-bio-count',        200);
     wireCounter('pe-meta-title', 'pe-meta-title-count', 60);
@@ -855,5 +918,23 @@
 
   document.addEventListener('pe:load-draft', (e: Event) => {
     loadDraftIntoForm((e as CustomEvent<DraftRecord>).detail);
+  });
+
+  // Receive seed data from DevFillButton (DEV-only, no-op in production).
+  // Known limitation: if triggered before visiting step 2, editor is null and
+  // body content will not be set until loadDraftIntoForm's goToStep(1) is called;
+  // the user must navigate to step 2 manually after fill for the markdown to appear.
+  document.addEventListener('pe:dev-fill', (e: Event) => {
+    const payload = (e as CustomEvent<Omit<DraftRecord, 'id' | 'createdAt' | 'updatedAt'>>).detail;
+    const now = Date.now();
+    draftCreatedAt = now;
+    const fullDraft: DraftRecord = {
+      ...payload,
+      id: uuid(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    log('dev:fill', { title: fullDraft.title, category: fullDraft.category });
+    loadDraftIntoForm(fullDraft);
   });
 </script>

@@ -1006,9 +1006,193 @@
   .pe-main { padding: 1.25rem 1rem; }
 }
 
+/* ── Dev FAB (DEV-only — rendered by DevFillButton.astro) ─────
+   Uses --color-secondary (orange) to visually separate from
+   primary mint UI. Hidden until pe:auth-success fires.        */
+
+@keyframes pe-dev-fab-bounce {
+  0%   { opacity: 0; transform: translateY(24px) scale(0.7); }
+  55%  { opacity: 1; transform: translateY(-6px) scale(1.06); }
+  75%  { transform: translateY(3px) scale(0.97); }
+  90%  { transform: translateY(-2px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pe-dev-fab-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 182, 145, 0.7),
+                     0 4px 12px rgba(255, 182, 145, 0.35),
+                     0 2px 4px rgba(0, 0, 0, 0.2); }
+  70%  { box-shadow: 0 0 0 14px rgba(255, 182, 145, 0),
+                     0 4px 12px rgba(255, 182, 145, 0.35),
+                     0 2px 4px rgba(0, 0, 0, 0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 182, 145, 0),
+                     0 4px 12px rgba(255, 182, 145, 0.35),
+                     0 2px 4px rgba(0, 0, 0, 0.2); }
+}
+
+.pe-dev-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pe-dev-fab--visible {
+  opacity: 1;
+  pointer-events: auto;
+  animation: pe-dev-fab-bounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.pe-dev-fab__btn {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  font-family: var(--font-sans);
+  box-shadow:
+    0 4px 12px rgba(255, 182, 145, 0.35),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+
+.pe-dev-fab__btn:hover {
+  transform: scale(1.1) translateY(-1px);
+  box-shadow:
+    0 8px 24px rgba(255, 182, 145, 0.5),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pe-dev-fab__btn:active {
+  transform: scale(0.95);
+  transition-duration: 0.08s;
+}
+
+.pe-dev-fab__btn:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 3px;
+}
+
+.pe-dev-fab__icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.pe-dev-fab__label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Pulse ring on click */
+.pe-dev-fab__btn.pe-dev-fab--pulse {
+  animation: pe-dev-fab-pulse-ring 0.6s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* CSS-only tooltip — reads from data-tooltip attribute */
+.pe-dev-fab__btn::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-surface-container-highest, var(--color-surface));
+  color: var(--color-on-surface);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--border-radius-btn);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 0.4em 0.75em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+/* Tooltip arrow */
+.pe-dev-fab__btn::after {
+  content: '';
+  position: absolute;
+  right: calc(100% + 5px);
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-left-color: var(--color-outline-variant);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.pe-dev-fab__btn:hover::before,
+.pe-dev-fab__btn:hover::after,
+.pe-dev-fab__btn:focus-visible::before,
+.pe-dev-fab__btn:focus-visible::after {
+  opacity: 1;
+}
+
+/* Reduced motion — simple fade instead of bounce/spring */
+@media (prefers-reduced-motion: reduce) {
+  .pe-dev-fab--visible {
+    animation: none;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+
+  .pe-dev-fab__btn.pe-dev-fab--pulse {
+    animation: none;
+  }
+
+  .pe-dev-fab__btn {
+    transition: box-shadow 0.2s ease;
+  }
+}
+
 @media (max-width: 480px) {
   .pe-topbar { padding: 0 1rem; }
   .pe-gate__card { padding: 1.75rem 1.25rem; }
   .pe-progress__label { display: none; }
   .pe-export-summary { grid-template-columns: 1fr 1fr; }
+
+  /* FAB: smaller, tooltip flips above on narrow screens */
+  .pe-dev-fab { bottom: 1.25rem; right: 1.25rem; }
+
+  .pe-dev-fab__btn { width: 48px; height: 48px; }
+
+  .pe-dev-fab__icon { font-size: 1rem; }
+
+  .pe-dev-fab__label { font-size: 0.5rem; }
+
+  .pe-dev-fab__btn::before {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+  }
+
+  .pe-dev-fab__btn::after {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 5px);
+    transform: translateX(-50%);
+    border-left-color: transparent;
+    border-top-color: var(--color-outline-variant);
+  }
 }

@@ -1,0 +1,62 @@
+---
+// Dev-only floating action button. Renders nothing in production builds.
+const isDev = import.meta.env.DEV;
+---
+
+{isDev && (
+  <div class="pe-dev-fab" id="pe-dev-fab" aria-hidden="true">
+    <button
+      class="pe-dev-fab__btn"
+      id="pe-dev-fab-btn"
+      type="button"
+      aria-label="Dev: auto-fill form (Ctrl+Shift+F)"
+      data-tooltip="Auto-fill  Ctrl⇧F"
+    >
+      <span class="pe-dev-fab__icon" aria-hidden="true">⚡</span>
+      <span class="pe-dev-fab__label">DEV</span>
+    </button>
+  </div>
+)}
+
+<script>
+  if (import.meta.env.DEV) {
+    import('../../utils/devSeedData').then(({ generateFakeDraft }) => {
+      const fab = document.getElementById('pe-dev-fab');
+      const btn = document.getElementById('pe-dev-fab-btn');
+
+      if (!fab || !btn) return;
+
+      // Show FAB after auth gate dismisses
+      document.addEventListener(
+        'pe:auth-success',
+        () => {
+          fab.removeAttribute('aria-hidden');
+          fab.classList.add('pe-dev-fab--visible');
+        },
+        { once: true },
+      );
+
+      btn.addEventListener('click', () => { triggerFill(); });
+
+      // Keyboard shortcut: Ctrl+Shift+F / Cmd+Shift+F
+      document.addEventListener('keydown', (e: KeyboardEvent) => {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'F') {
+          e.preventDefault();
+          triggerFill();
+        }
+      });
+
+      function triggerFill(): void {
+        btn!.classList.add('pe-dev-fab--pulse');
+        btn!.addEventListener(
+          'animationend',
+          () => { btn!.classList.remove('pe-dev-fab--pulse'); },
+          { once: true },
+        );
+        document.dispatchEvent(
+          new CustomEvent('pe:dev-fill', { detail: generateFakeDraft() }),
+        );
+      }
+    });
+  }
+</script>

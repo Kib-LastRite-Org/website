@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- **Dev auto-fill utility for post editor** — floating ⚡ DEV button (FAB, bottom-right, orange) that populates all 5 form steps with believable LastRite-themed content in one click; DEV-only (`import.meta.env.DEV`), emits zero HTML in production builds
+  - 4 seed variants: Engineering, Product Updates, Stories, Milestones — selected randomly per click
+  - Keyboard shortcut `Ctrl+Shift+F` / `Cmd+Shift+F`
+  - Spring-bounce entrance animation (`cubic-bezier(0.34, 1.56, 0.64, 1)`), pulse-ring on click, CSS-only tooltip, `prefers-reduced-motion` aware
+  - New files: `src/utils/devSeedData.ts`, `src/components/post-editor/DevFillButton.astro`
+- **Structured debug logging** in post editor — `[PE]` prefixed `console.groupCollapsed` logs for all state transitions: `boot`, `editor:init/ready`, `step:change`, `save:queued/start/success/error`, `draft:load`, `export:start/success`, `validate:error`, `dev:fill`; production dead-code-eliminated via Vite
+
 ### Changed
 
 - **Astro 6.1.9 → 6.2.1** — Minor + patch upgrade. Notable 6.2.x additions:

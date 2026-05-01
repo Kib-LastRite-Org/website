@@ -4,7 +4,10 @@ import ThemeToggle from '../components/ui/ThemeToggle.astro';
 import PostCreateForm from '../components/post-editor/PostCreateForm.astro';
 import DraftRecoveryBanner from '../components/post-editor/DraftRecoveryBanner.astro';
 import DraftsList from '../components/post-editor/DraftsList.astro';
+import DevFillButton from '../components/post-editor/DevFillButton.astro';
 import '../styles/post-editor.css';
+
+const isDev = import.meta.env.DEV;
 ---
 
 <!doctype html>
@@ -113,6 +116,9 @@ import '../styles/post-editor.css';
 
       </div>
     </div>
+
+    <!-- ── Dev tools (DEV-only) ─────────────────────────────── -->
+    {isDev && <DevFillButton />}
 
     <!-- ── Gate logic ───────────────────────────────────────── -->
     <script>
