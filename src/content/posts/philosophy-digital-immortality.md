@@ -2,11 +2,17 @@
 title: 'The Philosophy of Digital Immortality'
 postContent: 'Somewhere on a server farm in rural Oregon, there is a folder containing the final voicemail my grandmother left before she died. I have not listened to it in three years. Not because I have forgotten it exists, but because I cannot decide what kind of object it is. Is it a memory? A message? A piece of her that is somehow still present? The question of what it means to persist after death — digitally, informationally, in the minds of others — is one I have been thinking about since I joined LastRite.'
 category: 'Stories'
-author: 'Julian Vane'
+author:
+  name: 'Julian Vane'
+  bio: 'Writer and ethicist exploring technology and mortality.'
 date: '2024-03-25'
-readTime: '15 min'
-image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBcAtfPudYl51fiNHjvCLc0M8tcG9UrmUIJd2OchrkydFvUvL-5iYLtTYkFwekmrEvVzDukY2CfFZ0WRUIwilQd01sg0jHez5yDoyBJF1YHtT0S9aNOdkuKtSf3QN6f11Ql3Dp6_Eevu5KmoCyeL5uZCVzTOgqxQGEGk_guYVjE0REHchscG5nShxoIUyI6WQnKLPISP-AxHP2TB22U1kynPkI0TFKsDz5hvT4-bk-c40dIpIDMAl6cVZZS9YpD_M3Oa86p5MF8oNcN'
-imageAlt: 'low angle shot of ancient oak trees in a misty forest with ethereal light beams filtering through the canopy'
+status: 'published'
+version: 1
+readingTime: 15
+wordCount: 3000
+coverImage:
+  src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBcAtfPudYl51fiNHjvCLc0M8tcG9UrmUIJd2OchrkydFvUvL-5iYLtTYkFwekmrEvVzDukY2CfFZ0WRUIwilQd01sg0jHez5yDoyBJF1YHtT0S9aNOdkuKtSf3QN6f11Ql3Dp6_Eevu5KmoCyeL5uZCVzTOgqxQGEGk_guYVjE0REHchscG5nShxoIUyI6WQnKLPISP-AxHP2TB22U1kynPkI0TFKsDz5hvT4-bk-c40dIpIDMAl6cVZZS9YpD_M3Oa86p5MF8oNcN'
+  alt: 'low angle shot of ancient oak trees in a misty forest with ethereal light beams filtering through the canopy'
 featured: false
 draft: true
 tags: ['philosophy', 'stories', 'legacy']

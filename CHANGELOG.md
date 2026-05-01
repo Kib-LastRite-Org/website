@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-05-01
+
+### Added
+
+- **`/create` post editor** — browser-native, passphrase-gated post creation tool (no server required)
+  - 5-step multi-section form: Basic Info → Content → Cover Image → Settings & SEO → Export
+  - PBKDF2-SHA256 passphrase gate (310,000 iterations via Web Crypto API); dev mode passphrase `lastrite-create`; production uses `PUBLIC_CREATE_HASH` + `PUBLIC_CREATE_SALT` env vars
+  - Markdown editor powered by `tiny-markdown-editor` with full toolbar and live word count / reading time
+  - IndexedDB draft persistence via `idb` — autosave on 3-second debounce with Saved ✓ / Save failed ✗ status indicator
+  - Draft recovery banner on page load — resume or discard previous drafts
+  - Collapsible sidebar draft list showing all saved drafts with relative timestamps
+  - Tag chip input (comma/space/Enter to add, Backspace to remove, max 10)
+  - Cover image URL with live thumbnail preview
+  - SEO accordion (meta title, meta description, OG image, keywords, noIndex toggle) with live SERP preview
+  - Featured, draft, and status toggles
+  - Export step: slug review/edit, date picker, version counter, "Download .md" button
+  - Activity audit log: last 20 events (created, saved, exported) rendered in-page
+  - `scripts/gen-passphrase-hash.mjs` — one-time PBKDF2 hash generator for `.env` setup
+  - Page is `noindex, nofollow` and excluded from sitemap via `robots.txt`
+
+- **Expanded post schema** (`src/content.config.ts`) — breaking migration from flat fields to structured objects
+  - `author: { name, avatarUrl?, bio? }` (was flat string)
+  - `coverImage: { src, alt, caption? }` (was separate `image` + `imageAlt` fields)
+  - `readingTime: number` (was `readTime: string`)
+  - `wordCount: number` (new)
+  - `status: 'draft' | 'published' | 'archived'` (new)
+  - `version: number` (new)
+  - `seo?: { metaTitle?, metaDescription?, keywords?, ogImage?, noIndex }` (new)
+  - All 7 existing sample posts migrated with placeholder values
+
+- **New utilities**
+  - `src/utils/postStorage.ts` — IndexedDB CRUD for drafts and audit log
+  - `src/utils/postExporter.ts` — converts form state to YAML frontmatter + `.md` download
+  - `src/utils/slugGenerator.ts` — title → URL-safe slug
+  - `src/utils/wordCount.ts` — word count and reading time helpers
+
+### Changed
+
+- `src/layouts/BlogPost.astro` — updated props and template for new `author`, `coverImage`, and `readingTime` fields
+- `src/pages/blog/index.astro` — updated all field accesses (`author.name`, `coverImage.src/alt`, `readingTime`)
+- `src/pages/rss.xml.js` — explicit field mapping (`postContent` → `description`, `date` → `pubDate`)
+- `public/robots.txt` — added `Disallow: /create`
+- `.env.example` — added `PUBLIC_CREATE_HASH` and `PUBLIC_CREATE_SALT`
+
 ## [0.2.2] - 2026-04-30
 
 ### Added

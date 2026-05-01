@@ -1,0 +1,246 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import ThemeToggle from '../components/ui/ThemeToggle.astro';
+import PostCreateForm from '../components/post-editor/PostCreateForm.astro';
+import DraftRecoveryBanner from '../components/post-editor/DraftRecoveryBanner.astro';
+import DraftsList from '../components/post-editor/DraftsList.astro';
+import '../styles/post-editor.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Create Post · LastRite"
+      description="Post creation tool for the LastRite team."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+
+    <!-- ── Passphrase gate overlay ─────────────────────────── -->
+    <div class="pe-gate" id="pe-gate" role="dialog" aria-modal="true" aria-label="Authentication required">
+      <div class="pe-gate__card" id="pe-gate-card">
+        <div class="pe-gate__logo">LastRite</div>
+        <h1 class="pe-gate__title">Post Editor</h1>
+        <p class="pe-gate__subtitle">Enter your passphrase to continue</p>
+
+        <div class="pe-gate__input-wrap">
+          <input
+            class="pe-gate__input"
+            type="password"
+            id="pe-passphrase"
+            placeholder="Passphrase"
+            autocomplete="current-password"
+            aria-label="Passphrase"
+          />
+          <button class="pe-gate__toggle" id="pe-pass-toggle" type="button" aria-label="Show passphrase">
+            <svg id="pe-eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="pe-gate__error" id="pe-gate-error" role="alert" aria-live="polite"></div>
+
+        <button class="btn btn-primary" id="pe-gate-submit" type="button" style="width:100%;justify-content:center">
+          Unlock
+        </button>
+
+        <div class="pe-gate__lockout" id="pe-lockout" style="display:none" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- ── App shell (hidden until auth) ───────────────────── -->
+    <div class="pe-shell" id="pe-shell" aria-hidden="true">
+
+      <!-- Topbar -->
+      <header class="pe-topbar">
+        <a href="/" class="pe-topbar__brand">LastRite</a>
+
+        <div class="pe-topbar__center">
+          <span class="pe-save-status pe-save-status--idle" id="pe-save-status">
+            <span class="pe-save-dot" aria-hidden="true"></span>
+            <span class="pe-save-status__text">Idle</span>
+          </span>
+        </div>
+
+        <div class="pe-topbar__right">
+          <ThemeToggle />
+        </div>
+      </header>
+
+      <!-- Body layout -->
+      <div class="pe-layout">
+
+        <!-- Sidebar -->
+        <aside class="pe-sidebar" aria-label="Editor navigation">
+          <div class="pe-sidebar-section-label">Steps</div>
+          <ul class="pe-sidebar-nav" role="list">
+            {[
+              { n: 1, icon: '✦', label: 'Basic Info' },
+              { n: 2, icon: '✎', label: 'Content' },
+              { n: 3, icon: '◈', label: 'Cover Image' },
+              { n: 4, icon: '◉', label: 'Settings' },
+              { n: 5, icon: '⬇', label: 'Export' },
+            ].map(({ n, icon, label }) => (
+              <li role="listitem">
+                <button
+                  class={`pe-sidebar-nav__item${n === 1 ? ' pe-sidebar-nav__item--active' : ''}`}
+                  data-step={n}
+                  type="button"
+                  aria-label={`Go to step ${n}: ${label}`}
+                >
+                  <span aria-hidden="true">{icon}</span>
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <div class="pe-sidebar-section-label" style="margin-top:auto">Drafts</div>
+          <DraftsList />
+        </aside>
+
+        <!-- Main content -->
+        <main class="pe-main" id="pe-main">
+          <DraftRecoveryBanner />
+          <PostCreateForm />
+        </main>
+
+      </div>
+    </div>
+
+    <!-- ── Gate logic ───────────────────────────────────────── -->
+    <script>
+      // TODO: swap DEV_PASSPHRASE via .env before deploying to production
+      const DEV_PASSPHRASE = 'lastrite-create';
+      const PROD_HASH = import.meta.env.PUBLIC_CREATE_HASH;
+      const PROD_SALT = import.meta.env.PUBLIC_CREATE_SALT;
+
+      const gate       = document.getElementById('pe-gate')!;
+      const gateCard   = document.getElementById('pe-gate-card')!;
+      const shell      = document.getElementById('pe-shell')!;
+      const input      = document.getElementById('pe-passphrase') as HTMLInputElement;
+      const submitBtn  = document.getElementById('pe-gate-submit')!;
+      const errorEl    = document.getElementById('pe-gate-error')!;
+      const lockoutEl  = document.getElementById('pe-lockout')!;
+      const passToggle = document.getElementById('pe-pass-toggle')!;
+
+      let attempts = 0;
+      let lockedUntil = 0;
+
+      // Resume session if already authenticated
+      if (sessionStorage.getItem('lr_auth') === '1') {
+        grantAccess();
+      }
+
+      passToggle.addEventListener('click', () => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+        passToggle.setAttribute('aria-label', input.type === 'password' ? 'Show passphrase' : 'Hide passphrase');
+      });
+
+      submitBtn.addEventListener('click', tryUnlock);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+
+      async function tryUnlock() {
+        const now = Date.now();
+        if (now < lockedUntil) return;
+
+        const passphrase = input.value;
+        errorEl.textContent = '';
+        submitBtn.setAttribute('disabled', '');
+        submitBtn.textContent = 'Checking…';
+
+        const ok = await verify(passphrase);
+
+        submitBtn.removeAttribute('disabled');
+        submitBtn.textContent = 'Unlock';
+
+        if (ok) {
+          sessionStorage.setItem('lr_auth', '1');
+          grantAccess();
+        } else {
+          attempts++;
+          shake();
+          errorEl.textContent = 'Incorrect passphrase.';
+          input.value = '';
+          input.focus();
+
+          if (attempts >= 3) {
+            const delay = Math.min(30, 5 * (attempts - 2)) * 1000;
+            lockedUntil = Date.now() + delay;
+            submitBtn.setAttribute('disabled', '');
+            lockoutEl.style.display = '';
+            const countdown = setInterval(() => {
+              const remaining = Math.ceil((lockedUntil - Date.now()) / 1000);
+              if (remaining <= 0) {
+                clearInterval(countdown);
+                submitBtn.removeAttribute('disabled');
+                lockoutEl.style.display = 'none';
+              } else {
+                lockoutEl.textContent = `Too many attempts. Try again in ${remaining}s.`;
+              }
+            }, 500);
+          }
+        }
+      }
+
+      async function verify(passphrase: string): Promise<boolean> {
+        // Dev mode shortcut
+        if (!PROD_HASH && !PROD_SALT) {
+          return passphrase === DEV_PASSPHRASE;
+        }
+        // Production: PBKDF2-SHA256 comparison
+        try {
+          const saltBytes  = hexToBytes(PROD_SALT);
+          const keyMaterial = await crypto.subtle.importKey(
+            'raw',
+            new TextEncoder().encode(passphrase),
+            'PBKDF2',
+            false,
+            ['deriveBits'],
+          );
+          const derived = await crypto.subtle.deriveBits(
+            { name: 'PBKDF2', hash: 'SHA-256', salt: saltBytes, iterations: 310_000 },
+            keyMaterial,
+            256,
+          );
+          const hex = Array.from(new Uint8Array(derived)).map(b => b.toString(16).padStart(2, '0')).join('');
+          return timingSafeEqual(hex, PROD_HASH);
+        } catch {
+          return false;
+        }
+      }
+
+      function hexToBytes(hex: string): Uint8Array<ArrayBuffer> {
+        const arr = new Uint8Array(hex.length / 2) as Uint8Array<ArrayBuffer>;
+        for (let i = 0; i < hex.length; i += 2) arr[i / 2] = parseInt(hex.slice(i, i + 2), 16);
+        return arr;
+      }
+
+      function timingSafeEqual(a: string, b: string): boolean {
+        if (a.length !== b.length) return false;
+        let diff = 0;
+        for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+        return diff === 0;
+      }
+
+      function shake() {
+        gateCard.classList.remove('pe-shake');
+        void gateCard.offsetWidth; // force reflow to restart animation
+        gateCard.classList.add('pe-shake');
+      }
+
+      function grantAccess() {
+        gate.classList.add('pe-gate--hidden');
+        shell.classList.add('pe-shell--visible');
+        shell.removeAttribute('aria-hidden');
+        setTimeout(() => { gate.style.display = 'none'; }, 450);
+        document.dispatchEvent(new CustomEvent('pe:auth-success'));
+        input.focus();
+      }
+    </script>
+
+  </body>
+</html>

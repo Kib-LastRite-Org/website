@@ -2,11 +2,17 @@
 title: 'Scaling Memorial Services for Global Reach'
 postContent: 'Every year, on the anniversary of a death, something predictable happens on our platform: traffic spikes. Not gradually — sharply. A memorial that receives a handful of visits in a typical week will receive thousands on the anniversary, as family members scattered across time zones all visit at once. Early in our history, those spikes broke things. This is the story of how we fixed that, and what we built along the way.'
 category: 'Engineering'
-author: 'Alex Chen'
+author:
+  name: 'Alex Chen'
+  bio: 'Infrastructure & Platform Engineering at LastRite.'
 date: '2024-04-28'
-readTime: '8 min'
-image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3Huz8BFCQuBrMBVizF696hUgjeZ9yUAFRYD0v5ABltuei3Sp9g3aKDUfbjIrSrEsrZhQMAFiHI5SLpm943PQPW9n3nni8dyCIjJMcENNuRohDdJrbh8yC4JlMhAeEDQ2lqPVfuFLP7371IMtn_xcI5MtmFlOk04i9MArfJDWfhB5GpV6BBHSQFS3waRMoq26AIChnrM8o07WP-35qe6dHzm5WMcra2_kh9D3B6pApWrg5w9Zvcgfi3fTgyswmCadYgC3LpO662Zoj'
-imageAlt: 'close-up of complex circuit board with glowing emerald light pathways illuminating futuristic server architecture'
+status: 'published'
+version: 1
+readingTime: 8
+wordCount: 1600
+coverImage:
+  src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3Huz8BFCQuBrMBVizF696hUgjeZ9yUAFRYD0v5ABltuei3Sp9g3aKDUfbjIrSrEsrZhQMAFiHI5SLpm943PQPW9n3nni8dyCIjJMcENNuRohDdJrbh8yC4JlMhAeEDQ2lqPVfuFLP7371IMtn_xcI5MtmFlOk04i9MArfJDWfhB5GpV6BBHSQFS3waRMoq26AIChnrM8o07WP-35qe6dHzm5WMcra2_kh9D3B6pApWrg5w9Zvcgfi3fTgyswmCadYgC3LpO662Zoj'
+  alt: 'close-up of complex circuit board with glowing emerald light pathways illuminating futuristic server architecture'
 featured: false
 draft: true
 tags: ['engineering', 'infrastructure', 'performance']

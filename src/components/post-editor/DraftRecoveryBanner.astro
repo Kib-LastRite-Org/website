@@ -1,0 +1,61 @@
+---
+// Reads IndexedDB on mount; shows resume/discard controls if drafts exist.
+// Communicates via custom events: pe:load-draft (with draftId), pe:discard-drafts.
+---
+<div id="pe-recovery-banner" class="pe-recovery" style="display:none">
+  <div class="pe-recovery__icon" aria-hidden="true">📄</div>
+  <div class="pe-recovery__body">
+    <div class="pe-recovery__title" id="pe-recovery-title">Unsaved draft found</div>
+    <div class="pe-recovery__meta" id="pe-recovery-meta"></div>
+    <div class="pe-recovery__actions">
+      <button id="pe-resume-btn" class="btn btn-primary" style="font-size:0.85rem;padding:0.5em 1.1em">
+        Resume draft
+      </button>
+      <button id="pe-discard-btn" class="btn btn-outline" style="font-size:0.85rem;padding:0.5em 1.1em">
+        Start fresh
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { listDrafts, deleteDraft } from '../../utils/postStorage';
+
+  async function init() {
+    const drafts = await listDrafts();
+    if (!drafts.length) return;
+
+    const latest = drafts[0]!;
+    const banner = document.getElementById('pe-recovery-banner')!;
+    const title  = document.getElementById('pe-recovery-title')!;
+    const meta   = document.getElementById('pe-recovery-meta')!;
+
+    const ago = formatRelative(latest.updatedAt);
+    title.textContent = `Draft: "${latest.title || 'Untitled'}"`;
+    meta.textContent  = `Last saved ${ago}${drafts.length > 1 ? ` · ${drafts.length} total drafts` : ''}`;
+    banner.style.display = '';
+
+    document.getElementById('pe-resume-btn')!.addEventListener('click', () => {
+      banner.style.display = 'none';
+      document.dispatchEvent(new CustomEvent<typeof latest>('pe:load-draft', { detail: latest }));
+    });
+
+    document.getElementById('pe-discard-btn')!.addEventListener('click', async () => {
+      if (!confirm(`Discard all ${drafts.length} draft(s)? This cannot be undone.`)) return;
+      await Promise.all(drafts.map(d => deleteDraft(d.id)));
+      banner.style.display = 'none';
+    });
+  }
+
+  function formatRelative(ts: number): string {
+    const diff = Date.now() - ts;
+    const mins = Math.floor(diff / 60_000);
+    if (mins < 1)  return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24)  return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
+  }
+
+  document.addEventListener('pe:auth-success', init, { once: true });
+</script>

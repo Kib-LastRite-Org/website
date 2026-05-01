@@ -2,11 +2,17 @@
 title: 'Encryption Standards for Eternal Privacy'
 postContent: 'When someone entrusts LastRite with their most personal memories — the final letter a father left for his children, the video of a grandmother telling her immigration story for the first time — they are making an act of radical vulnerability. Our responsibility to protect that trust is not just a legal obligation. It is a moral one. This post explains the zero-knowledge architecture that underpins every piece of data on our platform.'
 category: 'Engineering'
-author: 'Marcus Thorne'
+author:
+  name: 'Marcus Thorne'
+  bio: 'Head of Security Engineering at LastRite.'
 date: '2024-04-15'
-readTime: '12 min'
-image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAR4wFsbcuM2aZ_-zJw6DJZW0L0PL_9vLFnWZJFWmG0GT91EU3dFcTWoHWd1gmQfLFSrZFjpKJmZgmjYRu1h4aRxXlMn84U8EFCNntuH-YDE8hWqltwxi0OnMgSAOERxE-dBU3d3WNpHpYsovDJ4BYYNggbAWq2TCPVwh5oEBuUKQ-Hnqi9RzVluOCOMHLbcICVczeBInqruDJyyESm6jK2Lps3qa2MS7jndJvkkJPllEj3FwnVXQ_aQE2EoqD8AlPP91KZZmedBplL'
-imageAlt: 'macro photography of a single glowing tree leaf with golden veins against a deep dark background'
+status: 'published'
+version: 1
+readingTime: 12
+wordCount: 2400
+coverImage:
+  src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAR4wFsbcuM2aZ_-zJw6DJZW0L0PL_9vLFnWZJFWmG0GT91EU3dFcTWoHWd1gmQfLFSrZFjpKJmZgmjYRu1h4aRxXlMn84U8EFCNntuH-YDE8hWqltwxi0OnMgSAOERxE-dBU3d3WNpHpYsovDJ4BYYNggbAWq2TCPVwh5oEBuUKQ-Hnqi9RzVluOCOMHLbcICVczeBInqruDJyyESm6jK2Lps3qa2MS7jndJvkkJPllEj3FwnVXQ_aQE2EoqD8AlPP91KZZmedBplL'
+  alt: 'macro photography of a single glowing tree leaf with golden veins against a deep dark background'
 featured: false
 draft: true
 tags: ['engineering', 'security', 'privacy']

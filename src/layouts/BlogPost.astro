@@ -1,7 +1,5 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import type { ImageMetadata } from 'astro';
 import BaseHead from '@/components/BaseHead.astro';
 import LandingFooter from '@/components/LandingFooter.astro';
 import FormattedDate from '@/components/ui/FormattedDate.astro';
@@ -15,39 +13,36 @@ interface Props {
   title: string;
   postContent: string;
   date: Date;
-  image: string | ImageMetadata;
-  imageAlt: string;
+  coverImage: { src: string; alt: string; caption?: string | undefined };
   category: string;
-  author: string;
-  readTime: string;
-  tags?: string[];
+  author: { name: string; avatarUrl?: string | undefined; bio?: string | undefined };
+  readingTime: number;
+  tags?: string[] | undefined;
   draft?: boolean | undefined;
-  relatedPosts?: RelatedPost[];
-  recentPosts?: RelatedPost[];
+  relatedPosts?: RelatedPost[] | undefined;
+  recentPosts?: RelatedPost[] | undefined;
 }
 
 const {
   title,
   postContent,
   date,
-  image,
-  imageAlt,
+  coverImage,
   category,
   author,
-  readTime,
+  readingTime,
   tags,
   draft = false,
   relatedPosts = [],
   recentPosts = [],
 } = Astro.props;
 
-const ogImage = typeof image !== 'string' ? image : undefined;
 const hasRelated = relatedPosts.length > 0;
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={postContent} image={ogImage} />
+		<BaseHead title={title} description={postContent} />
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 		<style>
 			.page-container {
@@ -267,6 +262,13 @@ const hasRelated = relatedPosts.length > 0;
 				font-family: var(--font-sans);
 			}
 
+			.author-bio {
+				font-size: 0.8rem;
+				color: var(--color-on-surface-variant);
+				line-height: 1.5;
+				margin: 0;
+			}
+
 			.recent-posts-list {
 				display: flex;
 				flex-direction: column;
@@ -480,19 +482,15 @@ const hasRelated = relatedPosts.length > 0;
 						</div>
 						<div class="meta-item">
 							<span class="material-symbols-outlined">schedule</span>
-							{readTime}
-						</div>
+							~{readingTime} min read
+</div>
 						<div class="meta-item">
 							<span class="material-symbols-outlined">person</span>
-							{author}
+							{author.name}
 						</div>
 					</div>
 					<div class="hero-image-wrapper reveal" data-delay="4">
-						{typeof image === 'string' ? (
-							<img src={image} alt={imageAlt} />
-						) : (
-							<Image src={image} alt={imageAlt} />
-						)}
+						<img src={coverImage.src} alt={coverImage.alt} />
 						<div class="hero-gradient-overlay"></div>
 					</div>
 				</div>
@@ -535,7 +533,8 @@ const hasRelated = relatedPosts.length > 0;
 					<div class="sidebar-card">
 						<div class="sidebar-author">
 							<span class="author-icon material-symbols-outlined">person</span>
-							<div class="author-name">{author}</div>
+							<div class="author-name">{author.name}</div>
+							{author.bio && <p class="author-bio">{author.bio}</p>}
 						</div>
 					</div>
 
@@ -576,11 +575,7 @@ const hasRelated = relatedPosts.length > 0;
 							{relatedPosts.map((post) => (
 								<a href={`/blog/${post.id}`} class="related-card">
 									<div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
-										{typeof post.data.image === 'string' ? (
-											<img src={post.data.image} alt={post.data.imageAlt} class="related-card-image" />
-										) : (
-											<Image src={post.data.image} alt={post.data.imageAlt} class="related-card-image" />
-										)}
+										<img src={post.data.coverImage.src} alt={post.data.coverImage.alt} class="related-card-image" />
 									</div>
 									<div class="related-card-content">
 										<div class="related-card-category">{post.data.category}</div>

@@ -144,7 +144,7 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
         id="blog-featured-wrapper"
         data-title={featuredPost.data.title.toLowerCase()}
         data-excerpt={featuredPost.data.postContent.toLowerCase()}
-        data-author={featuredPost.data.author.toLowerCase()}
+        data-author={featuredPost.data.author.name.toLowerCase()}
         data-tags={featuredPost.data.tags.join(',').toLowerCase()}
         data-category={featuredPost.data.category}
       >
@@ -152,9 +152,9 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
         <a href={`/blog/${featuredPost.id}/`} class="blog-featured-link">
           <div class="blog-featured-inner">
             <img
-              alt={featuredPost.data.imageAlt}
+              alt={featuredPost.data.coverImage.alt}
               class="blog-featured-image"
-              src={featuredPost.data.image}
+              src={featuredPost.data.coverImage.src}
               loading="lazy"
             />
             <div class="blog-featured-overlay"></div>
@@ -162,11 +162,11 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
               <span class="blog-featured-category">{featuredPost.data.category}</span>
               <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
               <div class="blog-featured-meta">
-                <span class="blog-featured-author">{featuredPost.data.author}</span>
+                <span class="blog-featured-author">{featuredPost.data.author.name}</span>
                 <span>•</span>
                 <span>{formatDate(featuredPost.data.date, 'long')}</span>
                 <span>•</span>
-                <span>{featuredPost.data.readTime}</span>
+                <span>~{featuredPost.data.readingTime} min read</span>
               </div>
             </div>
           </div>
@@ -182,11 +182,11 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
           class="blog-card-wrapper"
           data-title={post.data.title.toLowerCase()}
           data-excerpt={post.data.postContent.toLowerCase()}
-          data-author={post.data.author.toLowerCase()}
+          data-author={post.data.author.name.toLowerCase()}
           data-tags={post.data.tags.join(',').toLowerCase()}
           data-category={post.data.category}
           data-date={new Date(post.data.date).getTime().toString()}
-          data-readtime={parseInt(post.data.readTime).toString()}
+          data-readtime={post.data.readingTime.toString()}
         >
           <a href={`/blog/${post.id}/`} class="blog-card-link">
             <article
@@ -195,8 +195,8 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
             >
               <div class="blog-card-image">
                 <img
-                  alt={post.data.imageAlt}
-                  src={post.data.image}
+                  alt={post.data.coverImage.alt}
+                  src={post.data.coverImage.src}
                   loading="lazy"
                 />
               </div>
@@ -207,8 +207,8 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
                 </h3>
                 <p class="blog-card-excerpt">{post.data.postContent}</p>
                 <div class="blog-card-footer">
-                  <span>{post.data.author}</span>
-                  <span>{formatDate(post.data.date)} • {post.data.readTime}</span>
+                  <span>{post.data.author.name}</span>
+                  <span>{formatDate(post.data.date)} • ~{post.data.readingTime} min read</span>
                 </div>
               </div>
             </article>

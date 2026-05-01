@@ -2,11 +2,17 @@
 title: 'Introducing Memorial Spaces: A New Way to Gather and Grieve'
 postContent: 'Grief rarely follows a schedule. It arrives at 2 a.m. when the house is quiet, or on a Tuesday afternoon when a song comes on the radio. For years, the act of remembering the people we have lost has been largely solitary — a private ritual confined to photographs on mantels and memories replayed in the mind. Today, we are changing that with Memorial Spaces.'
 category: 'Feature'
-author: 'Sarah Miller'
+author:
+  name: 'Sarah Miller'
+  bio: 'Co-founder & Head of Product at LastRite.'
 date: '2024-05-12'
-readTime: '6 min'
-image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuALJBsT8UghXJYO7Qs7XdOh0F9KoriWH4prgOvEGhlQjYyLD1g2tssmWAs8tJkRMSES-wbzk6hHs5bFy3ewC-fxzqe_mU54cxyzhgvkhfxAeF1p5SAkNDZhMmK14ViuSbglQcaC_0-MJL7Hxn-mXGrdrWRPHnH3op_5XOzvmFPdttkwL0mm76EVK9nbk-DtuT6z1Uq3zR2LabxZkio3kdLBJtW_0dBSCdJJcQ8wM1gK5QUS2CUG_l9UkEdKsbh9a6zfQSrZ4ZtqURIy'
-imageAlt: 'dramatic wide shot of a serene mountain lake at twilight with glowing digital particles rising like stars into the night sky'
+status: 'published'
+version: 1
+readingTime: 6
+wordCount: 1200
+coverImage:
+  src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuALJBsT8UghXJYO7Qs7XdOh0F9KoriWH4prgOvEGhlQjYyLD1g2tssmWAs8tJkRMSES-wbzk6hHs5bFy3ewC-fxzqe_mU54cxyzhgvkhfxAeF1p5SAkNDZhMmK14ViuSbglQcaC_0-MJL7Hxn-mXGrdrWRPHnH3op_5XOzvmFPdttkwL0mm76EVK9nbk-DtuT6z1Uq3zR2LabxZkio3kdLBJtW_0dBSCdJJcQ8wM1gK5QUS2CUG_l9UkEdKsbh9a6zfQSrZ4ZtqURIy'
+  alt: 'dramatic wide shot of a serene mountain lake at twilight with glowing digital particles rising like stars into the night sky'
 featured: true
 draft: true
 tags: ['feature', 'community', 'memorial']

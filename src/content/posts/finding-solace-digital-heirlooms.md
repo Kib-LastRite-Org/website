@@ -2,11 +2,17 @@
 title: 'Finding Solace in Digital Heirlooms'
 postContent: 'Three months after her mother died, Amara Osei still could not bring herself to open the box of photographs sitting on her kitchen counter. But she could open her phone. She found herself returning, night after night, to the LastRite memorial her cousin had built in the weeks after the funeral — scrolling through photographs she had never seen, reading stories from people who knew her mother before Amara was born.'
 category: 'Stories'
-author: 'Elena Rossi'
+author:
+  name: 'Elena Rossi'
+  bio: 'Community & Stories writer at LastRite.'
 date: '2024-05-05'
-readTime: '5 min'
-image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCu_hZCbr7BAU2xZGdPjsWvHn0sZQB1XXnRTG34z0vs7kOzi-XSKq5xafi4JpeMpKbSwyUq_D8mHuoWp4vB0lNKoMjbs_ORGoQE_7-2Ibg1OUGXjhlZdFhgfkVBST4y2qawEnNdS7yom211NJ9AMiRc9kPlSsY5PoD14CHmMn-ATtQN0a987XzMP-EkDd_uKrDGGQoHEtOAQsMf70AE6kfNrzrxtGGm24iso_-8EdSUpVX_PbwI-N0K2hBtultCwi8E_TehJRY5QUrc'
-imageAlt: 'soft focus of a family sitting together in a sun-drenched library sharing a tablet with warm emotional lighting'
+status: 'published'
+version: 1
+readingTime: 5
+wordCount: 1000
+coverImage:
+  src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCu_hZCbr7BAU2xZGdPjsWvHn0sZQB1XXnRTG34z0vs7kOzi-XSKq5xafi4JpeMpKbSwyUq_D8mHuoWp4vB0lNKoMjbs_ORGoQE_7-2Ibg1OUGXjhlZdFhgfkVBST4y2qawEnNdS7yom211NJ9AMiRc9kPlSsY5PoD14CHmMn-ATtQN0a987XzMP-EkDd_uKrDGGQoHEtOAQsMf70AE6kfNrzrxtGGm24iso_-8EdSUpVX_PbwI-N0K2hBtultCwi8E_TehJRY5QUrc'
+  alt: 'soft focus of a family sitting together in a sun-drenched library sharing a tablet with warm emotional lighting'
 featured: false
 draft: true
 tags: ['stories', 'community', 'grief']

@@ -1,0 +1,863 @@
+---
+// 5-step post creation form with autosave, tag chips, TinyMDE editor, and .md export.
+---
+
+<style is:global>
+  @import 'tiny-markdown-editor/dist/tiny-mde.min.css';
+</style>
+
+<!-- Progress indicator -->
+<div class="pe-progress" id="pe-progress" role="list" aria-label="Form steps">
+  {[
+    { n: 1, label: 'Basic Info' },
+    { n: 2, label: 'Content' },
+    { n: 3, label: 'Cover Image' },
+    { n: 4, label: 'Settings' },
+    { n: 5, label: 'Export' },
+  ].map(({ n, label }) => (
+    <div class={`pe-progress__step${n === 1 ? ' pe-progress__step--active' : ''}`} role="listitem" data-step={n} aria-label={`Step ${n}: ${label}`}>
+      <div class="pe-progress__dot">{n}</div>
+      <div class="pe-progress__label">{label}</div>
+    </div>
+  ))}
+</div>
+
+<!-- Recovery banner slot -->
+<div id="pe-recovery-slot"></div>
+
+<!-- ── Step 1: Basic Info ───────────────────────────────────── -->
+<div class="pe-step pe-step--active" id="pe-step-1" role="tabpanel" aria-label="Basic Info">
+  <h2 class="pe-step__title">Basic Info</h2>
+
+  <div class="pe-field">
+    <label class="pe-label" for="pe-title">
+      Title <span class="pe-label__required">required</span>
+    </label>
+    <input class="pe-input" type="text" id="pe-title" name="title"
+      placeholder="Post title…" maxlength="120" autocomplete="off" />
+    <div class="pe-char-count" id="pe-title-count">0 / 120</div>
+  </div>
+
+  <div class="pe-field">
+    <label class="pe-label" for="pe-slug-input">Slug</label>
+    <div class="pe-slug-wrap">
+      <span class="pe-slug-prefix">/blog/</span>
+      <input class="pe-input pe-slug-input" type="text" id="pe-slug-input" name="slug"
+        placeholder="auto-generated" maxlength="80" pattern="[a-z0-9]+(-[a-z0-9]+)*" autocomplete="off" />
+    </div>
+    <div class="pe-hint">Lowercase letters, numbers and hyphens only</div>
+    <div class="pe-field-error" id="pe-slug-error" style="display:none">Invalid slug format</div>
+  </div>
+
+  <div class="pe-field">
+    <label class="pe-label" for="pe-excerpt">
+      Excerpt <span class="pe-label__required">required</span>
+    </label>
+    <textarea class="pe-textarea" id="pe-excerpt" name="postContent"
+      placeholder="Short description shown in listings and meta tags…"
+      maxlength="500" rows="3"></textarea>
+    <div class="pe-char-count" id="pe-excerpt-count">0 / 500</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div class="pe-field">
+      <label class="pe-label" for="pe-author-name">
+        Author name <span class="pe-label__required">required</span>
+      </label>
+      <input class="pe-input" type="text" id="pe-author-name" name="authorName"
+        placeholder="LastRite Team" autocomplete="off" />
+    </div>
+    <div class="pe-field">
+      <label class="pe-label" for="pe-category">Category</label>
+      <select class="pe-select" id="pe-category" name="category">
+        <option value="Engineering">Engineering</option>
+        <option value="Stories">Stories</option>
+        <option value="Product Updates">Product Updates</option>
+        <option value="Milestones">Milestones</option>
+        <option value="Feature">Feature</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="pe-field">
+    <label class="pe-label" for="pe-author-bio">
+      Author bio <span class="pe-label__optional">optional</span>
+    </label>
+    <input class="pe-input" type="text" id="pe-author-bio" name="authorBio"
+      placeholder="Short bio…" maxlength="200" autocomplete="off" />
+    <div class="pe-char-count" id="pe-bio-count">0 / 200</div>
+  </div>
+
+  <div class="pe-step-nav">
+    <span></span>
+    <button class="btn btn-primary" id="pe-next-1">Next: Content →</button>
+  </div>
+</div>
+
+<!-- ── Step 2: Content ─────────────────────────────────────── -->
+<div class="pe-step" id="pe-step-2" role="tabpanel" aria-label="Content">
+  <h2 class="pe-step__title">Write Content</h2>
+  <div class="pe-stats" id="pe-stats">
+    <div class="pe-stats__item">Words: <strong id="pe-word-count">0</strong></div>
+    <div class="pe-stats__item">Reading time: <strong id="pe-reading-time">~1 min</strong></div>
+  </div>
+  <div id="pe-editor-toolbar"></div>
+  <div id="pe-editor-area"></div>
+  <div class="pe-step-nav">
+    <button class="btn btn-outline" id="pe-prev-2">← Back</button>
+    <button class="btn btn-primary" id="pe-next-2">Next: Cover Image →</button>
+  </div>
+</div>
+
+<!-- ── Step 3: Cover Image ────────────────────────────────── -->
+<div class="pe-step" id="pe-step-3" role="tabpanel" aria-label="Cover Image">
+  <h2 class="pe-step__title">Cover Image</h2>
+
+  <div class="pe-field">
+    <label class="pe-label" for="pe-cover-src">Image URL <span class="pe-label__required">required</span></label>
+    <input class="pe-input" type="url" id="pe-cover-src" name="coverSrc"
+      placeholder="https://images.unsplash.com/…" autocomplete="off" />
+  </div>
+
+  <img class="pe-img-preview" id="pe-img-preview" alt="Cover preview" />
+  <div class="pe-img-placeholder" id="pe-img-placeholder">Image preview will appear here</div>
+
+  <div class="pe-field" style="margin-top:1rem">
+    <label class="pe-label" for="pe-cover-alt">
+      Alt text <span class="pe-label__required">required</span>
+    </label>
+    <input class="pe-input" type="text" id="pe-cover-alt" name="coverAlt"
+      placeholder="Descriptive alt text for accessibility" autocomplete="off" />
+  </div>
+
+  <div class="pe-field">
+    <label class="pe-label" for="pe-cover-caption">
+      Caption <span class="pe-label__optional">optional</span>
+    </label>
+    <input class="pe-input" type="text" id="pe-cover-caption" name="coverCaption"
+      placeholder="Photo credit or caption…" autocomplete="off" />
+  </div>
+
+  <div class="pe-step-nav">
+    <button class="btn btn-outline" id="pe-prev-3">← Back</button>
+    <button class="btn btn-primary" id="pe-next-3">Next: Settings →</button>
+  </div>
+</div>
+
+<!-- ── Step 4: Tags, Flags & SEO ──────────────────────────── -->
+<div class="pe-step" id="pe-step-4" role="tabpanel" aria-label="Settings">
+  <h2 class="pe-step__title">Tags, Flags & SEO</h2>
+
+  <div class="pe-field">
+    <label class="pe-label">Tags <span class="pe-label__optional">comma or space to add</span></label>
+    <div class="pe-tag-area" id="pe-tag-area" role="group" aria-label="Tags">
+      <input class="pe-tag-input" id="pe-tag-input" type="text"
+        placeholder="Add a tag…" maxlength="32" autocomplete="off" />
+    </div>
+    <div class="pe-hint" id="pe-tag-hint">0 / 10 tags</div>
+  </div>
+
+  <label class="pe-toggle-row" for="pe-featured-toggle">
+    <div class="pe-toggle-label">
+      <strong>Featured post</strong>
+      <span>Shows at top of blog listing</span>
+    </div>
+    <div class="pe-toggle">
+      <input type="checkbox" id="pe-featured-toggle" />
+      <div class="pe-toggle__track"></div>
+    </div>
+  </label>
+
+  <label class="pe-toggle-row" for="pe-draft-toggle">
+    <div class="pe-toggle-label">
+      <strong>Draft mode</strong>
+      <span>Shows draft banner when visiting post</span>
+    </div>
+    <div class="pe-toggle">
+      <input type="checkbox" id="pe-draft-toggle" checked />
+      <div class="pe-toggle__track"></div>
+    </div>
+  </label>
+
+  <div class="pe-field">
+    <label class="pe-label" for="pe-status">Status</label>
+    <select class="pe-select" id="pe-status" name="status" style="max-width:220px">
+      <option value="draft" selected>Draft</option>
+      <option value="published">Published</option>
+      <option value="archived">Archived</option>
+    </select>
+  </div>
+
+  <!-- SEO accordion -->
+  <div class="pe-accordion" id="pe-seo-accordion">
+    <button class="pe-accordion__trigger" id="pe-seo-trigger" type="button" aria-expanded="false">
+      <span>SEO Settings</span>
+      <svg class="pe-accordion__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+    <div class="pe-accordion__body">
+      <div class="pe-accordion__inner">
+        <div class="pe-field">
+          <label class="pe-label" for="pe-meta-title">Meta title <span class="pe-label__optional">max 60</span></label>
+          <input class="pe-input" type="text" id="pe-meta-title" maxlength="60" placeholder="SEO title override…" />
+          <div class="pe-char-count" id="pe-meta-title-count">0 / 60</div>
+          <div class="pe-serp" id="pe-serp" style="display:none">
+            <div class="pe-serp__title" id="pe-serp-title"></div>
+            <div class="pe-serp__url">lastrite.com/blog/<span id="pe-serp-slug">your-slug</span></div>
+            <div class="pe-serp__desc" id="pe-serp-desc">No description yet…</div>
+          </div>
+        </div>
+        <div class="pe-field">
+          <label class="pe-label" for="pe-meta-desc">Meta description <span class="pe-label__optional">max 160</span></label>
+          <textarea class="pe-textarea" id="pe-meta-desc" maxlength="160" rows="3" placeholder="Description shown in search results…"></textarea>
+          <div class="pe-char-count" id="pe-meta-desc-count">0 / 160</div>
+        </div>
+        <div class="pe-field">
+          <label class="pe-label" for="pe-og-image">OG image URL <span class="pe-label__optional">optional</span></label>
+          <input class="pe-input" type="url" id="pe-og-image" placeholder="https://…" />
+        </div>
+        <div class="pe-field">
+          <label class="pe-label" for="pe-keywords">Keywords <span class="pe-label__optional">comma separated</span></label>
+          <input class="pe-input" type="text" id="pe-keywords" placeholder="obituary, memorial, grief…" />
+        </div>
+        <label class="pe-toggle-row" for="pe-noindex-toggle" style="margin-bottom:0">
+          <div class="pe-toggle-label">
+            <strong>No-index</strong>
+            <span>Hide from search engines</span>
+          </div>
+          <div class="pe-toggle">
+            <input type="checkbox" id="pe-noindex-toggle" />
+            <div class="pe-toggle__track"></div>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="pe-step-nav">
+    <button class="btn btn-outline" id="pe-prev-4">← Back</button>
+    <button class="btn btn-primary" id="pe-next-4">Review & Export →</button>
+  </div>
+</div>
+
+<!-- ── Step 5: Export ──────────────────────────────────────── -->
+<div class="pe-step" id="pe-step-5" role="tabpanel" aria-label="Export">
+  <h2 class="pe-step__title">Review & Export</h2>
+
+  <div class="pe-export-card">
+    <p class="pe-export-card__subtitle">Review your post details before exporting the Markdown file.</p>
+    <div class="pe-export-summary" id="pe-export-summary">
+      <div class="pe-summary-item">
+        <div class="pe-summary-item__label">Words</div>
+        <div class="pe-summary-item__value" id="pe-sum-words">—</div>
+      </div>
+      <div class="pe-summary-item">
+        <div class="pe-summary-item__label">Reading time</div>
+        <div class="pe-summary-item__value" id="pe-sum-reading">—</div>
+      </div>
+      <div class="pe-summary-item">
+        <div class="pe-summary-item__label">Status</div>
+        <div class="pe-summary-item__value" id="pe-sum-status">Draft</div>
+      </div>
+      <div class="pe-summary-item">
+        <div class="pe-summary-item__label">Version</div>
+        <div class="pe-summary-item__value" id="pe-sum-version">1</div>
+      </div>
+    </div>
+
+    <div class="pe-field">
+      <label class="pe-label" for="pe-final-slug">Slug (editable)</label>
+      <div class="pe-slug-wrap">
+        <span class="pe-slug-prefix">/blog/</span>
+        <input class="pe-input pe-slug-input" type="text" id="pe-final-slug"
+          placeholder="post-slug" maxlength="80" pattern="[a-z0-9]+(-[a-z0-9]+)*" />
+      </div>
+    </div>
+
+    <div class="pe-field">
+      <label class="pe-label" for="pe-date">Publish date</label>
+      <input class="pe-input" type="date" id="pe-date" name="date" style="max-width:200px" />
+    </div>
+
+    <button class="btn btn-primary btn-lg" id="pe-export-btn" style="width:100%;justify-content:center;margin-top:0.5rem">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Download .md file
+    </button>
+  </div>
+
+  <div class="pe-audit" id="pe-audit-log">
+    <div class="pe-audit__title">Activity log</div>
+    <div class="pe-audit__list" id="pe-audit-list">
+      <div class="pe-audit__empty">No activity yet</div>
+    </div>
+  </div>
+
+  <div class="pe-step-nav">
+    <button class="btn btn-outline" id="pe-prev-5">← Back</button>
+    <button class="btn btn-outline" id="pe-new-post-btn">+ New post</button>
+  </div>
+</div>
+
+<script>
+  import TinyMDE from 'tiny-markdown-editor';
+  import { generateSlug } from '../../utils/slugGenerator';
+  import { wordCount, readingTime } from '../../utils/wordCount';
+  import { saveDraft, listAuditEvents, appendAuditEvent } from '../../utils/postStorage';
+  import { exportToMarkdown } from '../../utils/postExporter';
+  import type { DraftRecord } from '../../utils/postStorage';
+
+  // ── State ────────────────────────────────────────────────────
+  let currentStep = 1;
+  let autosaveTimer: ReturnType<typeof setTimeout> | null = null;
+  let draftId: string | null = null;
+  let draftCreatedAt = Date.now();
+  let version = 1;
+  const MAX_STEPS = 5;
+  const tags: string[] = [];
+  let editor: InstanceType<typeof TinyMDE.Editor> | null = null;
+
+  // ── DOM refs ──────────────────────────────────────────────────
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const $input = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const $textarea = (id: string) => document.getElementById(id) as HTMLTextAreaElement;
+  const $select = (id: string) => document.getElementById(id) as HTMLSelectElement;
+
+  // ── Step navigation ───────────────────────────────────────────
+  function goToStep(n: number) {
+    if (n < 1 || n > MAX_STEPS) return;
+    document.querySelectorAll<HTMLElement>('.pe-step').forEach((el, i) => {
+      el.classList.toggle('pe-step--active', i + 1 === n);
+    });
+    document.querySelectorAll<HTMLElement>('.pe-progress__step').forEach((el, i) => {
+      el.classList.toggle('pe-progress__step--active', i + 1 === n);
+      el.classList.toggle('pe-progress__step--done', i + 1 < n);
+    });
+    document.querySelectorAll<HTMLElement>('.pe-sidebar-nav__item').forEach(el => {
+      el.classList.toggle('pe-sidebar-nav__item--active', parseInt(el.dataset.step || '0') === n);
+    });
+    currentStep = n;
+    if (n === 5) {
+      refreshExportSummary();
+      refreshAuditLog();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Field validation ──────────────────────────────────────────
+  function validateStep1(): boolean {
+    const title  = $input('pe-title').value.trim();
+    const excerpt = $textarea('pe-excerpt').value.trim();
+    const author  = $input('pe-author-name').value.trim();
+    if (title.length < 5) {
+      $input('pe-title').classList.add('pe-input--error');
+      $input('pe-title').focus();
+      return false;
+    }
+    if (!excerpt) {
+      $textarea('pe-excerpt').classList.add('pe-textarea--error');
+      $textarea('pe-excerpt').focus();
+      return false;
+    }
+    if (!author) {
+      $input('pe-author-name').classList.add('pe-input--error');
+      $input('pe-author-name').focus();
+      return false;
+    }
+    return true;
+  }
+
+  function validateStep3(): boolean {
+    const src = $input('pe-cover-src').value.trim();
+    const alt = $input('pe-cover-alt').value.trim();
+    if (!src) { $input('pe-cover-src').classList.add('pe-input--error'); return false; }
+    if (!alt) { $input('pe-cover-alt').classList.add('pe-input--error'); return false; }
+    return true;
+  }
+
+  // ── Character counters ────────────────────────────────────────
+  function wireCounter(inputId: string, countId: string, max: number) {
+    const el = document.getElementById(inputId)!;
+    const cnt = document.getElementById(countId)!;
+    const update = () => {
+      const len = (el as HTMLInputElement | HTMLTextAreaElement).value.length;
+      cnt.textContent = `${len} / ${max}`;
+      cnt.className = 'pe-char-count' +
+        (len > max * 0.9 ? (len >= max ? ' pe-char-count--over' : ' pe-char-count--warn') : '');
+    };
+    el.addEventListener('input', update);
+    update();
+  }
+
+  // ── Slug autogeneration ───────────────────────────────────────
+  function wireSlug() {
+    const titleEl = $input('pe-title');
+    const slugEl  = $input('pe-slug-input');
+    let manualSlug = false;
+
+    titleEl.addEventListener('input', () => {
+      const count = $('pe-title-count');
+      count.textContent = `${titleEl.value.length} / 120`;
+      if (!manualSlug) {
+        slugEl.value = generateSlug(titleEl.value);
+        syncFinalSlug();
+      }
+    });
+
+    slugEl.addEventListener('input', () => {
+      manualSlug = slugEl.value.length > 0;
+      validateSlug(slugEl);
+      syncFinalSlug();
+    });
+  }
+
+  function syncFinalSlug() {
+    const finalSlug = $input('pe-final-slug');
+    if (finalSlug && !finalSlug.dataset.manuallyEdited) {
+      finalSlug.value = $input('pe-slug-input').value;
+    }
+  }
+
+  function validateSlug(el: HTMLInputElement): boolean {
+    const valid = !el.value || /^[a-z0-9]+(-[a-z0-9]+)*$/.test(el.value);
+    el.classList.toggle('pe-input--error', !valid);
+    const err = $('pe-slug-error');
+    if (err) err.style.display = valid ? 'none' : '';
+    return valid;
+  }
+
+  // ── Tag chip input ────────────────────────────────────────────
+  function wireTagInput() {
+    const area  = $('pe-tag-area');
+    const input = $input('pe-tag-input');
+    const hint  = $('pe-tag-hint');
+
+    function addTag(raw: string) {
+      const tag = raw.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+      if (!tag || tags.includes(tag) || tags.length >= 10) return;
+      tags.push(tag);
+
+      const chip = document.createElement('div');
+      chip.className = 'pe-chip';
+      chip.innerHTML = `<span>${escHtml(tag)}</span><button class="pe-chip__remove" aria-label="Remove tag ${escHtml(tag)}" type="button">×</button>`;
+      chip.querySelector('.pe-chip__remove')!.addEventListener('click', () => {
+        tags.splice(tags.indexOf(tag), 1);
+        chip.remove();
+        hint.textContent = `${tags.length} / 10 tags`;
+        scheduleSave();
+      });
+      area.insertBefore(chip, input);
+      hint.textContent = `${tags.length} / 10 tags`;
+      scheduleSave();
+    }
+
+    input.addEventListener('keydown', e => {
+      if (e.key === ',' || e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        addTag(input.value);
+        input.value = '';
+      } else if (e.key === 'Backspace' && !input.value && tags.length) {
+        area.querySelector(`.pe-chip:last-of-type`)?.remove();
+        tags.pop();
+        hint.textContent = `${tags.length} / 10 tags`;
+      }
+    });
+
+    input.addEventListener('blur', () => {
+      if (input.value.trim()) { addTag(input.value); input.value = ''; }
+    });
+
+    area.addEventListener('click', () => input.focus());
+  }
+
+  // ── Cover image preview ───────────────────────────────────────
+  function wireCoverPreview() {
+    const srcEl       = $input('pe-cover-src');
+    const preview     = $('pe-img-preview') as HTMLImageElement;
+    const placeholder = $('pe-img-placeholder');
+
+    srcEl.addEventListener('input', () => {
+      const url = srcEl.value.trim();
+      if (!url) {
+        preview.classList.remove('pe-img-preview--visible');
+        placeholder.style.display = '';
+        return;
+      }
+      preview.src = url;
+      preview.onload = () => {
+        preview.classList.add('pe-img-preview--visible');
+        placeholder.style.display = 'none';
+      };
+      preview.onerror = () => {
+        preview.classList.remove('pe-img-preview--visible');
+        placeholder.style.display = '';
+      };
+    });
+  }
+
+  // ── SEO accordion ─────────────────────────────────────────────
+  function wireSeoAccordion() {
+    const acc     = $('pe-seo-accordion');
+    const trigger = $('pe-seo-trigger');
+
+    trigger.addEventListener('click', () => {
+      const open = acc.classList.toggle('pe-accordion--open');
+      trigger.setAttribute('aria-expanded', String(open));
+    });
+
+    // SERP preview update
+    const metaTitleEl = $input('pe-meta-title');
+    const metaDescEl  = $textarea('pe-meta-desc');
+    const serpEl      = $('pe-serp');
+
+    function updateSerp() {
+      const title = metaTitleEl.value || $input('pe-title').value;
+      const desc  = metaDescEl.value  || $textarea('pe-excerpt').value;
+      if (!title && !desc) { serpEl.style.display = 'none'; return; }
+      serpEl.style.display = '';
+      $('pe-serp-title').textContent = title;
+      $('pe-serp-slug').textContent  = $input('pe-final-slug').value || $input('pe-slug-input').value || 'your-slug';
+      $('pe-serp-desc').textContent  = desc || 'No description yet…';
+    }
+
+    metaTitleEl.addEventListener('input', updateSerp);
+    metaDescEl.addEventListener('input',  updateSerp);
+    $input('pe-title').addEventListener('input',   updateSerp);
+    $textarea('pe-excerpt').addEventListener('input', updateSerp);
+  }
+
+  // ── TinyMDE editor ───────────────────────────────────────────
+  function initEditor() {
+    if (editor) return;
+    const area    = $('pe-editor-area');
+    const toolbar = $('pe-editor-toolbar');
+
+    editor = new TinyMDE.Editor({ element: area });
+    new TinyMDE.CommandBar({ editor, element: toolbar });
+
+    editor.addEventListener('change', () => {
+      const body   = editor!.getContent();
+      const words  = wordCount(body);
+      const rt     = readingTime(words);
+      $('pe-word-count').textContent  = words.toString();
+      $('pe-reading-time').textContent = `~${rt} min`;
+      scheduleSave();
+    });
+  }
+
+  // ── Autosave ──────────────────────────────────────────────────
+  function scheduleSave() {
+    if (autosaveTimer) clearTimeout(autosaveTimer);
+    setSaveStatus('saving');
+    autosaveTimer = setTimeout(doSave, 3000);
+  }
+
+  async function doSave() {
+    try {
+      const draft = buildDraftRecord();
+      if (!draftId) {
+        draftId = crypto.randomUUID();
+        draftCreatedAt = Date.now();
+        await appendAuditEvent({
+          id: crypto.randomUUID(),
+          event: 'draft_created',
+          draftId,
+          draftTitle: draft.title || 'Untitled',
+          timestamp: Date.now(),
+        });
+      }
+      await saveDraft({ ...draft, id: draftId!, createdAt: draftCreatedAt, updatedAt: Date.now() });
+      await appendAuditEvent({
+        id: crypto.randomUUID(),
+        event: 'draft_saved',
+        draftId,
+        draftTitle: draft.title || 'Untitled',
+        timestamp: Date.now(),
+      });
+      setSaveStatus('saved');
+      document.dispatchEvent(new CustomEvent('pe:draft-saved'));
+    } catch {
+      setSaveStatus('error');
+    }
+  }
+
+  function setSaveStatus(state: 'idle' | 'saving' | 'saved' | 'error') {
+    const el = $('pe-save-status');
+    if (!el) return;
+    const map = { idle: 'Idle', saving: 'Saving…', saved: 'Saved ✓', error: 'Save failed ✗' };
+    el.querySelector('.pe-save-status__text')!.textContent = map[state];
+    el.className = `pe-save-status pe-save-status--${state}`;
+  }
+
+  // ── Build draft record from form fields ───────────────────────
+  function buildDraftRecord(): Omit<DraftRecord, 'id' | 'createdAt' | 'updatedAt'> {
+    const keywords = $input('pe-keywords').value
+      .split(',').map(k => k.trim()).filter(Boolean);
+    const seoMetaTitle = $input('pe-meta-title').value.trim();
+    const seoMetaDesc  = ($('pe-meta-desc') as HTMLTextAreaElement).value.trim();
+    const seoOgImage   = $input('pe-og-image').value.trim();
+    const noIndex      = ($('pe-noindex-toggle') as HTMLInputElement).checked;
+    const hasSeo = seoMetaTitle || seoMetaDesc || seoOgImage || keywords.length || noIndex;
+
+    return {
+      title:       $input('pe-title').value.trim(),
+      slug:        $input('pe-slug-input').value.trim(),
+      postContent: ($('pe-excerpt') as HTMLTextAreaElement).value.trim(),
+      body:        editor ? editor.getContent() : '',
+      category:    $select('pe-category').value,
+      author: {
+        name: $input('pe-author-name').value.trim(),
+        bio:  $input('pe-author-bio').value.trim() || undefined,
+      },
+      coverImage: {
+        src:     $input('pe-cover-src').value.trim(),
+        alt:     $input('pe-cover-alt').value.trim(),
+        caption: $input('pe-cover-caption').value.trim() || undefined,
+      },
+      tags:     [...tags],
+      featured: ($('pe-featured-toggle') as HTMLInputElement).checked,
+      draft:    ($('pe-draft-toggle') as HTMLInputElement).checked,
+      status:   $select('pe-status').value as DraftRecord['status'],
+      version,
+      seo: hasSeo ? {
+        metaTitle:       seoMetaTitle || undefined,
+        metaDescription: seoMetaDesc  || undefined,
+        keywords:        keywords.length ? keywords : undefined,
+        ogImage:         seoOgImage  || undefined,
+        noIndex,
+      } : undefined,
+    };
+  }
+
+  // ── Load draft into form ──────────────────────────────────────
+  function loadDraftIntoForm(draft: DraftRecord) {
+    draftId  = draft.id;
+    version  = draft.version;
+
+    $input('pe-title').value       = draft.title;
+    $input('pe-slug-input').value  = draft.slug;
+    ($('pe-excerpt') as HTMLTextAreaElement).value = draft.postContent;
+    $input('pe-author-name').value = draft.author.name;
+    $input('pe-author-bio').value  = draft.author.bio || '';
+    $select('pe-category').value   = draft.category;
+    $input('pe-cover-src').value   = draft.coverImage.src;
+    $input('pe-cover-alt').value   = draft.coverImage.alt;
+    $input('pe-cover-caption').value = draft.coverImage.caption || '';
+    $select('pe-status').value     = draft.status;
+    ($('pe-featured-toggle') as HTMLInputElement).checked = draft.featured;
+    ($('pe-draft-toggle')    as HTMLInputElement).checked = draft.draft;
+
+    // Restore tags
+    tags.length = 0;
+    const area = $('pe-tag-area');
+    area.querySelectorAll('.pe-chip').forEach(el => el.remove());
+    draft.tags.forEach(t => {
+      tags.push(t);
+      const chip = document.createElement('div');
+      chip.className = 'pe-chip';
+      chip.innerHTML = `<span>${escHtml(t)}</span><button class="pe-chip__remove" type="button" aria-label="Remove ${escHtml(t)}">×</button>`;
+      chip.querySelector('.pe-chip__remove')!.addEventListener('click', () => {
+        tags.splice(tags.indexOf(t), 1);
+        chip.remove();
+        $('pe-tag-hint').textContent = `${tags.length} / 10 tags`;
+      });
+      area.insertBefore(chip, $input('pe-tag-input'));
+    });
+    $('pe-tag-hint').textContent = `${tags.length} / 10 tags`;
+
+    if (editor) editor.setContent(draft.body);
+    syncFinalSlug();
+    goToStep(1);
+  }
+
+  // ── Export summary refresh ────────────────────────────────────
+  function refreshExportSummary() {
+    const body  = editor ? editor.getContent() : '';
+    const words = wordCount(body);
+    const rt    = readingTime(words);
+    $('pe-sum-words').textContent   = words.toString();
+    $('pe-sum-reading').textContent = `~${rt} min`;
+    $('pe-sum-status').textContent  = $select('pe-status').value;
+    $('pe-sum-version').textContent = version.toString();
+    $input('pe-final-slug').value   = $input('pe-slug-input').value;
+    const today = new Date().toISOString().slice(0, 10);
+    const dateEl = $input('pe-date') as HTMLInputElement;
+    if (!dateEl.value) dateEl.value = today;
+  }
+
+  // ── Audit log ─────────────────────────────────────────────────
+  async function refreshAuditLog() {
+    const events = await listAuditEvents(20);
+    const list   = $('pe-audit-list');
+    list.innerHTML = '';
+
+    if (!events.length) {
+      list.innerHTML = '<div class="pe-audit__empty">No activity yet</div>';
+      return;
+    }
+
+    const eventLabels: Record<string, string> = {
+      draft_created:  'Created',
+      draft_saved:    'Saved',
+      draft_exported: 'Exported',
+      draft_deleted:  'Deleted',
+    };
+
+    events.forEach(ev => {
+      const el = document.createElement('div');
+      el.className = 'pe-audit__entry';
+      const time = new Date(ev.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      el.innerHTML = `
+        <span class="pe-audit__event">${eventLabels[ev.event] || ev.event}</span>
+        <span class="pe-audit__title-text">${escHtml(ev.draftTitle)}</span>
+        <span class="pe-audit__time">${time}</span>
+      `;
+      list.appendChild(el);
+    });
+  }
+
+  // ── Export handler ────────────────────────────────────────────
+  async function handleExport() {
+    const draft = buildDraftRecord();
+    const finalSlugEl = $input('pe-final-slug');
+    const slug  = finalSlugEl.value.trim() || draft.slug || generateSlug(draft.title);
+    const date  = ($('pe-date') as HTMLInputElement).value || new Date().toISOString().slice(0, 10);
+    version++;
+
+    exportToMarkdown({ ...draft, slug, date, version });
+
+    await doSave();
+    if (draftId) {
+      await appendAuditEvent({
+        id: crypto.randomUUID(),
+        event: 'draft_exported',
+        draftId,
+        draftTitle: draft.title || 'Untitled',
+        timestamp: Date.now(),
+      });
+    }
+
+    $('pe-sum-version').textContent = version.toString();
+    await refreshAuditLog();
+    document.dispatchEvent(new CustomEvent('pe:draft-exported'));
+  }
+
+  // ── Input change listeners for autosave ───────────────────────
+  function wireAutosave() {
+    const ids = [
+      'pe-title','pe-slug-input','pe-excerpt','pe-author-name','pe-author-bio',
+      'pe-cover-src','pe-cover-alt','pe-cover-caption',
+      'pe-meta-title','pe-meta-desc','pe-og-image','pe-keywords',
+    ];
+    ids.forEach(id => {
+      document.getElementById(id)?.addEventListener('input', scheduleSave);
+    });
+    ['pe-category','pe-status'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', scheduleSave);
+    });
+    ['pe-featured-toggle','pe-draft-toggle','pe-noindex-toggle'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', scheduleSave);
+    });
+  }
+
+  // ── Wire up step nav buttons ──────────────────────────────────
+  function wireNav() {
+    $('pe-next-1')?.addEventListener('click', () => { if (validateStep1()) goToStep(2); });
+    $('pe-prev-2')?.addEventListener('click', () => goToStep(1));
+    $('pe-next-2')?.addEventListener('click', () => goToStep(3));
+    $('pe-prev-3')?.addEventListener('click', () => goToStep(2));
+    $('pe-next-3')?.addEventListener('click', () => { if (validateStep3()) goToStep(4); });
+    $('pe-prev-4')?.addEventListener('click', () => goToStep(3));
+    $('pe-next-4')?.addEventListener('click', () => goToStep(5));
+    $('pe-prev-5')?.addEventListener('click', () => goToStep(4));
+
+    $('pe-export-btn')?.addEventListener('click', handleExport);
+
+    $('pe-new-post-btn')?.addEventListener('click', () => {
+      if (!confirm('Start a new post? Current draft is saved in the sidebar.')) return;
+      draftId = null;
+      version = 1;
+      resetForm();
+      goToStep(1);
+    });
+
+    // Progress dot click navigation
+    document.querySelectorAll<HTMLElement>('.pe-progress__step').forEach(el => {
+      el.addEventListener('click', () => {
+        const n = parseInt(el.dataset.step || '1');
+        if (n <= currentStep || el.classList.contains('pe-progress__step--done')) goToStep(n);
+      });
+    });
+
+    // Sidebar nav
+    document.querySelectorAll<HTMLElement>('.pe-sidebar-nav__item').forEach(el => {
+      el.addEventListener('click', () => {
+        const n = parseInt(el.dataset.step || '1');
+        goToStep(n);
+      });
+    });
+  }
+
+  function resetForm() {
+    ['pe-title','pe-slug-input','pe-excerpt','pe-author-name','pe-author-bio',
+     'pe-cover-src','pe-cover-alt','pe-cover-caption','pe-meta-title','pe-og-image',
+     'pe-keywords','pe-final-slug'].forEach(id => {
+       const el = document.getElementById(id) as HTMLInputElement | null;
+       if (el) el.value = '';
+     });
+    ($('pe-meta-desc') as HTMLTextAreaElement).value = '';
+    $select('pe-status').value = 'draft';
+    ($('pe-draft-toggle') as HTMLInputElement).checked = true;
+    ($('pe-featured-toggle') as HTMLInputElement).checked = false;
+    ($('pe-noindex-toggle') as HTMLInputElement).checked = false;
+    tags.length = 0;
+    $('pe-tag-area').querySelectorAll('.pe-chip').forEach(el => el.remove());
+    $('pe-tag-hint').textContent = '0 / 10 tags';
+    if (editor) editor.setContent('');
+    $('pe-word-count').textContent = '0';
+    $('pe-reading-time').textContent = '~1 min';
+    $('pe-img-preview').classList.remove('pe-img-preview--visible');
+    $('pe-img-placeholder').style.display = '';
+  }
+
+  function escHtml(s: string): string {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── Final slug manual edit flag ───────────────────────────────
+  function wireFinalSlug() {
+    const el = $input('pe-final-slug');
+    el.addEventListener('input', () => { el.dataset.manuallyEdited = 'true'; });
+  }
+
+  // ── Bootstrap on auth ─────────────────────────────────────────
+  function boot() {
+    wireCounter('pe-excerpt',    'pe-excerpt-count',    500);
+    wireCounter('pe-author-bio', 'pe-bio-count',        200);
+    wireCounter('pe-meta-title', 'pe-meta-title-count', 60);
+    wireCounter('pe-meta-desc',  'pe-meta-desc-count',  160);
+    wireSlug();
+    wireTagInput();
+    wireCoverPreview();
+    wireSeoAccordion();
+    wireAutosave();
+    wireNav();
+    wireFinalSlug();
+
+    // Init editor on step 2 first visit
+    document.getElementById('pe-next-1')?.addEventListener('click', () => {
+      if (!editor && validateStep1()) initEditor();
+    }, { once: true });
+  }
+
+  document.addEventListener('pe:auth-success', boot, { once: true });
+
+  document.addEventListener('pe:load-draft', (e: Event) => {
+    loadDraftIntoForm((e as CustomEvent<DraftRecord>).detail);
+  });
+</script>

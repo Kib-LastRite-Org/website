@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /create
+
+Sitemap: https://website-azure-two-47.vercel.app/sitemap-index.xml
