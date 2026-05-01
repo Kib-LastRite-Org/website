@@ -305,7 +305,7 @@
 </div>
 
 <script>
-  import TinyMDE from 'tiny-markdown-editor';
+  import { Editor as TinyMDEEditor, CommandBar as TinyMDECommandBar } from 'tiny-markdown-editor';
   import { generateSlug } from '../../utils/slugGenerator';
   import { wordCount, readingTime } from '../../utils/wordCount';
   import { saveDraft, listAuditEvents, appendAuditEvent } from '../../utils/postStorage';
@@ -320,7 +320,7 @@
   let version = 1;
   const MAX_STEPS = 5;
   const tags: string[] = [];
-  let editor: InstanceType<typeof TinyMDE.Editor> | null = null;
+  let editor: InstanceType<typeof TinyMDEEditor> | null = null;
 
   // ── DOM refs ──────────────────────────────────────────────────
   const $ = (id: string) => document.getElementById(id) as HTMLElement;
@@ -342,6 +342,7 @@
       el.classList.toggle('pe-sidebar-nav__item--active', parseInt(el.dataset.step || '0') === n);
     });
     currentStep = n;
+    if (n === 2) initEditor();
     if (n === 5) {
       refreshExportSummary();
       refreshAuditLog();
@@ -537,10 +538,10 @@
     const area    = $('pe-editor-area');
     const toolbar = $('pe-editor-toolbar');
 
-    editor = new TinyMDE.Editor({ element: area });
-    new TinyMDE.CommandBar({ editor, element: toolbar });
+    editor = new TinyMDEEditor({ element: area });
+    new TinyMDECommandBar({ editor, element: toolbar });
 
-    editor.addEventListener('change', () => {
+    editor!.addEventListener('change', () => {
       const body   = editor!.getContent();
       const words  = wordCount(body);
       const rt     = readingTime(words);
@@ -776,7 +777,7 @@
     $('pe-next-4')?.addEventListener('click', () => goToStep(5));
     $('pe-prev-5')?.addEventListener('click', () => goToStep(4));
 
-    $('pe-export-btn')?.addEventListener('click', handleExport);
+    $('pe-export-btn')?.addEventListener('click', () => void handleExport());
 
     $('pe-new-post-btn')?.addEventListener('click', () => {
       if (!confirm('Start a new post? Current draft is saved in the sidebar.')) return;
@@ -848,11 +849,6 @@
     wireAutosave();
     wireNav();
     wireFinalSlug();
-
-    // Init editor on step 2 first visit
-    document.getElementById('pe-next-1')?.addEventListener('click', () => {
-      if (!editor && validateStep1()) initEditor();
-    }, { once: true });
   }
 
   document.addEventListener('pe:auth-success', boot, { once: true });
