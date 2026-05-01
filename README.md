@@ -27,11 +27,12 @@ Marketing landing page (hero, features, how it works, mobile section, testimonia
 
 | Technology | Version | Purpose |
 | --- | --- | --- |
-| Astro | 6.1.8 | Static site generator (ES modules) |
+| Astro | 6.2.1 | Static site generator (ES modules) |
 | TypeScript | (strict) | Type-safe development |
-| MDX | 5.0.3 | Markdown + JSX components |
+| MDX | 5.0.4 | Markdown + JSX components |
 | CSS + Design Tokens | — | Dark/light theme, custom properties |
-| Sharp | 0.34.3 | Image optimization |
+| Tailwind CSS | 4.2.4 | Utility layout/spacing (hybrid with CSS design system) |
+| Sharp | 0.34.5 | Image optimization |
 | @astrojs/rss, @astrojs/sitemap | 4.0.18, 3.7.2 | Feed & SEO |
 | pnpm | — | Package manager |
 
@@ -60,8 +61,8 @@ src/
   assets/fonts/            Self-hosted Manrope, Inter, Atkinson
   components/
     landing/               HeroSection, FeaturesSection, etc.
-    BaseHead, Header, Footer, ThemeToggle, Toast, etc.
-  content/blog/            Markdown/MDX memorial posts
+    ui/                    BaseHead, Header, Footer, ThemeToggle, Toast, etc.
+  content/posts/           Markdown/MDX memorial posts
   layouts/BlogPost.astro   Blog post template
   pages/
     index.astro            Landing page
@@ -69,8 +70,8 @@ src/
     blog/[...slug].astro   Blog posts
     rss.xml.js, sitemap.xml.ts
   scripts/
-    theme.js               Theme toggle + localStorage
-    animations.js          Scroll-reveal animations
+    theme.ts               Theme toggle + localStorage
+    animations.ts          Scroll-reveal animations
     *Interceptor.ts        Coming-soon & toast handlers
   styles/global.css        Design tokens, theme variables
   utils/                   Utilities
@@ -81,13 +82,13 @@ astro.config.mjs, tsconfig.json, package.json, pnpm-lock.yaml
 
 ## Key Systems
 
-**Theme Toggle:** System-aware dark/light mode (`theme.js` + `ThemeToggle.astro`). Persisted to localStorage with FOUC prevention via inline script in `BaseHead.astro`. Design tokens in `global.css`.
+**Theme Toggle:** System-aware dark/light mode (`theme.ts` + `ThemeToggle.astro`). Persisted to localStorage with FOUC prevention via inline script in `BaseHead.astro`. Design tokens in `global.css`.
 
 **Coming Soon Interceptor:** `data-coming-soon="true"` attribute intercepts clicks and shows toast instead of navigating.
 
 **Toast Notifications:** `Toast.astro`, `ComingSoonToast.astro` components. Triggered via `comingSoonToast()` utility or custom events.
 
-**Scroll Animations:** Elements with `data-delay` animate into view via `animations.js` (Intersection Observer).
+**Scroll Animations:** Elements with `data-delay` animate into view via `animations.ts` (Intersection Observer).
 
 ## Tailwind v4 Hybrid Migration
 
@@ -112,9 +113,9 @@ See `CLAUDE.md` for detailed migration guidance and `docs_etc/` for validation r
 
 ## Configuration & Deployment
 
-**Site URL (astro.config.mjs):** Update `site: "https://example.com"` to your actual domain before production (required for canonical URLs, sitemap, RSS).
+**Site URL (astro.config.mjs):** Currently set to `https://website-azure-two-47.vercel.app` with `VERCEL_URL` env var override. Update to the production domain before launch (required for canonical URLs, sitemap, RSS).
 
-**No env vars needed** — fully static. If you add backend integrations, create `.env.example` and `.env.local` (add `.env.local` to `.gitignore`).
+**Env vars:** The `/create` page requires `PUBLIC_CREATE_HASH` and `PUBLIC_CREATE_SALT` (see `.env.example`). Add `.env.local` to `.gitignore`.
 
 **Typography:** Three-tier hierarchy via Astro Fonts API:
 

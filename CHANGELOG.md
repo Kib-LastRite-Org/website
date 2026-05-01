@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+
+- **Astro 6.1.9 → 6.2.1** — Minor + patch upgrade. Notable 6.2.x additions:
+  - Experimental custom logger (structured JSON output for logging agents)
+  - SVG Optimizer API — new `svgOptimizer` option (with built-in `svgoOptimizer()`) replaces the old `svgo` flag; relevant for future SVG asset optimization (hero SVG added in v0.2.x)
+  - `experimental_getFontFileURL()` helper from `astro:assets` — useful for resolving font URLs from the Astro Fonts API (Inter, Manrope, Atkinson)
+  - **6.2.1 patch:** fixes Zod 4.4.0 config validation compatibility — directly benefits `content.config.ts` schema definitions
+
+---
+
 ## [0.3.0] - 2026-05-01
 
 ### Added
