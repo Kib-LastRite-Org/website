@@ -3,6 +3,13 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { createClient } from '@supabase/supabase-js';
 
+if (!import.meta.env.CREATE_API_TOKEN) {
+  console.error(
+    '[api/posts] CREATE_API_TOKEN is not set — all authenticated requests will return 401. ' +
+    'Check your .env.local.',
+  );
+}
+
 export const GET: APIRoute = async ({ url, request }) => {
   const status = url.searchParams.get('status');
   const slug   = url.searchParams.get('slug');
