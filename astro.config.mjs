@@ -2,11 +2,15 @@
 
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import { defineConfig, fontProviders } from 'astro/config';
+import vercel from '@astrojs/vercel';
 import tailwindcss from "@tailwindcss/vite";
+import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'static',
+  adapter: vercel(),
+
   site: process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : "https://website-azure-two-47.vercel.app",

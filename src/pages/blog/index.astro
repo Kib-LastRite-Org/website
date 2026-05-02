@@ -1,17 +1,24 @@
 ---
 import { getCollection } from 'astro:content';
 import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import { supabase, normalizeSupabasePost } from '@/lib/supabase';
+import { normalizeMdxPost, mergePosts } from '@/lib/posts';
 
 const title = 'LastRite Chronicle - Blog & Stories';
 const description = 'Insights into our journey, product updates, and the stories behind digital memorials.';
 
-const allPosts = await getCollection('posts');
-const sortedPosts = allPosts
-  .filter((post: any) => 'date' in post.data && post.data.date)
-  .sort((a: any, b: any) => new Date(b.data.date as string).getTime() - new Date(a.data.date as string).getTime());
+const [mdxEntries, { data: supabaseRows }] = await Promise.all([
+  getCollection('posts'),
+  supabase.from('posts').select('*').eq('status', 'published'),
+]);
 
-const featuredPost = sortedPosts.find(p => p.data.featured) || sortedPosts[0];
-const regularPosts = sortedPosts.filter(p => !p.data.featured);
+const allPosts = mergePosts(
+  mdxEntries.map(normalizeMdxPost),
+  (supabaseRows ?? []).map(normalizeSupabasePost),
+);
+
+const featuredPost = allPosts.find(p => p.featured) ?? allPosts[0];
+const regularPosts = allPosts.filter(p => !p.featured);
 
 const getCategoryColor = (category: string): string => {
   const colors: Record<string, string> = {
@@ -142,31 +149,31 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
     {featuredPost && (
       <div
         id="blog-featured-wrapper"
-        data-title={featuredPost.data.title.toLowerCase()}
-        data-excerpt={featuredPost.data.postContent.toLowerCase()}
-        data-author={featuredPost.data.author.name.toLowerCase()}
-        data-tags={featuredPost.data.tags.join(',').toLowerCase()}
-        data-category={featuredPost.data.category}
+        data-title={featuredPost.title.toLowerCase()}
+        data-excerpt={featuredPost.postContent.toLowerCase()}
+        data-author={featuredPost.author.name.toLowerCase()}
+        data-tags={featuredPost.tags.join(',').toLowerCase()}
+        data-category={featuredPost.category}
       >
       <section class="blog-featured reveal">
-        <a href={`/blog/${featuredPost.id}/`} class="blog-featured-link">
+        <a href={`/blog/${featuredPost.slug}/`} class="blog-featured-link">
           <div class="blog-featured-inner">
             <img
-              alt={featuredPost.data.coverImage.alt}
+              alt={featuredPost.coverImage.alt}
               class="blog-featured-image"
-              src={featuredPost.data.coverImage.src}
+              src={featuredPost.coverImage.src}
               loading="lazy"
             />
             <div class="blog-featured-overlay"></div>
             <div class="blog-featured-content">
-              <span class="blog-featured-category">{featuredPost.data.category}</span>
-              <h2 class="blog-featured-title">{featuredPost.data.title}</h2>
+              <span class="blog-featured-category">{featuredPost.category}</span>
+              <h2 class="blog-featured-title">{featuredPost.title}</h2>
               <div class="blog-featured-meta">
-                <span class="blog-featured-author">{featuredPost.data.author.name}</span>
+                <span class="blog-featured-author">{featuredPost.author.name}</span>
                 <span>•</span>
-                <span>{formatDate(featuredPost.data.date, 'long')}</span>
+                <span>{formatDate(featuredPost.date, 'long')}</span>
                 <span>•</span>
-                <span>~{featuredPost.data.readingTime} min read</span>
+                <span>~{featuredPost.readingTime} min read</span>
               </div>
             </div>
           </div>
@@ -180,35 +187,35 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
       {regularPosts.map((post, index) => (
         <div
           class="blog-card-wrapper"
-          data-title={post.data.title.toLowerCase()}
-          data-excerpt={post.data.postContent.toLowerCase()}
-          data-author={post.data.author.name.toLowerCase()}
-          data-tags={post.data.tags.join(',').toLowerCase()}
-          data-category={post.data.category}
-          data-date={new Date(post.data.date).getTime().toString()}
-          data-readtime={post.data.readingTime.toString()}
+          data-title={post.title.toLowerCase()}
+          data-excerpt={post.postContent.toLowerCase()}
+          data-author={post.author.name.toLowerCase()}
+          data-tags={post.tags.join(',').toLowerCase()}
+          data-category={post.category}
+          data-date={new Date(post.date).getTime().toString()}
+          data-readtime={post.readingTime.toString()}
         >
-          <a href={`/blog/${post.id}/`} class="blog-card-link">
+          <a href={`/blog/${post.slug}/`} class="blog-card-link">
             <article
               class="blog-card glass-panel reveal"
               style={`--reveal-delay: ${postDelays[index] || '0.6s'};`}
             >
               <div class="blog-card-image">
                 <img
-                  alt={post.data.coverImage.alt}
-                  src={post.data.coverImage.src}
+                  alt={post.coverImage.alt}
+                  src={post.coverImage.src}
                   loading="lazy"
                 />
               </div>
               <div class="blog-card-content">
-                <span class="blog-card-category" style={`color: ${getCategoryColor(post.data.category)}`}>{post.data.category}</span>
+                <span class="blog-card-category" style={`color: ${getCategoryColor(post.category)}`}>{post.category}</span>
                 <h3 class="blog-card-title">
-                  {post.data.title}
+                  {post.title}
                 </h3>
-                <p class="blog-card-excerpt">{post.data.postContent}</p>
+                <p class="blog-card-excerpt">{post.postContent}</p>
                 <div class="blog-card-footer">
-                  <span>{post.data.author.name}</span>
-                  <span>{formatDate(post.data.date)} • ~{post.data.readingTime} min read</span>
+                  <span>{post.author.name}</span>
+                  <span>{formatDate(post.date)} • ~{post.readingTime} min read</span>
                 </div>
               </div>
             </article>

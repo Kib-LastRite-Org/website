@@ -1,28 +1,77 @@
 ---
 import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { marked } from 'marked';
 import BlogPost from '@/layouts/BlogPost.astro';
+import { supabase, normalizeSupabasePost } from '@/lib/supabase';
+import { normalizeMdxPost, mergePosts } from '@/lib/posts';
+import type { UnifiedPost } from '@/types/post';
+
+interface Props {
+	post: UnifiedPost;
+	mdxEntry: CollectionEntry<'posts'> | null;
+	allPosts: UnifiedPost[];
+}
 
 export async function getStaticPaths() {
-	const posts = await getCollection('posts');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: { post, allPosts: posts },
+	const [mdxEntries, { data: supabaseRows }] = await Promise.all([
+		getCollection('posts'),
+		supabase.from('posts').select('*').eq('status', 'published'),
+	]);
+
+	const mdxMap = new Map(mdxEntries.map(e => [e.data.slug ?? e.id, e]));
+
+	const allPosts = mergePosts(
+		mdxEntries.map(normalizeMdxPost),
+		(supabaseRows ?? []).map(normalizeSupabasePost),
+	);
+
+	return allPosts.map((post) => ({
+		params: { slug: post.slug },
+		props: {
+			post,
+			// Only carry the MDX entry for local-only posts; Supabase content is used otherwise.
+			mdxEntry: post.syncState === 'local-only' ? (mdxMap.get(post.slug) ?? null) : null,
+			allPosts,
+		},
 	}));
 }
 
-const { post, allPosts } = Astro.props;
-const { Content } = await render(post);
+const { post, mdxEntry, allPosts } = Astro.props as Props;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let Content: any = undefined;
+let renderedHtml = '';
+
+if (mdxEntry) {
+	const rendered = await render(mdxEntry);
+	Content = rendered.Content;
+} else {
+	renderedHtml = await marked(post.content);
+}
 
 const relatedPosts = allPosts
-	.filter(p => p.id !== post.id && p.data.category === post.data.category)
+	.filter(p => p.slug !== post.slug && p.category === post.category)
 	.slice(0, 3);
 
+// allPosts is already sorted by date DESC from mergePosts()
 const recentPosts = allPosts
-	.filter(p => p.id !== post.id)
-	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+	.filter(p => p.slug !== post.slug)
 	.slice(0, 5);
 ---
 
-<BlogPost {...post.data} relatedPosts={relatedPosts} recentPosts={recentPosts}>
-	<Content />
+<BlogPost
+	title={post.title}
+	postContent={post.postContent}
+	date={post.date}
+	coverImage={post.coverImage}
+	category={post.category}
+	author={post.author}
+	readingTime={post.readingTime}
+	tags={post.tags}
+	draft={post.draft}
+	relatedPosts={relatedPosts}
+	recentPosts={recentPosts}
+>
+	{Content ? <Content /> : <Fragment set:html={renderedHtml} />}
 </BlogPost>

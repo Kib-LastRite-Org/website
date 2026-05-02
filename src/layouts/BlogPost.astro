@@ -1,5 +1,4 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import BaseHead from '@/components/BaseHead.astro';
 import LandingFooter from '@/components/LandingFooter.astro';
 import FormattedDate from '@/components/ui/FormattedDate.astro';
@@ -7,7 +6,14 @@ import LandingHeader from '@/components/LandingHeader.astro';
 import BackToTopButton from '@/components/ui/BackToTopButton.astro';
 import SamplePostBanner from '@/components/ui/SamplePostBanner.astro';
 
-type RelatedPost = CollectionEntry<'posts'>;
+interface RelatedPost {
+  slug: string;
+  title: string;
+  date: Date;
+  coverImage: { src: string; alt: string };
+  category: string;
+  postContent: string;
+}
 
 interface Props {
   title: string;
@@ -544,10 +550,10 @@ const hasRelated = relatedPosts.length > 0;
 							<h3>Recent Journal</h3>
 							<div class="recent-posts-list">
 								{recentPosts.map((post) => (
-									<a href={`/blog/${post.id}`} class="recent-post-link">
-										<span class="recent-post-title">{post.data.title}</span>
+									<a href={`/blog/${post.slug}/`} class="recent-post-link">
+										<span class="recent-post-title">{post.title}</span>
 										<span class="recent-post-date">
-											<FormattedDate date={post.data.date} />
+											<FormattedDate date={post.date} />
 										</span>
 									</a>
 								))}
@@ -573,14 +579,14 @@ const hasRelated = relatedPosts.length > 0;
 						<h2>Related Stories</h2>
 						<div class="related-grid">
 							{relatedPosts.map((post) => (
-								<a href={`/blog/${post.id}`} class="related-card">
+								<a href={`/blog/${post.slug}/`} class="related-card">
 									<div style="position: relative; overflow: hidden; aspect-ratio: 16/9;">
-										<img src={post.data.coverImage.src} alt={post.data.coverImage.alt} class="related-card-image" />
+										<img src={post.coverImage.src} alt={post.coverImage.alt} class="related-card-image" />
 									</div>
 									<div class="related-card-content">
-										<div class="related-card-category">{post.data.category}</div>
-										<h3 class="related-card-title">{post.data.title}</h3>
-										<p class="related-card-excerpt">{post.data.postContent}</p>
+										<div class="related-card-category">{post.category}</div>
+										<h3 class="related-card-title">{post.title}</h3>
+										<p class="related-card-excerpt">{post.postContent}</p>
 									</div>
 								</a>
 							))}

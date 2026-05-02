@@ -289,6 +289,15 @@
       </svg>
       Download .md file
     </button>
+
+    <button class="btn btn-outline btn-lg" id="pe-publish-btn" style="width:100%;justify-content:center;margin-top:0.5rem">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0">
+        <polyline points="16 16 12 12 8 16"/>
+        <line x1="12" y1="12" x2="12" y2="21"/>
+        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+      </svg>
+      Publish to Supabase
+    </button>
   </div>
 
   <div class="pe-audit" id="pe-audit-log">
@@ -810,6 +819,66 @@
     document.dispatchEvent(new CustomEvent('pe:draft-exported'));
   }
 
+  // ── Publish handler ──────────────────────────────────────────
+  async function handlePublish() {
+    const draft = buildDraftRecord();
+    const slug  = $input('pe-final-slug').value.trim() || draft.slug || generateSlug(draft.title);
+    const date  = ($('pe-date') as HTMLInputElement).value || new Date().toISOString().slice(0, 10);
+    const wordCountVal   = parseInt($('pe-word-count').textContent || '0', 10);
+    const readingTimeVal = Math.max(1, Math.round(wordCountVal / 200));
+
+    log('publish:start', { slug });
+    await doSave();
+
+    const res = await fetch('/api/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-create-token': import.meta.env.PUBLIC_CREATE_API_TOKEN ?? '',
+      },
+      body: JSON.stringify({
+        ...draft,
+        slug,
+        date,
+        locale: 'en',
+        wordCount: wordCountVal,
+        readingTime: readingTimeVal,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json() as { error: string };
+      log('publish:error', { error: err.error });
+      alert(`Publish failed: ${err.error}`);
+      return;
+    }
+
+    const result = await res.json() as { success: boolean; id?: string | null };
+    log('publish:success', { slug, id: result.id });
+
+    if (result.id && draftId) {
+      await saveDraft({
+        ...draft,
+        id: draftId,
+        createdAt: draftCreatedAt,
+        updatedAt: Date.now(),
+        supabaseId: result.id,
+      });
+    }
+
+    if (draftId) {
+      await appendAuditEvent({
+        id: uuid(),
+        event: 'draft_published',
+        draftId,
+        draftTitle: draft.title || 'Untitled',
+        timestamp: Date.now(),
+      });
+    }
+    await refreshAuditLog();
+    document.dispatchEvent(new CustomEvent('pe:publish-success', { detail: { slug } }));
+  }
+
   // ── Input change listeners for autosave ───────────────────────
   function wireAutosave() {
     const ids = [
@@ -840,6 +909,7 @@
     $('pe-prev-5')?.addEventListener('click', () => goToStep(4));
 
     $('pe-export-btn')?.addEventListener('click', () => void handleExport());
+    $('pe-publish-btn')?.addEventListener('click', () => void handlePublish());
 
     $('pe-new-post-btn')?.addEventListener('click', () => {
       if (!confirm('Start a new post? Current draft is saved in the sidebar.')) return;

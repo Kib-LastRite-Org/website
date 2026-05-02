@@ -21,13 +21,14 @@ export interface DraftRecord {
     ogImage?: string | undefined;
     noIndex: boolean;
   } | undefined;
+  supabaseId?: string | undefined;
   createdAt: number;
   updatedAt: number;
 }
 
 export interface AuditRecord {
   id: string;
-  event: 'draft_created' | 'draft_saved' | 'draft_exported' | 'draft_deleted';
+  event: 'draft_created' | 'draft_saved' | 'draft_exported' | 'draft_deleted' | 'draft_published';
   draftId: string;
   draftTitle: string;
   timestamp: number;
