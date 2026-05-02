@@ -7,7 +7,7 @@ Node engine: >=22.12.0, ES modules enabled. devDependencies: `@astrojs/check@^0.
 Core dependencies: astro@^6.2.1, @astrojs/mdx@^5.0.4, @astrojs/sitemap@^3.7.2, @astrojs/rss@^4.0.18, sharp@^0.34.5. While using astro ensure to follow standards of astro6[<https://astro.build/blog/astro-6/>](Astro 6 introduces a broad set of new capabilities, including a built-in Fonts API, Content Security Policy API, and support for Live Content Collections)[<https://astro.build/blog/astro-620/>](Astro 6.2 adds: experimental custom logger for structured JSON output; SVG Optimizer API — `svgOptimizer` option replaces the old `svgo` flag, use `svgoOptimizer()` built-in; `experimental_getFontFileURL()` helper from `astro:assets`; 6.2.1 patch fixes Zod 4.4.0 compatibility in config validation — benefits `content.config.ts`)(Always ensure to use Astro-6-&-onwards features).
 
 - logs/documentations etc are kept in folder `./docs_etc/`.
-- include current & validated data via web-search. sequential-thinking for proper assessment and planning.
+- include current & validated data via web-search; sequentialthinking-mcp-tool for proper assessment and planning; context7-mcp-tool for up-to-date, version-specific documentation; playwright for testing via browser.
 
 TypeScript config extends astro/tsconfigs/strictest with strictNullChecks and exactOptionalPropertyTypes enabled. Target output: dist/ directory. When adding optional properties that may be undefined, annotate as `prop?: Type | undefined` instead of `prop?: Type`.
 
