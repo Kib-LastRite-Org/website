@@ -27,7 +27,8 @@
     "marked": "^18.0.3",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.4",
-    "tiny-markdown-editor": "^0.2.25"
+    "tiny-markdown-editor": "^0.2.25",
+    "zod": "^4.4.2"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
