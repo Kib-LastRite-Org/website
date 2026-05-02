@@ -327,6 +327,8 @@
   let draftId: string | null = null;
   let draftCreatedAt = Date.now();
   let version = 1;
+  let manualSlug = false;
+  let supabaseId: string | null = null;
   const MAX_STEPS = 5;
   const tags: string[] = [];
   let editor: InstanceType<typeof TinyMDEEditor> | null = null;
@@ -451,7 +453,6 @@
   function wireSlug() {
     const titleEl = $input('pe-title');
     const slugEl  = $input('pe-slug-input');
-    let manualSlug = false;
 
     titleEl.addEventListener('input', () => {
       const count = $('pe-title-count');
@@ -687,8 +688,9 @@
       tags:     [...tags],
       featured: ($('pe-featured-toggle') as HTMLInputElement).checked,
       draft:    ($('pe-draft-toggle') as HTMLInputElement).checked,
-      status:   $select('pe-status').value as DraftRecord['status'],
+      status:     $select('pe-status').value as DraftRecord['status'],
       version,
+      supabaseId: supabaseId ?? undefined,
       seo: hasSeo ? {
         metaTitle:       seoMetaTitle || undefined,
         metaDescription: seoMetaDesc  || undefined,
@@ -702,11 +704,14 @@
   // ── Load draft into form ──────────────────────────────────────
   function loadDraftIntoForm(draft: DraftRecord) {
     log('draft:load', { id: draft.id, title: draft.title });
-    draftId  = draft.id;
-    version  = draft.version;
+    draftId       = draft.id;
+    draftCreatedAt = draft.createdAt;
+    version       = draft.version;
+    supabaseId    = draft.supabaseId ?? null;
 
     $input('pe-title').value       = draft.title;
     $input('pe-slug-input').value  = draft.slug;
+    manualSlug = draft.slug.length > 0;
     ($('pe-excerpt') as HTMLTextAreaElement).value = draft.postContent;
     $input('pe-author-name').value = draft.author.name;
     $input('pe-author-bio').value  = draft.author.bio || '';
@@ -821,6 +826,11 @@
 
   // ── Publish handler ──────────────────────────────────────────
   async function handlePublish() {
+    const publishBtn = $('pe-publish-btn') as HTMLButtonElement;
+    const originalHTML = publishBtn.innerHTML;
+    publishBtn.disabled = true;
+    publishBtn.textContent = 'Publishing…';
+
     const draft = buildDraftRecord();
     const slug  = $input('pe-final-slug').value.trim() || draft.slug || generateSlug(draft.title);
     const date  = ($('pe-date') as HTMLInputElement).value || new Date().toISOString().slice(0, 10);
@@ -830,40 +840,55 @@
     log('publish:start', { slug });
     await doSave();
 
-    const res = await fetch('/api/posts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-create-token': import.meta.env.PUBLIC_CREATE_API_TOKEN ?? '',
-      },
-      body: JSON.stringify({
-        ...draft,
-        slug,
-        date,
-        locale: 'en',
-        wordCount: wordCountVal,
-        readingTime: readingTimeVal,
-      }),
-    });
+    let res: Response;
+    try {
+      res = await fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-create-token': import.meta.env.PUBLIC_CREATE_API_TOKEN ?? '',
+        },
+        body: JSON.stringify({
+          ...draft,
+          slug,
+          date,
+          locale: 'en',
+          wordCount: wordCountVal,
+          readingTime: readingTimeVal,
+        }),
+      });
+    } catch (err) {
+      publishBtn.disabled = false;
+      publishBtn.innerHTML = originalHTML;
+      log('publish:network-error', { error: String(err) });
+      showToast('Publish failed', 'Network error — check your connection.', 'error');
+      return;
+    }
+
+    publishBtn.disabled = false;
+    publishBtn.innerHTML = originalHTML;
 
     if (!res.ok) {
       const err = await res.json() as { error: string };
       log('publish:error', { error: err.error });
-      alert(`Publish failed: ${err.error}`);
+      showToast('Publish failed', err.error, 'error');
       return;
     }
 
     const result = await res.json() as { success: boolean; id?: string | null };
     log('publish:success', { slug, id: result.id });
 
-    if (result.id && draftId) {
-      await saveDraft({
-        ...draft,
-        id: draftId,
-        createdAt: draftCreatedAt,
-        updatedAt: Date.now(),
-        supabaseId: result.id,
-      });
+    if (result.id) {
+      supabaseId = result.id;
+      if (draftId) {
+        await saveDraft({
+          ...draft,
+          id: draftId,
+          createdAt: draftCreatedAt,
+          updatedAt: Date.now(),
+          supabaseId: result.id,
+        });
+      }
     }
 
     if (draftId) {
@@ -877,6 +902,7 @@
     }
     await refreshAuditLog();
     document.dispatchEvent(new CustomEvent('pe:publish-success', { detail: { slug } }));
+    showToast('Published', `/blog/${slug}`, 'success');
   }
 
   // ── Input change listeners for autosave ───────────────────────
@@ -960,6 +986,32 @@
 
   function escHtml(s: string): string {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── Toast notifications ───────────────────────────────────────
+  function showToast(title: string, description: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') {
+    document.querySelector('.pe-toast')?.remove();
+    const toast = document.createElement('div');
+    toast.className = `toast toast--${type} pe-toast`;
+    toast.innerHTML = `
+      <div class="toast-content">
+        <div class="toast-message">
+          <p class="toast-title">${escHtml(title)}</p>
+          ${description ? `<p class="toast-description">${escHtml(description)}</p>` : ''}
+        </div>
+        <button class="toast-dismiss" type="button" aria-label="Dismiss notification">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>`;
+    const dismiss = () => {
+      toast.classList.add('toast--exiting');
+      toast.addEventListener('animationend', () => toast.remove(), { once: true });
+    };
+    toast.querySelector('.toast-dismiss')!.addEventListener('click', dismiss);
+    document.body.appendChild(toast);
+    setTimeout(dismiss, type === 'error' ? 8000 : 5000);
   }
 
   // ── Final slug manual edit flag ───────────────────────────────
