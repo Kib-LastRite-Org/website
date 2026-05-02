@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import type { UnifiedPost } from '../types/post';
+import type { UnifiedPost } from '@/types/post';
 
 export const supabase = createClient(
   import.meta.env.SUPABASE_URL,

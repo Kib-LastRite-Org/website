@@ -1,5 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
-import type { UnifiedPost } from '../types/post';
+import type { UnifiedPost } from '@/types/post';
 
 export function normalizeMdxPost(entry: CollectionEntry<'posts'>): UnifiedPost {
   const { data, id, body } = entry;

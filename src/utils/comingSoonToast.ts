@@ -1,5 +1,5 @@
 import { showToast } from "./lastRiteToast";
-import { COMING_SOON_SUBTITLE } from "../consts";
+import { COMING_SOON_SUBTITLE } from "@/consts";
 
 export function showComingSoonToast(featureName: string, subtitle?: string) {
   const title = `${featureName} Coming Soon`;
