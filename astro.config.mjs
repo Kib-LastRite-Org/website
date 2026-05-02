@@ -32,7 +32,7 @@ function makeValidateEnvPlugin() {
     /** @param {any} config */
     configResolved(config) { cfg = config; },
     configureServer() {
-      const env = readEnvLocal();
+      const env = { ...readEnvLocal(), ...process.env };
       const required = [
         'CREATE_API_TOKEN', 'PUBLIC_CREATE_API_TOKEN',
         'SUPABASE_URL', 'SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY',
@@ -47,7 +47,7 @@ function makeValidateEnvPlugin() {
     },
     buildStart() {
       if (cfg?.command !== 'build') return;
-      const env = readEnvLocal();
+      const env = { ...readEnvLocal(), ...process.env };
       const required = [
         'CREATE_API_TOKEN', 'SUPABASE_URL', 'SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY',
       ];
