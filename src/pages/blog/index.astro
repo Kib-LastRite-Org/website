@@ -1,24 +1,41 @@
 ---
 import { getCollection } from 'astro:content';
 import MarketingLayout from '@/layouts/MarketingLayout.astro';
-import { supabase, normalizeSupabasePost } from '@/lib/supabase';
+import { supabaseAdmin, normalizeSupabasePost } from '@/lib/supabase';
 import { normalizeMdxPost, mergePosts } from '@/lib/posts';
 
 const title = 'LastRite Chronicle - Blog & Stories';
 const description = 'Insights into our journey, product updates, and the stories behind digital memorials.';
+const isDev = import.meta.env.DEV;
 
-const [mdxEntries, { data: supabaseRows }] = await Promise.all([
+const [mdxEntries, supabaseResult] = await Promise.all([
   getCollection('posts'),
-  supabase.from('posts').select('*').eq('status', 'published'),
+  supabaseAdmin.from('posts').select('*'),
 ]);
+
+if (supabaseResult.error) {
+  console.error('[blog/index] Supabase fetch failed:', supabaseResult.error.message);
+}
 
 const allPosts = mergePosts(
   mdxEntries.map(normalizeMdxPost),
-  (supabaseRows ?? []).map(normalizeSupabasePost),
+  (supabaseResult.data ?? []).map(normalizeSupabasePost),
 );
 
-const featuredPost = allPosts.find(p => p.featured) ?? allPosts[0];
-const regularPosts = allPosts.filter(p => !p.featured);
+const featuredPost = isDev
+  ? (allPosts.find(p => p.featured) ?? allPosts[0])
+  : (allPosts.find(p => p.featured && p.status === 'published') ?? allPosts.find(p => p.status === 'published') ?? allPosts[0]);
+
+const regularPosts = allPosts.filter(p => p !== featuredPost);
+
+const isLocked = (post: { status: string }) => !isDev && post.status !== 'published';
+
+const STATUS_STYLES: Record<string, { label: string; bg: string }> = {
+  published: { label: 'Published', bg: 'rgba(105, 219, 173, 0.85)' },
+  draft:     { label: 'Draft',     bg: 'rgba(245, 158, 11, 0.9)' },
+  archived:  { label: 'Archived',  bg: 'rgba(120, 120, 130, 0.8)' },
+};
+const getStatusStyle = (status: string) => STATUS_STYLES[status] ?? STATUS_STYLES['archived']!;
 
 const getCategoryColor = (category: string): string => {
   const colors: Record<string, string> = {
@@ -166,6 +183,11 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
             />
             <div class="blog-featured-overlay"></div>
             <div class="blog-featured-content">
+              {isDev && (
+                <span class="blog-status-badge blog-status-badge--featured" style={`background: ${getStatusStyle(featuredPost.status).bg};`}>
+                  {getStatusStyle(featuredPost.status).label}
+                </span>
+              )}
               <span class="blog-featured-category">{featuredPost.category}</span>
               <h2 class="blog-featured-title">{featuredPost.title}</h2>
               <div class="blog-featured-meta">
@@ -184,44 +206,78 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
 
     <!-- Blog Grid -->
     <section class="blog-grid" id="blog-grid">
-      {regularPosts.map((post, index) => (
-        <div
-          class="blog-card-wrapper"
-          data-title={post.title.toLowerCase()}
-          data-excerpt={post.postContent.toLowerCase()}
-          data-author={post.author.name.toLowerCase()}
-          data-tags={post.tags.join(',').toLowerCase()}
-          data-category={post.category}
-          data-date={new Date(post.date).getTime().toString()}
-          data-readtime={post.readingTime.toString()}
-        >
-          <a href={`/blog/${post.slug}/`} class="blog-card-link">
-            <article
-              class="blog-card glass-panel reveal"
-              style={`--reveal-delay: ${postDelays[index] || '0.6s'};`}
-            >
-              <div class="blog-card-image">
-                <img
-                  alt={post.coverImage.alt}
-                  src={post.coverImage.src}
-                  loading="lazy"
-                />
+      {regularPosts.map((post, index) => {
+        const locked = isLocked(post);
+        const statusStyle = getStatusStyle(post.status);
+        return (
+          <div
+            class="blog-card-wrapper"
+            data-title={post.title.toLowerCase()}
+            data-excerpt={post.postContent.toLowerCase()}
+            data-author={post.author.name.toLowerCase()}
+            data-tags={post.tags.join(',').toLowerCase()}
+            data-category={post.category}
+            data-date={new Date(post.date).getTime().toString()}
+            data-readtime={post.readingTime.toString()}
+          >
+            {locked ? (
+              <div
+                class="blog-card-link blog-card-link--locked"
+                role="article"
+                aria-label={`${post.title} — ${statusStyle.label}, not available`}
+              >
+                <article
+                  class="blog-card glass-panel reveal blog-card--locked"
+                  style={`--reveal-delay: ${postDelays[index] || '0.6s'};`}
+                >
+                  <div class="blog-card-image">
+                    <img alt={post.coverImage.alt} src={post.coverImage.src} loading="lazy" />
+                    <div class="blog-card-lock-overlay">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                    </div>
+                    <span class="blog-status-badge blog-status-badge--card" style={`background: ${statusStyle.bg};`}>{statusStyle.label}</span>
+                  </div>
+                  <div class="blog-card-content">
+                    <span class="blog-card-category" style={`color: ${getCategoryColor(post.category)}`}>{post.category}</span>
+                    <h3 class="blog-card-title">{post.title}</h3>
+                    <p class="blog-card-excerpt">{post.postContent}</p>
+                    <div class="blog-card-footer">
+                      <span>{post.author.name}</span>
+                      <span>{formatDate(post.date)} • ~{post.readingTime} min read</span>
+                    </div>
+                  </div>
+                </article>
               </div>
-              <div class="blog-card-content">
-                <span class="blog-card-category" style={`color: ${getCategoryColor(post.category)}`}>{post.category}</span>
-                <h3 class="blog-card-title">
-                  {post.title}
-                </h3>
-                <p class="blog-card-excerpt">{post.postContent}</p>
-                <div class="blog-card-footer">
-                  <span>{post.author.name}</span>
-                  <span>{formatDate(post.date)} • ~{post.readingTime} min read</span>
-                </div>
-              </div>
-            </article>
-          </a>
-        </div>
-      ))}
+            ) : (
+              <a href={`/blog/${post.slug}/`} class="blog-card-link">
+                <article
+                  class="blog-card glass-panel reveal"
+                  style={`--reveal-delay: ${postDelays[index] || '0.6s'};`}
+                >
+                  <div class="blog-card-image">
+                    <img alt={post.coverImage.alt} src={post.coverImage.src} loading="lazy" />
+                    {isDev && (
+                      <span class="blog-status-badge blog-status-badge--card" style={`background: ${statusStyle.bg};`}>{statusStyle.label}</span>
+                    )}
+                  </div>
+                  <div class="blog-card-content">
+                    <span class="blog-card-category" style={`color: ${getCategoryColor(post.category)}`}>{post.category}</span>
+                    <h3 class="blog-card-title">{post.title}</h3>
+                    <p class="blog-card-excerpt">{post.postContent}</p>
+                    <div class="blog-card-footer">
+                      <span>{post.author.name}</span>
+                      <span>{formatDate(post.date)} • ~{post.readingTime} min read</span>
+                    </div>
+                  </div>
+                </article>
+              </a>
+            )}
+          </div>
+        );
+      })}
     </section>
 
     <!-- Pagination -->
@@ -668,6 +724,7 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
     .blog-card-image {
       height: 11rem;
       overflow: hidden;
+      position: relative;
     }
 
     .blog-card-image img {
@@ -1154,6 +1211,75 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
 
     .blog-empty-btn[hidden] {
       display: none;
+    }
+
+    /* Status badge */
+    .blog-status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.55rem;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #fff;
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+    }
+
+    .blog-status-badge--featured {
+      margin-bottom: 0.75rem;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.65rem;
+    }
+
+    .blog-status-badge--card {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      z-index: 2;
+    }
+
+    /* Lock overlay */
+    .blog-card-lock-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(5, 23, 11, 0.55);
+      z-index: 1;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Locked card state */
+    .blog-card--locked {
+      opacity: 0.75;
+    }
+
+    .blog-card--locked .blog-card-image img {
+      filter: grayscale(0.6);
+    }
+
+    .blog-card--locked .blog-card-title {
+      color: var(--color-on-surface-variant);
+    }
+
+    .blog-card-link--locked {
+      cursor: not-allowed;
+      display: block;
+      text-decoration: none;
+    }
+
+    .blog-card-link--locked .blog-card:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: rgba(226, 237, 230, 0.1);
+    }
+
+    .blog-card-link--locked .blog-card-image img {
+      transform: none !important;
     }
 
   </style>

@@ -6,6 +6,12 @@ export const supabase = createClient(
   import.meta.env.SUPABASE_ANON_KEY,
 );
 
+// Bypasses RLS — server-side only. Never import in client scripts.
+export const supabaseAdmin = createClient(
+  import.meta.env.SUPABASE_URL,
+  import.meta.env.SUPABASE_SERVICE_ROLE_KEY,
+);
+
 export interface SupabasePost {
   id: string;
   slug: string;
