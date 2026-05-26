@@ -1,4 +1,9 @@
 ---
+/**
+ * MediaCard — thumbnail + metadata card.
+ * Meta items render as M3-style tonal chips rather than plain text.
+ * All text uses non-heading elements to escape global h-tag sizing.
+ */
 interface Props {
 	title?: string | undefined;
 	subtitle?: string | undefined;
@@ -11,56 +16,136 @@ interface Props {
 const { title, subtitle, description, image, meta, rating } = Astro.props;
 ---
 
-<div class="rounded-2xl border border-outline-variant bg-surface-container-low p-4">
-	<div class="flex gap-4">
+<div class="media-card">
+	{
+		image && (
+			<img
+				src={image}
+				alt={title ?? "Media"}
+				class="media-img"
+				loading="lazy"
+			/>
+		)
+	}
+
+	<div class="media-body">
+		{title && <div class="media-title">{title}</div>}
+
 		{
-			image && (
-				<img
-					src={image}
-					alt={title ?? "Media"}
-					class="h-36 w-24 flex-shrink-0 rounded-xl object-cover"
-				/>
+			subtitle && (
+				<div class="media-subtitle">{subtitle}</div>
 			)
 		}
 
-		<div class="flex-1 min-w-0">
-			<div class="flex flex-wrap items-center gap-3">
-				{
-					title && (
-						<h4 class="text-3xl font-bold text-on-surface">{title}</h4>
-					)
-				}
-
-				{
-					rating !== undefined && (
-						/* Secondary (orange/warm) maps perfectly to star ratings */
-						<div class="flex items-center gap-1 text-secondary">
+		{
+			(meta?.length || rating !== undefined) && (
+				<div class="media-meta-row">
+					{meta?.map((tag) => <span class="media-chip">{tag}</span>)}
+					{rating !== undefined && (
+						<span class="media-rating">
 							<span aria-hidden="true">★</span>
-							<span class="text-lg font-semibold">{rating}</span>
-						</div>
-					)
-				}
-			</div>
+							{rating}
+						</span>
+					)}
+				</div>
+			)
+		}
 
-			{subtitle && <p class="mt-1 text-sm text-on-surface-variant">{subtitle}</p>}
-
-			{
-				meta && meta.length > 0 && (
-					<div class="mt-2 flex flex-wrap gap-3 text-sm text-on-surface-variant">
-						{meta.map((tag) => (
-							<span>{tag}</span>
-						))}
-					</div>
-				)
-			}
-
-			{
-				description && (
-					<p class="mt-4 text-base leading-8 text-on-surface-variant">
-						{description}
-					</p>
-				)
-			}
-		</div>
+		{description && <p class="media-desc">{description}</p>}
 	</div>
 </div>
+
+<style>
+	.media-card {
+		display: flex;
+		gap: 12px;
+		border-radius: 12px;
+		border: 1px solid var(--color-outline-variant);
+		background: var(--color-surface-container-low);
+		padding: 12px;
+		align-items: flex-start;
+	}
+
+	.media-img {
+		flex-shrink: 0;
+		width: 62px;
+		height: 78px;
+		border-radius: 8px;
+		object-fit: cover;
+		/* slight border to separate from card bg */
+		outline: 1px solid var(--color-outline-variant);
+		outline-offset: -1px;
+	}
+
+	.media-body {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.media-title {
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--color-on-surface);
+		line-height: 1.4;
+		font-family: var(--font-display);
+		/* clamp to 2 lines */
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.media-subtitle {
+		font-size: 12px;
+		color: var(--color-on-surface-variant);
+		margin-top: 3px;
+		line-height: 1.4;
+	}
+
+	.media-meta-row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 5px;
+		margin-top: 7px;
+	}
+
+	/* M3 "tonal" chip — uses surface-container as fill */
+	.media-chip {
+		font-size: 11px;
+		font-weight: 500;
+		color: var(--color-on-surface-variant);
+		background: var(--color-surface-container);
+		border: 1px solid var(--color-outline-variant);
+		border-radius: 20px;
+		padding: 2px 8px;
+		white-space: nowrap;
+		line-height: 1.4;
+	}
+
+	.media-rating {
+		font-size: 11px;
+		font-weight: 600;
+		/* Secondary (orange/warm) is the perfect star colour */
+		color: var(--color-secondary);
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
+		line-height: 1.4;
+	}
+
+	.media-desc {
+		font-size: 12.5px;
+		color: var(--color-on-surface-variant);
+		line-height: 1.6;
+		margin-top: 8px;
+		margin-bottom: 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+</style>

@@ -8,23 +8,18 @@ interface Props {
 const { actions } = Astro.props;
 ---
 
-<div class="flex flex-wrap gap-3">
+<div class="action-row">
 	{
 		actions.map((action) => (
 			<a
 				href={action.href ?? "#"}
 				onclick={action.onClick}
 				class:list={[
-					"rounded-xl px-5 py-3 text-sm font-medium transition",
-					action.variant === "primary" &&
-						"bg-primary text-on-primary hover:opacity-90",
-					action.variant === "secondary" &&
-						"bg-surface-container-high text-on-surface hover:bg-surface-container-highest",
-					action.variant === "ghost" &&
-						"border border-outline-variant bg-transparent text-on-surface hover:bg-surface-container",
-					/* default fallback when variant is undefined */
-					!action.variant &&
-						"border border-outline-variant bg-transparent text-on-surface hover:bg-surface-container",
+					"action-btn",
+					action.variant === "primary" && "action-btn--primary",
+					action.variant === "secondary" && "action-btn--secondary",
+					(action.variant === "ghost" || !action.variant) &&
+						"action-btn--ghost",
 				]}
 			>
 				{action.label}
@@ -32,3 +27,63 @@ const { actions } = Astro.props;
 		))
 	}
 </div>
+
+<style>
+	.action-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.action-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 38px;
+		padding: 0 18px;
+		border-radius: var(--border-radius-btn, 10px);
+		font-size: 13.5px;
+		font-weight: 600;
+		text-decoration: none;
+		cursor: pointer;
+		transition:
+			opacity 0.15s,
+			background 0.15s,
+			border-color 0.15s;
+		white-space: nowrap;
+		/* reset link colour inheritance */
+		color: inherit;
+		border: none;
+		line-height: 1;
+	}
+
+	.action-btn--primary {
+		background: var(--color-primary);
+		color: var(--color-on-primary);
+	}
+
+	.action-btn--primary:hover {
+		opacity: 0.86;
+	}
+
+	.action-btn--secondary {
+		background: var(--color-surface-container-high);
+		color: var(--color-on-surface);
+	}
+
+	.action-btn--secondary:hover {
+		background: var(--color-surface-container-highest);
+	}
+
+	.action-btn--ghost {
+		border: 1px solid var(--color-outline-variant);
+		background: transparent;
+		color: var(--color-on-surface-variant);
+	}
+
+	.action-btn--ghost:hover {
+		background: var(--color-surface-container);
+		border-color: var(--color-outline);
+		color: var(--color-on-surface);
+	}
+</style>

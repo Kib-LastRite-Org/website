@@ -64,29 +64,27 @@ const translateClass = open
 <aside
 	id="dynamic-side-drawer"
 	class:list={[
-		"fixed top-0 z-50 h-screen overflow-hidden border-l border-outline-variant bg-surface text-on-surface shadow-2xl transition-transform duration-300 ease-out",
+		"fixed top-0 z-50 h-screen overflow-hidden shadow-2xl transition-transform duration-300 ease-out",
 		sideClass,
 		translateClass,
 	]}
 	style={`width:${width}`}
 	aria-label={title}
 >
-	<div class="flex h-full flex-col">
+	<div class="drawer-shell">
 		<!-- Header -->
 		<DrawerHeader title={title} subtitle={subtitle} />
 
-		<!-- Scrollable content -->
-		<div class="flex-1 overflow-y-auto px-6 py-6">
+		<!-- Scrollable body -->
+		<div class="drawer-body">
 			{
 				sections.map((section) => (
-					<section class="mb-8" id={section.id}>
+					<section class="drawer-section" id={section.id}>
 						{section.title && (
-							<h3 class="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
-								{section.title}
-							</h3>
+							<div class="drawer-section-label">{section.title}</div>
 						)}
 
-						<div class="space-y-4">
+						<div class="drawer-section-items">
 							{section.items.map((item) => (
 								<>
 									{item.type === "text" && (
@@ -125,10 +123,78 @@ const translateClass = open
 	</div>
 </aside>
 
+<style>
+	/* Panel shell */
+	.drawer-shell {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: var(--color-surface);
+		border-left: 1px solid var(--color-outline-variant);
+	}
+
+	/* Scrollable content area */
+	.drawer-body {
+		flex: 1;
+		overflow-y: auto;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	/* Thin, themed scrollbar */
+	.drawer-body::-webkit-scrollbar {
+		width: 3px;
+	}
+	.drawer-body::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.drawer-body::-webkit-scrollbar-thumb {
+		background: var(--color-outline-variant);
+		border-radius: 3px;
+	}
+	.drawer-body::-webkit-scrollbar-thumb:hover {
+		background: var(--color-outline);
+	}
+
+	/* Each named section */
+	.drawer-section {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding-bottom: 20px;
+		/* subtle divider between sections */
+		border-bottom: 1px solid var(--color-outline-variant);
+		margin-bottom: 4px;
+	}
+
+	.drawer-section:last-child {
+		border-bottom: none;
+		padding-bottom: 4px;
+	}
+
+	/* M3 "label" style — deliberately small and recessive */
+	.drawer-section-label {
+		font-size: 10.5px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--color-on-surface-variant);
+		padding-bottom: 2px;
+	}
+
+	/* Cards inside each section */
+	.drawer-section-items {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+</style>
+
 <!--
   define:vars passes server props into the inline script.
   is:inline is implied by define:vars — no bundling, no hoisting.
-  @ts-nocheck because define:vars injected variables have no TS declarations.
 -->
 <script define:vars={{ closeOnBackdrop, side }} is:inline>
 	// @ts-nocheck
@@ -137,7 +203,6 @@ const translateClass = open
 		const backdrop = document.getElementById("drawer-backdrop");
 		const closeBtn = document.getElementById("drawer-close-button");
 
-		/** Collapse the drawer off-screen and hide the backdrop. */
 		function closeDrawer() {
 			drawer?.classList.remove("translate-x-0");
 			drawer?.classList.add(
@@ -147,7 +212,6 @@ const translateClass = open
 			backdrop?.classList.add("opacity-0", "pointer-events-none");
 		}
 
-		/** Slide the drawer into view and show the backdrop. */
 		function openDrawer() {
 			drawer?.classList.remove(
 				side === "right" ? "translate-x-full" : "-translate-x-full",
@@ -163,8 +227,7 @@ const translateClass = open
 			backdrop?.addEventListener("click", closeDrawer);
 		}
 
-		// Custom-event API — lets any script on the page control the drawer
-		// without needing a direct reference to this component's DOM.
+		// Custom-event API for external control
 		document.addEventListener("drawer:open", openDrawer);
 		document.addEventListener("drawer:close", closeDrawer);
 	});

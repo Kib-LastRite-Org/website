@@ -1,4 +1,8 @@
 ---
+/**
+ * StatsCard — single metric highlight with icon, value, and label.
+ * M3-inspired layout: icon left, number + label stacked right.
+ */
 interface Props {
 	title?: string | undefined;
 	value?: string | number | undefined;
@@ -7,47 +11,79 @@ interface Props {
 const { title, value } = Astro.props;
 ---
 
-<!--
-  Gradient runs across surface-container tokens to give depth without
-  fighting the dark background. Primary (mint) replaces the original red.
--->
-<div
-	class="flex items-center gap-4 rounded-2xl border border-outline-variant bg-gradient-to-r from-surface-container to-surface-container-low p-5"
->
-	<div
-		class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-primary/20"
-	>
-		<!-- Eye / views icon — swap for any Heroicon as needed -->
+<div class="stats-card">
+	<div class="stats-icon" aria-hidden="true">
+		<!-- Eye / views — swap for any inline SVG as needed -->
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			class="h-8 w-8 text-primary"
+			width="22"
+			height="22"
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke="currentColor"
+			stroke-width="1.75"
+			stroke-linecap="round"
+			stroke-linejoin="round"
 		>
+			<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
 			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-			/>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
 				d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-			/>
+			></path>
 		</svg>
 	</div>
 
-	<div>
-		{title && <p class="text-sm text-on-surface-variant">{title}</p>}
-		{
-			value !== undefined && (
-				<p class="text-5xl font-bold tracking-tight text-on-surface">
-					{value}
-				</p>
-			)
-		}
+	<div class="stats-body">
+		{value !== undefined && <div class="stats-value">{value}</div>}
+		{title && <div class="stats-label">{title}</div>}
 	</div>
 </div>
+
+<style>
+	.stats-card {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		border-radius: 12px;
+		border: 1px solid var(--color-outline-variant);
+		/* Subtle directional gradient for M3 "tonal surface" feel */
+		background: linear-gradient(
+			135deg,
+			var(--color-surface-container) 0%,
+			var(--color-surface-container-low) 100%
+		);
+		padding: 14px 16px;
+	}
+
+	.stats-icon {
+		flex-shrink: 0;
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 10px;
+		background: rgba(105, 219, 173, 0.12);
+		color: var(--color-primary);
+	}
+
+	.stats-body {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.stats-value {
+		font-size: 36px;
+		font-weight: 800;
+		color: var(--color-on-surface);
+		line-height: 1;
+		letter-spacing: -0.03em;
+		font-family: var(--font-display);
+	}
+
+	.stats-label {
+		font-size: 12px;
+		color: var(--color-on-surface-variant);
+		letter-spacing: 0.01em;
+	}
+</style>
