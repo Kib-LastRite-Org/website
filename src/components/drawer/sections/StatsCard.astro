@@ -1,0 +1,53 @@
+---
+interface Props {
+	title?: string | undefined;
+	value?: string | number | undefined;
+}
+
+const { title, value } = Astro.props;
+---
+
+<!--
+  Gradient runs across surface-container tokens to give depth without
+  fighting the dark background. Primary (mint) replaces the original red.
+-->
+<div
+	class="flex items-center gap-4 rounded-2xl border border-outline-variant bg-gradient-to-r from-surface-container to-surface-container-low p-5"
+>
+	<div
+		class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-primary/20"
+	>
+		<!-- Eye / views icon — swap for any Heroicon as needed -->
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-8 w-8 text-primary"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+			/>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				stroke-width="2"
+				d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+			/>
+		</svg>
+	</div>
+
+	<div>
+		{title && <p class="text-sm text-on-surface-variant">{title}</p>}
+		{
+			value !== undefined && (
+				<p class="text-5xl font-bold tracking-tight text-on-surface">
+					{value}
+				</p>
+			)
+		}
+	</div>
+</div>

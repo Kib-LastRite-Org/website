@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import MarketingLayout from '@/layouts/MarketingLayout.astro';
 import { supabaseAdmin, normalizeSupabasePost } from '@/lib/supabase';
 import { normalizeMdxPost, mergePosts } from '@/lib/posts';
+import SideDrawer from '@/components/drawer/SideDrawer.astro';
+import type { DrawerSection } from '@/components/drawer/types';
 
 const title = 'LastRite Chronicle - Blog & Stories';
 const description = 'Insights into our journey, product updates, and the stories behind digital memorials.';
@@ -65,6 +67,90 @@ const formatDate = (dateInput: string | Date, format: 'short' | 'long' = 'short'
 
 const categories = ['All', 'Milestones', 'Product Updates', 'Engineering', 'Stories'];
 const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
+
+// ── Drawer data ──────────────────────────────────────────────────────────────
+// Sections are built at SSG time from the same data the page already fetched —
+// no extra requests. The featured post's excerpt is capped at 140 chars so it
+// fits cleanly inside the MediaCard without wrapping.
+const featuredExcerpt = featuredPost
+  ? featuredPost.postContent.length > 140
+    ? featuredPost.postContent.slice(0, 140) + '…'
+    : featuredPost.postContent
+  : '';
+
+const featuredSection: DrawerSection[] = featuredPost
+  ? [
+      {
+        id: 'featured-story',
+        title: 'Featured Story',
+        items: [
+          {
+            id: 'featured-media',
+            type: 'media' as const,
+            title: featuredPost.title,
+            meta: [featuredPost.category, `~${featuredPost.readingTime} min read`],
+            image: featuredPost.coverImage.src,
+            description: featuredExcerpt,
+          },
+        ],
+      },
+    ]
+  : [];
+
+const drawerSections: DrawerSection[] = [
+  {
+    id: 'chronicle-stats',
+    items: [
+      {
+        id: 'post-count',
+        type: 'stats' as const,
+        title: 'Total Stories',
+        value: allPosts.length,
+      },
+    ],
+  },
+  {
+    id: 'about',
+    title: 'About the Chronicle',
+    items: [
+      {
+        id: 'about-text',
+        type: 'text' as const,
+        title: 'The LastRite Chronicle',
+        description:
+          'A living archive of insights, product updates, and the stories behind building a platform for digital memorials.',
+      },
+    ],
+  },
+  ...featuredSection,
+  {
+    id: 'chronicle-actions',
+    items: [
+      {
+        id: 'action-buttons',
+        type: 'actions' as const,
+        actions: [
+          ...(featuredPost
+            ? [
+                {
+                  id: 'read-featured',
+                  label: 'Read Featured',
+                  href: `/blog/${featuredPost.slug}/`,
+                  variant: 'primary' as const,
+                },
+              ]
+            : []),
+          {
+            id: 'browse-all',
+            label: 'Browse Posts',
+            href: '#blog-grid',
+            variant: 'ghost' as const,
+          },
+        ],
+      },
+    ],
+  },
+];
 ---
 
 <MarketingLayout title={title} description={description}>
@@ -77,6 +163,32 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
       <p class="blog-hero-subtitle">
         Insights into our journey, product updates, and the stories behind digital memorials.
       </p>
+
+      <!-- Drawer trigger — dispatches the custom event the drawer's script listens for -->
+      <button
+        id="blog-info-btn"
+        class="blog-info-btn"
+        aria-label="Open Chronicle Info panel"
+        onclick="document.dispatchEvent(new Event('drawer:open'))"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        Chronicle Info
+      </button>
     </header>
 
     <!-- Search & Filter Bar -->
@@ -316,6 +428,15 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
       </div>
     </section>
   </main>
+
+  <!-- SideDrawer: fixed-position, z-50, doesn't affect page layout flow -->
+  <SideDrawer
+    open={false}
+    title="Chronicle Info"
+    subtitle={`${allPosts.length} stor${allPosts.length === 1 ? 'y' : 'ies'} · LastRite Blog`}
+    sections={drawerSections}
+    width="440px"
+  />
 
   <style>
     /* Main layout */
@@ -1280,6 +1401,36 @@ const postDelays = ['0.1s', '0.2s', '0.3s', '0.4s', '0.5s', '0.6s'];
 
     .blog-card-link--locked .blog-card-image img {
       transform: none !important;
+    }
+
+    /* Chronicle Info trigger button */
+    .blog-info-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.75rem;
+      padding: 0.5rem 1.25rem;
+      background: rgba(105, 219, 173, 0.08);
+      border: 1px solid var(--color-outline-variant);
+      border-radius: var(--border-radius-btn);
+      color: var(--color-primary);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .blog-info-btn:hover {
+      background: rgba(105, 219, 173, 0.18);
+      border-color: var(--color-primary);
+    }
+
+    @media (max-width: 480px) {
+      .blog-info-btn {
+        font-size: 0.8rem;
+        padding: 0.45rem 1rem;
+        margin-top: 1.25rem;
+      }
     }
 
   </style>

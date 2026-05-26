@@ -16,6 +16,13 @@
   --color-on-surface-variant: var(--color-on-surface-variant); /* → text-on-surface-variant */
   --color-outline-variant: var(--color-outline-variant); /* → border-outline-variant */
 
+  /* Surface container hierarchy */
+  --color-surface-container-lowest: var(--color-surface-container-lowest);   /* → bg-surface-container-lowest */
+  --color-surface-container-low: var(--color-surface-container-low);         /* → bg-surface-container-low */
+  --color-surface-container: var(--color-surface-container);                 /* → bg-surface-container */
+  --color-surface-container-high: var(--color-surface-container-high);       /* → bg-surface-container-high */
+  --color-surface-container-highest: var(--color-surface-container-highest); /* → bg-surface-container-highest */
+
   --font-sans: var(--font-sans);                   /* → font-sans */
   --font-display: var(--font-display);             /* → font-display */
   --font-prose: var(--font-atkinson);              /* → font-prose (maps --font-atkinson) */

@@ -1,0 +1,171 @@
+---
+/**
+ * SideDrawer — data-driven slide-in panel.
+ *
+ * Usage:
+ *   import SideDrawer from "@/components/drawer/SideDrawer.astro";
+ *   <SideDrawer open={true} title="Settings" sections={drawerSections} />
+ *
+ * External JS control (dispatch on `document`):
+ *   document.dispatchEvent(new Event("drawer:open"));
+ *   document.dispatchEvent(new Event("drawer:close"));
+ */
+import type { DrawerSection } from "./types";
+import DrawerHeader from "./DrawerHeader.astro";
+import TextCard from "./sections/TextCard.astro";
+import StatsCard from "./sections/StatsCard.astro";
+import MediaCard from "./sections/MediaCard.astro";
+import ActionButtons from "./sections/ActionButtons.astro";
+
+interface Props {
+	open?: boolean | undefined;
+	side?: "left" | "right" | undefined;
+	width?: string | undefined;
+	title?: string | undefined;
+	subtitle?: string | undefined;
+	sections?: DrawerSection[] | undefined;
+	showBackdrop?: boolean | undefined;
+	closeOnBackdrop?: boolean | undefined;
+}
+
+const {
+	open = false,
+	side = "right",
+	width = "420px",
+	title = "Settings",
+	subtitle,
+	sections = [],
+	showBackdrop = true,
+	closeOnBackdrop = true,
+} = Astro.props;
+
+const sideClass = side === "right" ? "right-0" : "left-0";
+const translateClass = open
+	? "translate-x-0"
+	: side === "right"
+		? "translate-x-full"
+		: "-translate-x-full";
+---
+
+{
+	showBackdrop && (
+		<div
+			id="drawer-backdrop"
+			class:list={[
+				"fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300",
+				open
+					? "opacity-100 pointer-events-auto"
+					: "opacity-0 pointer-events-none",
+			]}
+		/>
+	)
+}
+
+<aside
+	id="dynamic-side-drawer"
+	class:list={[
+		"fixed top-0 z-50 h-screen overflow-hidden border-l border-outline-variant bg-surface text-on-surface shadow-2xl transition-transform duration-300 ease-out",
+		sideClass,
+		translateClass,
+	]}
+	style={`width:${width}`}
+	aria-label={title}
+>
+	<div class="flex h-full flex-col">
+		<!-- Header -->
+		<DrawerHeader title={title} subtitle={subtitle} />
+
+		<!-- Scrollable content -->
+		<div class="flex-1 overflow-y-auto px-6 py-6">
+			{
+				sections.map((section) => (
+					<section class="mb-8" id={section.id}>
+						{section.title && (
+							<h3 class="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
+								{section.title}
+							</h3>
+						)}
+
+						<div class="space-y-4">
+							{section.items.map((item) => (
+								<>
+									{item.type === "text" && (
+										<TextCard
+											title={item.title}
+											subtitle={item.subtitle}
+											description={item.description}
+										/>
+									)}
+
+									{item.type === "stats" && (
+										<StatsCard title={item.title} value={item.value} />
+									)}
+
+									{item.type === "media" && (
+										<MediaCard
+											title={item.title}
+											subtitle={item.subtitle}
+											description={item.description}
+											image={item.image}
+											meta={item.meta}
+											rating={item.rating}
+										/>
+									)}
+
+									{item.type === "actions" && item.actions && (
+										<ActionButtons actions={item.actions} />
+									)}
+								</>
+							))}
+						</div>
+					</section>
+				))
+			}
+		</div>
+	</div>
+</aside>
+
+<!--
+  define:vars passes server props into the inline script.
+  is:inline is implied by define:vars — no bundling, no hoisting.
+  @ts-nocheck because define:vars injected variables have no TS declarations.
+-->
+<script define:vars={{ closeOnBackdrop, side }} is:inline>
+	// @ts-nocheck
+	document.addEventListener("DOMContentLoaded", () => {
+		const drawer = document.getElementById("dynamic-side-drawer");
+		const backdrop = document.getElementById("drawer-backdrop");
+		const closeBtn = document.getElementById("drawer-close-button");
+
+		/** Collapse the drawer off-screen and hide the backdrop. */
+		function closeDrawer() {
+			drawer?.classList.remove("translate-x-0");
+			drawer?.classList.add(
+				side === "right" ? "translate-x-full" : "-translate-x-full",
+			);
+			backdrop?.classList.remove("opacity-100", "pointer-events-auto");
+			backdrop?.classList.add("opacity-0", "pointer-events-none");
+		}
+
+		/** Slide the drawer into view and show the backdrop. */
+		function openDrawer() {
+			drawer?.classList.remove(
+				side === "right" ? "translate-x-full" : "-translate-x-full",
+			);
+			drawer?.classList.add("translate-x-0");
+			backdrop?.classList.remove("opacity-0", "pointer-events-none");
+			backdrop?.classList.add("opacity-100", "pointer-events-auto");
+		}
+
+		closeBtn?.addEventListener("click", closeDrawer);
+
+		if (closeOnBackdrop) {
+			backdrop?.addEventListener("click", closeDrawer);
+		}
+
+		// Custom-event API — lets any script on the page control the drawer
+		// without needing a direct reference to this component's DOM.
+		document.addEventListener("drawer:open", openDrawer);
+		document.addEventListener("drawer:close", closeDrawer);
+	});
+</script>

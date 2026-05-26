@@ -1,0 +1,34 @@
+---
+import type { DrawerAction } from "../types";
+
+interface Props {
+	actions: DrawerAction[];
+}
+
+const { actions } = Astro.props;
+---
+
+<div class="flex flex-wrap gap-3">
+	{
+		actions.map((action) => (
+			<a
+				href={action.href ?? "#"}
+				onclick={action.onClick}
+				class:list={[
+					"rounded-xl px-5 py-3 text-sm font-medium transition",
+					action.variant === "primary" &&
+						"bg-primary text-on-primary hover:opacity-90",
+					action.variant === "secondary" &&
+						"bg-surface-container-high text-on-surface hover:bg-surface-container-highest",
+					action.variant === "ghost" &&
+						"border border-outline-variant bg-transparent text-on-surface hover:bg-surface-container",
+					/* default fallback when variant is undefined */
+					!action.variant &&
+						"border border-outline-variant bg-transparent text-on-surface hover:bg-surface-container",
+				]}
+			>
+				{action.label}
+			</a>
+		))
+	}
+</div>
